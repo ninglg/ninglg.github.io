@@ -1,0 +1,830 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>FFmpeg介绍和使用 | Light Ning</title>
+<meta name="description" content="永远奔腾，永远闪光" />
+<link rel="shortcut icon" href="https://ninglg.com/favicon.ico">
+<link rel="stylesheet" href="https://ninglg.com/styles/main.css">
+
+<script src="https://ninglg.com/media/js/jquery.min.js"></script>
+<script src="https://ninglg.com/media/js/masonry.pkgd.min.js"></script>
+<script src="https://ninglg.com/media/js/aos.js"></script>
+<script src="https://ninglg.com/media/js/pace.min.js"></script>
+<script src="https://ninglg.com/media/js/view-image.min.js"></script>
+<script src="https://ninglg.com/media/js/jquery.magnific-popup.min.js"></script>
+<script src="https://ninglg.com/media/js/functions.js"></script>
+        <meta name="referrer" content="never">
+        <meta name="description" content="FFmpeg介绍和使用
+
+安装FFmpeg
+在Mac上通过brew安装FFmpeg
+brew tap homebrew-ffmpeg/ffmpeg
+brew options homebrew-ffmpeg/ffmpeg/ffmpeg
+
+br..." />
+        <meta name="keywords" content="开发工具" />
+        <script src="https://ninglg.com/media/js/waterfall.min.js"></script>
+        <script src="https://ninglg.com/media/js/prism.min.js"></script>
+</head>
+
+<body>
+    <header id="header" class="grid-container">
+    <!-- start: .menu-wrapper -->
+    <div class="menu-mobile">
+        <i class="fa fa-reorder"></i>
+    </div>
+    <div class="menu-wrapper">
+        <div class="">
+            <div class="logo">
+                <a href="https://ninglg.com"><img src="/media/images/custom-headerLogo.png" alt=""></a>
+            </div>
+            <!-- start: .main-nav -->
+
+            <nav class="main-nav grid-container grid-parent">
+                <ul id="menu-header" class="menu gradient-effect">
+                    <li class=""><a href="https://ninglg.com" class="menu">首页</a></li>
+                    
+                        <li class="">
+                            <a href="/archives" class="menu">
+                                存档
+                            </a>
+                        </li>
+                        
+                        <li class="">
+                            <a href="/tags" class="menu">
+                                标签
+                            </a>
+                        </li>
+                        
+                        <li class="">
+                            <a href="/post/about/" class="menu">
+                                关于
+                            </a>
+                        </li>
+                        
+                            <li class="search-menu-item hide-on-mobile hide-on-tablet"><a href="#search-lightbox" class="lightbox mfp-inline"><i class="fa fa-search-line"></i></a></li>
+                </ul>
+            </nav>
+            <a href="#search-lightbox" class="lightbox epcl-search-button mfp-inline hide-on-tablet hide-on-desktop"><i class="fa fa-search-line"></i></a>
+            <!-- end: .main-nav -->
+            <div class="clear"></div>
+            <div class="border hide-on-tablet hide-on-mobile"></div>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <!-- end: .menu-wrapper -->
+    <div class="clear"></div>
+</header>
+<div class="hide-on-mobile hide-on-tablet hide-on-desktop">
+    <div id="search-lightbox" class="grid-container grid-small grid-parent mfp-hide">
+        <div class="search-wrapper section">
+            <form id="gridea-search-form" data-update="1728915775825" action="/search/index.html" class="search-form" _lpchecked="1">
+                <input type="text" name="q" id="s" value="" class="search-field" placeholder="搜点啥..." aria-label="搜点啥..." required="">
+                <button type="submit" class="submit" aria-label="Submit">
+                <i class="fa fa-search-line"></i>
+              </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+        <main id="single" class="main grid-container fullcover no-sidebar aos-init aos-animate" data-aos="fade">
+
+            <div class="center content">
+                <div class="featured-image cover" style="background-image: url('/media/images/dev-tool.jpg');">
+                    <div class="meta top">
+                        <time class="meta-info" style="float:left;" datetime="2021-08-01"><i class="fa fa-calendar"></i><span class="lately">3 年前</span></time>
+                        
+                            <a href="https://ninglg.com/post/ffmpeg-intro-and-usage/#comments" class="comments meta-info" title="">
+                                <i class="fa fa-comment remixicon"></i><span class="comment-count valine-comment-count" data-xid="/ffmpeg-intro-and-usage/"> </span>
+                            </a>
+                            <span id="/ffmpeg-intro-and-usage/" class="leancloud_visitors views-counter meta-info" title=""><i class="fa fa-leancloud remixicon"></i><span class="leancloud-visitors-count"></span></span>
+                            
+                    </div>
+                    <div class="info">
+                        <div class="tags ">
+                            
+                                <a href="https://ninglg.com/tag/dev-tool/" class="ctag ctag-0 ctag-dev-tool" aria-label="">
+                                    开发工具
+                                </a>
+                                
+                        </div>
+                        <h1 class="title ularge white bold">
+                            FFmpeg介绍和使用
+                        </h1>
+                    </div>
+                </div>
+            </div>
+
+            <div class="epcl-page-wrapper">
+                <div class="left-content grid-70 np-mobile">
+                    <article class="main-article post">
+                        <section class="post-content">
+                            <div class="text">
+                                <p>FFmpeg介绍和使用</p>
+<!-- more -->
+<h1 id="安装ffmpeg">安装FFmpeg</h1>
+<h2 id="在mac上通过brew安装ffmpeg">在Mac上通过brew安装FFmpeg</h2>
+<pre><code class="language-sh">brew tap homebrew-ffmpeg/ffmpeg
+brew options homebrew-ffmpeg/ffmpeg/ffmpeg
+
+brew install homebrew-ffmpeg/ffmpeg/ffmpeg --with-chromaprint --with-decklink --with-fdk-aac --with-game-music-emu --with-libbluray --with-libbs2b --with-libcaca --with-libgsm --with-libmodplug --with-librsvg --with-libsoxr --with-libssh --with-libvidstab --with-libvmaf --with-libxml2 --with-opencore-amr --with-openh264 --with-openjpeg --with-openssl --with-openssl@1.1 --with-rav1e --with-rtmpdump --with-rubberband --with-speex --with-srt --with-tesseract --with-two-lame --with-webp --with-xvid --with-zeromq --with-zimg --HEAD
+</code></pre>
+<h2 id="验证是否安装成功">验证是否安装成功</h2>
+<pre><code class="language-sh">ffmpeg -version
+</code></pre>
+<h1 id="使用ffmpeg">使用FFmpeg</h1>
+<h2 id="获取视频信息">获取视频信息</h2>
+<blockquote>
+<p>ffmpeg -i test.mp4</p>
+</blockquote>
+<h2 id="将图片序列合成视频">将图片序列合成视频</h2>
+<blockquote>
+<p>ffmpeg -f image2 -i image%d.jpg video.mpg<br>
+可把当前目录下的图片（名字如：image1.jpg、image2.jpg 等）合并成video.mpg</p>
+</blockquote>
+<h2 id="将视频分解成图片">将视频分解成图片</h2>
+<blockquote>
+<p>ffmpeg -i video.mpg image%d.jpg</p>
+</blockquote>
+<h2 id="从视频中抽取声音">从视频中抽取声音</h2>
+<h2 id="视频截图">视频截图</h2>
+<pre><code class="language-go">package main
+
+import (
+	&quot;bytes&quot;
+	&quot;fmt&quot;
+	&quot;io/ioutil&quot;
+	&quot;os/exec&quot;
+)
+
+func main() {
+	filename := &quot;http://www.xxxxxxx.com/yyyy.mp4&quot;
+	width := 640
+	height := 360
+	cmd := exec.Command(&quot;ffmpeg&quot;, &quot;-i&quot;, filename, &quot;-vframes&quot;, &quot;10&quot;, &quot;-s&quot;, fmt.Sprintf(&quot;%dx%d&quot;, width, height), &quot;-f&quot;, &quot;singlejpeg&quot;, &quot;-&quot;)
+	var buffer bytes.Buffer
+	cmd.Stdout = &amp;buffer
+	if cmd.Run() != nil {
+		panic(&quot;could not generate frame&quot;)
+	}
+
+	ioutil.WriteFile(&quot;./frame.jpg&quot;, []byte(buffer.String()), 0666)
+}
+</code></pre>
+<h2 id="视频添加图片水印">视频添加图片水印</h2>
+<blockquote>
+<p>ffmpeg -i input.mp4 -vf &quot;movie=水印图片.png[watermark];[in][watermark] overlay=main_w-overlay_w-10:main_h-overlay_h-10[out] &quot; output.mp4<br>
+-i：表示输入<br>
+-vf：滤镜相关，视频裁剪，水印等等操作都需要它完成<br>
+overlay：水印参数<br>
+main_w-overlay_w-10：水印在x轴的位置，也可以写成x=main_w-overlay_w-10<br>
+main_h-overlay_h-10：水印在y轴的位置<br>
+或者也可以使用命令 ffmpeg -i input.mp4 -i logo.png -filter_complex 'overlay=main_w-overlay_w-10:main_h-overlay_h-10' output.mp4</p>
+</blockquote>
+<h2 id="视频添加文字水印">视频添加文字水印</h2>
+<blockquote>
+<p>ffmpeg -i input.mp4 -vf &quot;drawtext=fontfile=simhei.ttf: text='abc-watermark':x=10:y=10:fontsize=24:fontcolor=white:shadowy=2&quot; output.mp4<br>
+在视频左上角添加一条白色字体的文字水印</p>
+</blockquote>
+
+                            </div>
+                            <div class="clear"></div>
+                        </section>
+                    </article>
+                    <div class="clear"></div>
+
+                    <section class="related section">
+                        
+                                
+                                    <article class="next grid-50 tablet-grid-50 grid-parent">
+                                        <div class="thumb cover lazy loaded" style="background-image: url('https://ninglg.com/media/images/life.jpg');"></div>
+                                        <a href="https://ninglg.com/post/annual-goals/" class="full-link"></a>
+                                        <div class="info">
+                                            <time datetime="2021-01-01">2021-01-01</time>
+                                            <h4 class="title white no-margin">
+                                                年度目标
+                                            </h4>
+                                        </div>
+                                        <span class="epcl-button red">
+                  <img src="https://ninglg.com/media/images/right-arrow.svg" width="15" alt="Left Arrow">
+                </span>
+                                        <div class="overlay"></div>
+                                    </article>
+                                    
+
+                                        <div class="clear"></div>
+                    </section>
+
+                    <div class="clear"></div>
+
+                    
+                                <!--
+                                <div id="comments" class="bg-white hosted ">
+                                    
+                                    <p>请到客户端“主题--自定义配置--valine”中填入ID和KEY</p>
+                                    
+                                </div>
+                                -->
+                                <div class="clear"></div>
+                                
+
+                </div>
+            </div>
+        </main>
+
+        <footer id="footer" class="grid-container">
+    <div class="widgets row gradient-effect">
+        <div class="default-sidebar border-effect">
+            <div class="grid-33 tablet-grid-50 mobile-grid-100">
+                <section id="tag_cloud-2" class="widget widget_epcl_posts_thumbs underline-effect">
+                    <h4 class="widget-title title white bordered">Latest Posts</h4>
+                    
+                        
+                            <article class="item post-0 post type-post status-publish format-standard has-post-thumbnail hentry">
+                                <a href="https://ninglg.com/post/ffmpeg-intro-and-usage/" class="thumb hover-effect">
+                      <span class="fullimage cover" style="display:block;border-radius:50%;background-image: url('/media/images/dev-tool.jpg');"></span>
+                    </a>
+                                <div class="info gradient-effect">
+                                    <time datetime="2021-08-01">2021-08-01</time>
+                                    <h4 class="title usmall">
+                                        <a href="https://ninglg.com/post/ffmpeg-intro-and-usage/">
+                                            FFmpeg介绍和使用
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div class="clear"></div>
+                            </article>
+                            
+                                
+                        
+                            <article class="item post-1 post type-post status-publish format-standard has-post-thumbnail hentry">
+                                <a href="https://ninglg.com/post/annual-goals/" class="thumb hover-effect">
+                      <span class="fullimage cover" style="display:block;border-radius:50%;background-image: url('/media/images/life.jpg');"></span>
+                    </a>
+                                <div class="info gradient-effect">
+                                    <time datetime="2021-01-01">2021-01-01</time>
+                                    <h4 class="title usmall">
+                                        <a href="https://ninglg.com/post/annual-goals/">
+                                            年度目标
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div class="clear"></div>
+                            </article>
+                            
+                                
+                        
+                            <article class="item post-2 post type-post status-publish format-standard has-post-thumbnail hentry">
+                                <a href="https://ninglg.com/post/book-reading-list/" class="thumb hover-effect">
+                      <span class="fullimage cover" style="display:block;border-radius:50%;background-image: url('/media/images/read.jpg');"></span>
+                    </a>
+                                <div class="info gradient-effect">
+                                    <time datetime="2021-01-01">2021-01-01</time>
+                                    <h4 class="title usmall">
+                                        <a href="https://ninglg.com/post/book-reading-list/">
+                                            阅读书单
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div class="clear"></div>
+                            </article>
+                            
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                                    <div class="clear"></div>
+                </section>
+            </div>
+
+            <div class="grid-33 tablet-grid-50 mobile-grid-100">
+                <section id="tag_cloud-2" class="widget widget_tag_cloud underline-effect">
+                    <h4 class="widget-title title white bordered">Tags Cloud</h4>
+                    <div class="tagcloud">
+                        
+                            <a href="https://ninglg.com/tag/dev-tool/" class="ctag ctag-0 ctag-dev-tool" aria-label="">
+                                开发工具
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/life/" class="ctag ctag-1 ctag-life" aria-label="">
+                                生活
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/read/" class="ctag ctag-2 ctag-read" aria-label="">
+                                阅读
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/flutter/" class="ctag ctag-3 ctag-flutter" aria-label="">
+                                Flutter
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/html/" class="ctag ctag-4 ctag-html" aria-label="">
+                                HTML
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/algorithm/" class="ctag ctag-5 ctag-algorithm" aria-label="">
+                                算法
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/elasticsearch/" class="ctag ctag-6 ctag-elasticsearch" aria-label="">
+                                Elasticsearch
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/kafka/" class="ctag ctag-7 ctag-kafka" aria-label="">
+                                Kafka
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/golang/" class="ctag ctag-8 ctag-golang" aria-label="">
+                                Golang
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/system-design/" class="ctag ctag-9 ctag-system-design" aria-label="">
+                                系统设计
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/app/" class="ctag ctag-10 ctag-app" aria-label="">
+                                APP
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/linux/" class="ctag ctag-11 ctag-linux" aria-label="">
+                                Linux
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/bigdata/" class="ctag ctag-12 ctag-bigdata" aria-label="">
+                                大数据
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/http/" class="ctag ctag-13 ctag-http" aria-label="">
+                                HTTP
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/microservice/" class="ctag ctag-14 ctag-microservice" aria-label="">
+                                微服务
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/data-structure/" class="ctag ctag-15 ctag-data-structure" aria-label="">
+                                数据结构
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/docker/" class="ctag ctag-16 ctag-docker" aria-label="">
+                                Docker
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/english/" class="ctag ctag-17 ctag-english" aria-label="">
+                                英语
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/mysql/" class="ctag ctag-18 ctag-mysql" aria-label="">
+                                MySQL
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/redis/" class="ctag ctag-19 ctag-redis" aria-label="">
+                                Redis
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/work/" class="ctag ctag-20 ctag-work" aria-label="">
+                                工作
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/operating-system/" class="ctag ctag-21 ctag-operating-system" aria-label="">
+                                操作系统
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/vuejs/" class="ctag ctag-22 ctag-vuejs" aria-label="">
+                                Vue.js
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/php/" class="ctag ctag-23 ctag-php" aria-label="">
+                                PHP
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/distributed-system/" class="ctag ctag-24 ctag-distributed-system" aria-label="">
+                                分布式系统
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/movie/" class="ctag ctag-25 ctag-movie" aria-label="">
+                                电影
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/nginx/" class="ctag ctag-26 ctag-nginx" aria-label="">
+                                Nginx
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/network/" class="ctag ctag-27 ctag-network" aria-label="">
+                                网络
+                            </a>
+                            
+                    </div>
+                    <div class="clear"></div>
+                </section>
+            </div>
+
+            <div class="grid-33 tablet-grid-50 mobile-grid-100">
+                <section id="epcl_about-2" class="widget widget_epcl_about underline-effect">
+                    <h4 class="widget-title title white bordered">About Me</h4>
+                    <div class="avatar">
+                        <a href="/post/about/" class="translate-effect thumb"><span class="fullimage cover" style="background-image: url(https://ninglg.com/images/avatar.png);"></span></a>
+                    </div>
+                    <div class="info">
+                        <h4 class="title small author-name gradient-effect no-margin">
+                            <a href="/">
+                                Light Ning
+                            </a>
+                        </h4>
+                        <p class="founder">
+                            永远奔腾，永远闪光
+                        </p>
+                        <div class="social">
+                            
+                                
+                                        
+                                
+                                        
+                                
+                                        
+                                
+                                        
+                                
+                                        
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                </section>
+            </div>
+
+        </div>
+        <div class="clear"></div>
+    </div>
+
+    <div class="logo">
+        <a href="javascript: scroll(0, 0)"><img src="/media/images/custom-footerLogo.png" alt=""></a>
+    </div>
+    <p class="published border-effect">
+        ©2021 共
+        176 篇文章
+            <br/> Theme <a href="https://github.com/lmm214/gridea-theme-breek/" target="_blank">「breek」</a> Powered by <a href="https://gridea.dev/" target="_blank">「Gridea」</a>
+    </p>
+
+    <a href="javascript:void(0)" id="back-to-top" class="epcl-button dark" style="display:none">
+        <i class="fa fa-arrow"></i>
+    </a>
+</footer>
+
+<div class="clear"></div>
+
+
+
+            <script src="https://ninglg.com/media/js/functions-post.js"></script>
+
+            </div>
+            <!-- end: #wrapper -->
+</body>
+
+</html>

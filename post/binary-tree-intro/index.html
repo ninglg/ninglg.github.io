@@ -1,0 +1,1202 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>数据结构：二叉树 | Light Ning</title>
+<meta name="description" content="永远奔腾，永远闪光" />
+<link rel="shortcut icon" href="https://ninglg.com/favicon.ico">
+<link rel="stylesheet" href="https://ninglg.com/styles/main.css">
+
+<script src="https://ninglg.com/media/js/jquery.min.js"></script>
+<script src="https://ninglg.com/media/js/masonry.pkgd.min.js"></script>
+<script src="https://ninglg.com/media/js/aos.js"></script>
+<script src="https://ninglg.com/media/js/pace.min.js"></script>
+<script src="https://ninglg.com/media/js/view-image.min.js"></script>
+<script src="https://ninglg.com/media/js/jquery.magnific-popup.min.js"></script>
+<script src="https://ninglg.com/media/js/functions.js"></script>
+        <meta name="referrer" content="never">
+        <meta name="description" content="数据结构：二叉树
+
+二叉树的特点
+
+二叉树中每个节点最多有两棵子树，称为左子树、右子树；
+左子树和右子树是有顺序的，有左右之分，次序不能随意颠倒；
+即使某个节点只有一个子树，也要区分左右子树。
+
+
+即：最多两棵树，还要分左右。
+
+
+完全二叉..." />
+        <meta name="keywords" content="数据结构" />
+        <script src="https://ninglg.com/media/js/waterfall.min.js"></script>
+        <script src="https://ninglg.com/media/js/prism.min.js"></script>
+</head>
+
+<body>
+    <header id="header" class="grid-container">
+    <!-- start: .menu-wrapper -->
+    <div class="menu-mobile">
+        <i class="fa fa-reorder"></i>
+    </div>
+    <div class="menu-wrapper">
+        <div class="">
+            <div class="logo">
+                <a href="https://ninglg.com"><img src="/media/images/custom-headerLogo.png" alt=""></a>
+            </div>
+            <!-- start: .main-nav -->
+
+            <nav class="main-nav grid-container grid-parent">
+                <ul id="menu-header" class="menu gradient-effect">
+                    <li class=""><a href="https://ninglg.com" class="menu">首页</a></li>
+                    
+                        <li class="">
+                            <a href="/archives" class="menu">
+                                存档
+                            </a>
+                        </li>
+                        
+                        <li class="">
+                            <a href="/tags" class="menu">
+                                标签
+                            </a>
+                        </li>
+                        
+                        <li class="">
+                            <a href="/post/about/" class="menu">
+                                关于
+                            </a>
+                        </li>
+                        
+                            <li class="search-menu-item hide-on-mobile hide-on-tablet"><a href="#search-lightbox" class="lightbox mfp-inline"><i class="fa fa-search-line"></i></a></li>
+                </ul>
+            </nav>
+            <a href="#search-lightbox" class="lightbox epcl-search-button mfp-inline hide-on-tablet hide-on-desktop"><i class="fa fa-search-line"></i></a>
+            <!-- end: .main-nav -->
+            <div class="clear"></div>
+            <div class="border hide-on-tablet hide-on-mobile"></div>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <!-- end: .menu-wrapper -->
+    <div class="clear"></div>
+</header>
+<div class="hide-on-mobile hide-on-tablet hide-on-desktop">
+    <div id="search-lightbox" class="grid-container grid-small grid-parent mfp-hide">
+        <div class="search-wrapper section">
+            <form id="gridea-search-form" data-update="1728915775825" action="/search/index.html" class="search-form" _lpchecked="1">
+                <input type="text" name="q" id="s" value="" class="search-field" placeholder="搜点啥..." aria-label="搜点啥..." required="">
+                <button type="submit" class="submit" aria-label="Submit">
+                <i class="fa fa-search-line"></i>
+              </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+        <main id="single" class="main grid-container fullcover no-sidebar aos-init aos-animate" data-aos="fade">
+
+            <div class="center content">
+                <div class="featured-image cover" style="background-image: url('/media/images/data-structure.jpg');">
+                    <div class="meta top">
+                        <time class="meta-info" style="float:left;" datetime="2011-03-20"><i class="fa fa-calendar"></i><span class="lately">14 年前</span></time>
+                        
+                            <a href="https://ninglg.com/post/binary-tree-intro/#comments" class="comments meta-info" title="">
+                                <i class="fa fa-comment remixicon"></i><span class="comment-count valine-comment-count" data-xid="/binary-tree-intro/"> </span>
+                            </a>
+                            <span id="/binary-tree-intro/" class="leancloud_visitors views-counter meta-info" title=""><i class="fa fa-leancloud remixicon"></i><span class="leancloud-visitors-count"></span></span>
+                            
+                    </div>
+                    <div class="info">
+                        <div class="tags ">
+                            
+                                <a href="https://ninglg.com/tag/data-structure/" class="ctag ctag-0 ctag-data-structure" aria-label="">
+                                    数据结构
+                                </a>
+                                
+                        </div>
+                        <h1 class="title ularge white bold">
+                            数据结构：二叉树
+                        </h1>
+                    </div>
+                </div>
+            </div>
+
+            <div class="epcl-page-wrapper">
+                <div class="left-content grid-70 np-mobile">
+                    <article class="main-article post">
+                        <section class="post-content">
+                            <div class="text">
+                                <p>数据结构：二叉树</p>
+<!-- more -->
+<h1 id="二叉树的特点">二叉树的特点</h1>
+<ol>
+<li>二叉树中每个节点最多有两棵子树，称为左子树、右子树；</li>
+<li>左子树和右子树是有顺序的，有左右之分，次序不能随意颠倒；</li>
+<li>即使某个节点只有一个子树，也要区分左右子树。</li>
+</ol>
+<blockquote>
+<p>即：最多两棵树，还要分左右。</p>
+</blockquote>
+<ol start="4">
+<li>完全二叉树：只有底层没满，且按顺序排列在左边的二叉树。</li>
+<li>满二叉树：所有节点都满了的二叉树</li>
+<li>二叉搜索树：节点分大小，左边&gt;中间&gt;右边。</li>
+<li>平衡二叉树：左右子树的高度差最大为1。</li>
+<li>平衡二叉搜索树：集合二叉搜索树和平衡二叉树两者特点的树，比如AVL树。</li>
+</ol>
+<h1 id="二叉树的存储">二叉树的存储</h1>
+<pre><code class="language-go"> type TreeNode struct {
+     Val int
+     Left *TreeNode
+     Right *TreeNode
+ }
+</code></pre>
+<h1 id="树的遍历">树的遍历</h1>
+<h2 id="前序遍历">前序遍历</h2>
+<h3 id="前序遍历-递归">前序遍历-递归</h3>
+<pre><code class="language-go">func preOrder(t *TreeNode) {
+	if t == nil {
+		return
+	}
+	fmt.Println(t.Val)
+	preOrder(t.Left)
+	preOrder(t.Right)
+}
+</code></pre>
+<h3 id="前序遍历-非递归">前序遍历-非递归</h3>
+<h2 id="中序遍历">中序遍历</h2>
+<h3 id="中序遍历-递归">中序遍历-递归</h3>
+<pre><code class="language-go">func inOrder(t *TreeNode) {
+	if t == nil {
+		return
+	}
+	inOrder(t.Left)
+	fmt.Println(t.Val)
+	inOrder(t.Right)
+}
+</code></pre>
+<h3 id="中序遍历-非递归">中序遍历-非递归</h3>
+<pre><code class="language-go">// 使用栈来记录树上的节点，栈顶的节点即是当前访问的节点
+</code></pre>
+<h2 id="后序遍历">后序遍历</h2>
+<h3 id="后序遍历-递归">后序遍历-递归</h3>
+<pre><code class="language-go">func postOrder(t *TreeNode) {
+	if t == nil {
+		return
+	}
+	postOrder(t.Left)
+	postOrder(t.Right)
+	fmt.Println(t.Val)
+}
+</code></pre>
+<h3 id="后序遍历-非递归">后序遍历-非递归</h3>
+<h1 id="dfs和bfs搜索">DFS和BFS搜索</h1>
+<figure data-type="image" tabindex="1"><img src="https://ninglg.com/post-images/1646830336745.gif" alt="" loading="lazy"></figure>
+<h2 id="广度优先搜索breath-first-searchbfs又称层序遍历-一般采用队列进行遍历辅助">广度优先搜索（Breath First Search，BFS，又称层序遍历。一般采用队列进行遍历辅助。）</h2>
+<pre><code class="language-go">func bfs(p *TreeNode) []int {
+	res := make([]int, 0)
+	if p == nil {
+		return res
+	}
+
+// BFS需要使用一个 **队列** 协助，此处用slice模拟队列
+	queue := []*TreeNode{p}
+	for len(queue) &gt; 0 {    //每一轮是不同层
+		length := len(queue)
+		for length &gt; 0 {    // 同层遍历
+			length--
+			if queue[0].Left != nil {
+				queue = append(queue, queue[0].Left)
+			}
+			if queue[0].Right != nil {
+				queue = append(queue, queue[0].Right)
+			}
+			res = append(res, queue[0].Val)
+			queue = queue[1:]
+		}
+	}
+
+	return res
+}
+
+</code></pre>
+<h2 id="深度优先搜索depth-first-searchdfs-一般采用栈进行遍历辅助可用递归来实现栈">深度优先搜索（Depth First Search，DFS。一般采用栈进行遍历辅助，可用递归来实现栈。）</h2>
+<pre><code class="language-go">func DFS(root *TreeNode) []int {
+    if root == nil {
+        return
+    }
+
+    var res []int
+    res = append(res, root.Val)
+
+    DFS(root.Left)
+    DFS(root.Right)
+
+    return res
+}
+</code></pre>
+<h1 id="计算二叉树的节点个数">计算二叉树的节点个数</h1>
+<pre><code class="language-go">/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+func countNodes(root *TreeNode) int {
+    if root == nil {
+        return 0
+    }
+
+    return countNodes(root.Left) + countNodes(root.Right) + 1
+}
+</code></pre>
+<h1 id="计算二叉树的深度">计算二叉树的深度</h1>
+<pre><code class="language-go">func maxDepth(root *TreeNode) int {
+    if root == nil {
+        return 0
+    }
+
+    return 1 + max(maxDepth(root.Left), maxDepth(root.Right))
+}
+
+func max(x,y int) int {
+    if x &gt; y {
+        return x
+    }
+    
+    return y
+}
+</code></pre>
+<h1 id="平衡二叉树">平衡二叉树</h1>
+<h2 id="判断一棵二叉树是否是平衡二叉树">判断一棵二叉树是否是平衡二叉树</h2>
+<pre><code class="language-go">func isBalanced(root *TreeNode) bool {
+	if root == nil {
+		return true
+	}
+	leftHeight := height(root.Left)
+	rightHeight := height(root.Right)
+	if leftHeight-rightHeight &lt; -1 || leftHeight-rightHeight &gt; 1 {
+		return false
+	}
+
+	return isBalanced(root.Left) &amp;&amp; isBalanced(root.Right)
+}
+
+func height(node *TreeNode) int {
+	if node == nil {
+		return 0
+	}
+
+	return 1 + max(height(node.Left), height(node.Right))
+}
+
+func max(a, b int) int {
+	if a &gt; b {
+		return a
+	}
+
+	return b
+}
+</code></pre>
+<h2 id="合并两个二叉树">合并两个二叉树</h2>
+<pre><code class="language-go">func mergeTrees(root1 *TreeNode, root2 *TreeNode) *TreeNode {
+	if root1 == nil &amp;&amp; root2 == nil {
+		return nil
+	} else if root1 == nil {
+		return root2
+	} else if root2 == nil {
+		return root1
+	} else {
+		root1.Val += root2.Val
+		root1.Left = mergeTrees(root1.Left, root2.Left)
+		root1.Right = mergeTrees(root1.Right, root2.Right)
+		return root1
+	}
+}
+</code></pre>
+<h2 id="反转二叉树">反转二叉树</h2>
+<pre><code class="language-go">/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+func invertTree(root *TreeNode) *TreeNode {
+    if root == nil {
+        return nil
+    }
+
+    left := invertTree(root.Left)
+    right := invertTree(root.Right)
+
+    root.Left = right
+    root.Right = left
+    
+    return root
+}
+</code></pre>
+<h2 id="判断两棵二叉树是否相同">判断两棵二叉树是否相同</h2>
+<pre><code class="language-go">/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+func isSameTree(p *TreeNode, q *TreeNode) bool {
+    if (p == nil) &amp;&amp; (q == nil) {
+        return true
+    }
+
+    if (p == nil) || (q == nil) {
+        return false
+    }
+
+    if p.Val != q.Val {
+        return false
+    }
+
+    return isSameTree(p.Left, q.Left) &amp;&amp; isSameTree(p.Right, q.Right)    
+}
+</code></pre>
+<h2 id="打印二叉树的所有路径">打印二叉树的所有路径</h2>
+<blockquote>
+<p>输入：root = [1,2,3,null,5]<br>
+输出：[&quot;1-&gt;2-&gt;5&quot;,&quot;1-&gt;3&quot;]</p>
+</blockquote>
+<pre><code class="language-go">/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+var paths []string
+
+func binaryTreePaths(root *TreeNode) []string {
+    paths = []string{}
+    constructPaths(root, &quot;&quot;)
+    return paths
+}
+
+func constructPaths(root *TreeNode, path string) {
+    if root != nil {
+        pathSB := path
+        pathSB += strconv.Itoa(root.Val)
+        if root.Left == nil &amp;&amp; root.Right == nil {
+            paths = append(paths, pathSB)
+        } else {
+            pathSB += &quot;-&gt;&quot;
+            constructPaths(root.Left, pathSB)
+            constructPaths(root.Right, pathSB)
+        }
+    }
+}
+</code></pre>
+<h2 id="计算二叉树的最小深度">计算二叉树的最小深度</h2>
+<blockquote>
+<p>最小深度是从根节点到最近叶子节点的最短路径上的节点数量。</p>
+</blockquote>
+<pre><code class="language-go">/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+func minDepth(root *TreeNode) int {
+    if root == nil {
+		return 0
+	}
+
+	if root.Left == nil {
+		return minDepth(root.Right) + 1
+	}
+
+	if root.Right == nil {
+		return minDepth(root.Left) + 1
+	}
+
+	return min(minDepth(root.Left), minDepth(root.Right)) + 1  
+}
+
+func min(a, b int) int {
+    if a &lt; b {
+        return a
+    }
+
+    return b
+}
+</code></pre>
+<h2 id="二叉树的最近公共祖先">二叉树的最近公共祖先</h2>
+<pre><code class="language-go">/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
+    if root == nil {
+        return nil
+    }
+
+    if root.Val == p.Val || root.Val == q.Val {
+        return root
+    }
+
+    left := lowestCommonAncestor(root.Left, p, q)
+    right := lowestCommonAncestor(root.Right, p, q)
+    if left != nil &amp;&amp; right != nil {
+        return root
+    }
+
+    if left == nil {
+        return right
+    }
+    
+    return left
+}
+</code></pre>
+<h2 id="判断是否是轴对称的对称二叉树">判断是否是轴对称的对称二叉树</h2>
+<pre><code class="language-go">/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+func isSymmetric(root *TreeNode) bool {
+    if root == nil {
+        return true
+    }
+
+    return compare(root.Left, root.Right)
+}
+
+func compare(node1 *TreeNode, node2 *TreeNode) bool {
+    if node1 == nil &amp;&amp; node2 == nil {
+        return true
+    }
+
+    if node1 == nil || node2 == nil {
+        return false
+    }
+
+    if node1.Val != node2.Val {
+        return false
+    }
+
+
+    return compare(node1.Left, node2.Right) &amp;&amp; compare(node1.Right, node2.Left)
+}
+</code></pre>
+<h1 id="二分搜索树bstbinary-search-tree">二分搜索树（BST，Binary Search Tree）</h1>
+<ol>
+<li>二分搜索树也是一种二叉树，但二分搜索树种每个节点的值都要大于其左子树所有节点的值，小于其右子树所有节点的值；</li>
+<li>每一棵子树也是二分搜索树。</li>
+</ol>
+<h2 id="验证是否是二叉搜索树">验证是否是二叉搜索树</h2>
+<pre><code class="language-go">/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+func isValidBST(root *TreeNode) bool {
+    if root == nil{
+        return true
+    }
+    var stack []*TreeNode
+    cur := root
+    var prev *TreeNode
+    
+    for len(stack)&gt;0 || cur!=nil{
+        if cur!=nil{
+            stack = append(stack,cur)
+            cur = cur.Left
+        }else{
+            cur = stack[len(stack)-1]
+            stack = stack[:len(stack)-1]
+            if prev!=nil &amp;&amp;prev.Val &gt;= cur.Val{
+                return false
+            }
+            
+            prev = cur
+            cur = cur.Right
+        }
+    }
+    
+    return true
+}
+</code></pre>
+<h1 id="平衡二叉树avl树-红黑树">平衡二叉树（AVL树、红黑树）</h1>
+<h1 id="线段树">线段树</h1>
+<h1 id="trie树又称字典树或前缀树">Trie树（又称字典树或前缀树）</h1>
+
+                            </div>
+                            <div class="clear"></div>
+                        </section>
+                    </article>
+                    <div class="clear"></div>
+
+                    <section class="related section">
+                        
+                            <article class="prev grid-50 tablet-grid-50 grid-parent">
+                                <div class="thumb cover lazy loaded" style="background-image: url('https://ninglg.com/media/images/linux.jpg');"></div>
+                                <a href="https://ninglg.com/post/cpu-context-switch-intro/" class="full-link"></a>
+                                <div class="info">
+                                    <time datetime="2011-08-17">2011-08-17</time>
+                                    <h4 class="title white no-margin">
+                                        CPU上下文切换的概念
+                                    </h4>
+                                </div>
+                                <span class="epcl-button red">
+                  <img src="https://ninglg.com/media/images/left-arrow.svg" width="15" alt="Left Arrow">
+                </span>
+                                <div class="overlay"></div>
+                            </article>
+                            
+                                
+                                    <article class="next grid-50 tablet-grid-50 grid-parent">
+                                        <div class="thumb cover lazy loaded" style="background-image: url('https://ninglg.com/media/images/linux.jpg');"></div>
+                                        <a href="https://ninglg.com/post/sed-command-usage/" class="full-link"></a>
+                                        <div class="info">
+                                            <time datetime="2011-03-16">2011-03-16</time>
+                                            <h4 class="title white no-margin">
+                                                sed命令使用
+                                            </h4>
+                                        </div>
+                                        <span class="epcl-button red">
+                  <img src="https://ninglg.com/media/images/right-arrow.svg" width="15" alt="Left Arrow">
+                </span>
+                                        <div class="overlay"></div>
+                                    </article>
+                                    
+
+                                        <div class="clear"></div>
+                    </section>
+
+                    <div class="clear"></div>
+
+                    
+                                <!--
+                                <div id="comments" class="bg-white hosted ">
+                                    
+                                    <p>请到客户端“主题--自定义配置--valine”中填入ID和KEY</p>
+                                    
+                                </div>
+                                -->
+                                <div class="clear"></div>
+                                
+
+                </div>
+            </div>
+        </main>
+
+        <footer id="footer" class="grid-container">
+    <div class="widgets row gradient-effect">
+        <div class="default-sidebar border-effect">
+            <div class="grid-33 tablet-grid-50 mobile-grid-100">
+                <section id="tag_cloud-2" class="widget widget_epcl_posts_thumbs underline-effect">
+                    <h4 class="widget-title title white bordered">Latest Posts</h4>
+                    
+                        
+                            <article class="item post-0 post type-post status-publish format-standard has-post-thumbnail hentry">
+                                <a href="https://ninglg.com/post/ffmpeg-intro-and-usage/" class="thumb hover-effect">
+                      <span class="fullimage cover" style="display:block;border-radius:50%;background-image: url('/media/images/dev-tool.jpg');"></span>
+                    </a>
+                                <div class="info gradient-effect">
+                                    <time datetime="2021-08-01">2021-08-01</time>
+                                    <h4 class="title usmall">
+                                        <a href="https://ninglg.com/post/ffmpeg-intro-and-usage/">
+                                            FFmpeg介绍和使用
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div class="clear"></div>
+                            </article>
+                            
+                                
+                        
+                            <article class="item post-1 post type-post status-publish format-standard has-post-thumbnail hentry">
+                                <a href="https://ninglg.com/post/annual-goals/" class="thumb hover-effect">
+                      <span class="fullimage cover" style="display:block;border-radius:50%;background-image: url('/media/images/life.jpg');"></span>
+                    </a>
+                                <div class="info gradient-effect">
+                                    <time datetime="2021-01-01">2021-01-01</time>
+                                    <h4 class="title usmall">
+                                        <a href="https://ninglg.com/post/annual-goals/">
+                                            年度目标
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div class="clear"></div>
+                            </article>
+                            
+                                
+                        
+                            <article class="item post-2 post type-post status-publish format-standard has-post-thumbnail hentry">
+                                <a href="https://ninglg.com/post/book-reading-list/" class="thumb hover-effect">
+                      <span class="fullimage cover" style="display:block;border-radius:50%;background-image: url('/media/images/read.jpg');"></span>
+                    </a>
+                                <div class="info gradient-effect">
+                                    <time datetime="2021-01-01">2021-01-01</time>
+                                    <h4 class="title usmall">
+                                        <a href="https://ninglg.com/post/book-reading-list/">
+                                            阅读书单
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div class="clear"></div>
+                            </article>
+                            
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                                    <div class="clear"></div>
+                </section>
+            </div>
+
+            <div class="grid-33 tablet-grid-50 mobile-grid-100">
+                <section id="tag_cloud-2" class="widget widget_tag_cloud underline-effect">
+                    <h4 class="widget-title title white bordered">Tags Cloud</h4>
+                    <div class="tagcloud">
+                        
+                            <a href="https://ninglg.com/tag/dev-tool/" class="ctag ctag-0 ctag-dev-tool" aria-label="">
+                                开发工具
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/life/" class="ctag ctag-1 ctag-life" aria-label="">
+                                生活
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/read/" class="ctag ctag-2 ctag-read" aria-label="">
+                                阅读
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/flutter/" class="ctag ctag-3 ctag-flutter" aria-label="">
+                                Flutter
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/html/" class="ctag ctag-4 ctag-html" aria-label="">
+                                HTML
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/algorithm/" class="ctag ctag-5 ctag-algorithm" aria-label="">
+                                算法
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/elasticsearch/" class="ctag ctag-6 ctag-elasticsearch" aria-label="">
+                                Elasticsearch
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/kafka/" class="ctag ctag-7 ctag-kafka" aria-label="">
+                                Kafka
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/golang/" class="ctag ctag-8 ctag-golang" aria-label="">
+                                Golang
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/system-design/" class="ctag ctag-9 ctag-system-design" aria-label="">
+                                系统设计
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/app/" class="ctag ctag-10 ctag-app" aria-label="">
+                                APP
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/linux/" class="ctag ctag-11 ctag-linux" aria-label="">
+                                Linux
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/bigdata/" class="ctag ctag-12 ctag-bigdata" aria-label="">
+                                大数据
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/http/" class="ctag ctag-13 ctag-http" aria-label="">
+                                HTTP
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/microservice/" class="ctag ctag-14 ctag-microservice" aria-label="">
+                                微服务
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/data-structure/" class="ctag ctag-15 ctag-data-structure" aria-label="">
+                                数据结构
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/docker/" class="ctag ctag-16 ctag-docker" aria-label="">
+                                Docker
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/english/" class="ctag ctag-17 ctag-english" aria-label="">
+                                英语
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/mysql/" class="ctag ctag-18 ctag-mysql" aria-label="">
+                                MySQL
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/redis/" class="ctag ctag-19 ctag-redis" aria-label="">
+                                Redis
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/work/" class="ctag ctag-20 ctag-work" aria-label="">
+                                工作
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/operating-system/" class="ctag ctag-21 ctag-operating-system" aria-label="">
+                                操作系统
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/vuejs/" class="ctag ctag-22 ctag-vuejs" aria-label="">
+                                Vue.js
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/php/" class="ctag ctag-23 ctag-php" aria-label="">
+                                PHP
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/distributed-system/" class="ctag ctag-24 ctag-distributed-system" aria-label="">
+                                分布式系统
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/movie/" class="ctag ctag-25 ctag-movie" aria-label="">
+                                电影
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/nginx/" class="ctag ctag-26 ctag-nginx" aria-label="">
+                                Nginx
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/network/" class="ctag ctag-27 ctag-network" aria-label="">
+                                网络
+                            </a>
+                            
+                    </div>
+                    <div class="clear"></div>
+                </section>
+            </div>
+
+            <div class="grid-33 tablet-grid-50 mobile-grid-100">
+                <section id="epcl_about-2" class="widget widget_epcl_about underline-effect">
+                    <h4 class="widget-title title white bordered">About Me</h4>
+                    <div class="avatar">
+                        <a href="/post/about/" class="translate-effect thumb"><span class="fullimage cover" style="background-image: url(https://ninglg.com/images/avatar.png);"></span></a>
+                    </div>
+                    <div class="info">
+                        <h4 class="title small author-name gradient-effect no-margin">
+                            <a href="/">
+                                Light Ning
+                            </a>
+                        </h4>
+                        <p class="founder">
+                            永远奔腾，永远闪光
+                        </p>
+                        <div class="social">
+                            
+                                
+                                        
+                                
+                                        
+                                
+                                        
+                                
+                                        
+                                
+                                        
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                </section>
+            </div>
+
+        </div>
+        <div class="clear"></div>
+    </div>
+
+    <div class="logo">
+        <a href="javascript: scroll(0, 0)"><img src="/media/images/custom-footerLogo.png" alt=""></a>
+    </div>
+    <p class="published border-effect">
+        ©2021 共
+        176 篇文章
+            <br/> Theme <a href="https://github.com/lmm214/gridea-theme-breek/" target="_blank">「breek」</a> Powered by <a href="https://gridea.dev/" target="_blank">「Gridea」</a>
+    </p>
+
+    <a href="javascript:void(0)" id="back-to-top" class="epcl-button dark" style="display:none">
+        <i class="fa fa-arrow"></i>
+    </a>
+</footer>
+
+<div class="clear"></div>
+
+
+
+            <script src="https://ninglg.com/media/js/functions-post.js"></script>
+
+            </div>
+            <!-- end: #wrapper -->
+</body>
+
+</html>

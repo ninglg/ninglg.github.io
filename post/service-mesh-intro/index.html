@@ -1,0 +1,778 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Service Mesh介绍 | Light Ning</title>
+<meta name="description" content="永远奔腾，永远闪光" />
+<link rel="shortcut icon" href="https://ninglg.com/favicon.ico">
+<link rel="stylesheet" href="https://ninglg.com/styles/main.css">
+
+<script src="https://ninglg.com/media/js/jquery.min.js"></script>
+<script src="https://ninglg.com/media/js/masonry.pkgd.min.js"></script>
+<script src="https://ninglg.com/media/js/aos.js"></script>
+<script src="https://ninglg.com/media/js/pace.min.js"></script>
+<script src="https://ninglg.com/media/js/view-image.min.js"></script>
+<script src="https://ninglg.com/media/js/jquery.magnific-popup.min.js"></script>
+<script src="https://ninglg.com/media/js/functions.js"></script>
+        <meta name="referrer" content="never">
+        <meta name="description" content="此篇简要介绍一下Service Mesh的相关内容。
+
+Service Mesh介绍
+Service Mesh是一个致力于解决服务间通信的基础设施层，其负责在现代云原生应用的复杂服务拓扑下实现请求的可靠传递，在实践中Service Mesh..." />
+        <meta name="keywords" content="微服务" />
+        <script src="https://ninglg.com/media/js/waterfall.min.js"></script>
+        <script src="https://ninglg.com/media/js/prism.min.js"></script>
+</head>
+
+<body>
+    <header id="header" class="grid-container">
+    <!-- start: .menu-wrapper -->
+    <div class="menu-mobile">
+        <i class="fa fa-reorder"></i>
+    </div>
+    <div class="menu-wrapper">
+        <div class="">
+            <div class="logo">
+                <a href="https://ninglg.com"><img src="/media/images/custom-headerLogo.png" alt=""></a>
+            </div>
+            <!-- start: .main-nav -->
+
+            <nav class="main-nav grid-container grid-parent">
+                <ul id="menu-header" class="menu gradient-effect">
+                    <li class=""><a href="https://ninglg.com" class="menu">首页</a></li>
+                    
+                        <li class="">
+                            <a href="/archives" class="menu">
+                                存档
+                            </a>
+                        </li>
+                        
+                        <li class="">
+                            <a href="/tags" class="menu">
+                                标签
+                            </a>
+                        </li>
+                        
+                        <li class="">
+                            <a href="/post/about/" class="menu">
+                                关于
+                            </a>
+                        </li>
+                        
+                            <li class="search-menu-item hide-on-mobile hide-on-tablet"><a href="#search-lightbox" class="lightbox mfp-inline"><i class="fa fa-search-line"></i></a></li>
+                </ul>
+            </nav>
+            <a href="#search-lightbox" class="lightbox epcl-search-button mfp-inline hide-on-tablet hide-on-desktop"><i class="fa fa-search-line"></i></a>
+            <!-- end: .main-nav -->
+            <div class="clear"></div>
+            <div class="border hide-on-tablet hide-on-mobile"></div>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <!-- end: .menu-wrapper -->
+    <div class="clear"></div>
+</header>
+<div class="hide-on-mobile hide-on-tablet hide-on-desktop">
+    <div id="search-lightbox" class="grid-container grid-small grid-parent mfp-hide">
+        <div class="search-wrapper section">
+            <form id="gridea-search-form" data-update="1728915775825" action="/search/index.html" class="search-form" _lpchecked="1">
+                <input type="text" name="q" id="s" value="" class="search-field" placeholder="搜点啥..." aria-label="搜点啥..." required="">
+                <button type="submit" class="submit" aria-label="Submit">
+                <i class="fa fa-search-line"></i>
+              </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+        <main id="single" class="main grid-container fullcover no-sidebar aos-init aos-animate" data-aos="fade">
+
+            <div class="center content">
+                <div class="featured-image cover" style="background-image: url('/media/images/microservice.jpg');">
+                    <div class="meta top">
+                        <time class="meta-info" style="float:left;" datetime="2019-04-01"><i class="fa fa-calendar"></i><span class="lately">6 年前</span></time>
+                        
+                            <a href="https://ninglg.com/post/service-mesh-intro/#comments" class="comments meta-info" title="">
+                                <i class="fa fa-comment remixicon"></i><span class="comment-count valine-comment-count" data-xid="/service-mesh-intro/"> </span>
+                            </a>
+                            <span id="/service-mesh-intro/" class="leancloud_visitors views-counter meta-info" title=""><i class="fa fa-leancloud remixicon"></i><span class="leancloud-visitors-count"></span></span>
+                            
+                    </div>
+                    <div class="info">
+                        <div class="tags ">
+                            
+                                <a href="https://ninglg.com/tag/microservice/" class="ctag ctag-0 ctag-microservice" aria-label="">
+                                    微服务
+                                </a>
+                                
+                        </div>
+                        <h1 class="title ularge white bold">
+                            Service Mesh介绍
+                        </h1>
+                    </div>
+                </div>
+            </div>
+
+            <div class="epcl-page-wrapper">
+                <div class="left-content grid-70 np-mobile">
+                    <article class="main-article post">
+                        <section class="post-content">
+                            <div class="text">
+                                <p>此篇简要介绍一下Service Mesh的相关内容。</p>
+<!-- more -->
+<h1 id="service-mesh介绍">Service Mesh介绍</h1>
+<p>Service Mesh是一个致力于解决服务间通信的基础设施层，其负责在现代云原生应用的复杂服务拓扑下实现请求的可靠传递，在实践中Service Mesh通常实现为一组轻量级网络代理，这些代理与应用程序部署在一起，并且对应用程序透明。</p>
+<p>基础设施层是Service Mesh的定位，致力于解决微服务基础设施标准化、配置化、服务化和产品化问题；服务间通信是Service Mesh技术面对的问题域，对微服务屏蔽通信的复杂度，解决微服务的通信治理问题；请求的可靠传递是Service Mesh的目标；轻量级网络代理是Service Mesh的部署方式；对应用程序透明是Service Mesh的亮点和特色，Service Mesh接入对业务无侵入，可以非常方便地获取Service Mesh带来的便捷性，算是Service Mesh的一大优势。</p>
+<h2 id="完善的微服务基础设施">完善的微服务基础设施</h2>
+<p>Service Mesh通过将微服务通信下沉到基础设施层，屏蔽了微服务处理各种通信问题的复杂度，可以看成是微服务之间的抽象协议层，抽象层面可以看成是TCP/IP协议栈的一部分。对于微服务的开发者来说，比如当前使用HTTP或者Thrift进行RPC通信时，你不需要关注TCP/IP这一层的具体实现；有了Service Mesh之后，微服务也不再需要关注RPC通信（包含服务发现、负载均衡、流量调度、限流降级、监控统计等）的一切细节，真正像本地调用一样使用微服务，通信相关的一切工作直接交给Service Mesh。</p>
+<h2 id="语言无关的通信和链路治理">语言无关的通信和链路治理</h2>
+<p>功能上Service Mesh并没有提供任何新的特性和能力，Service Mesh提供的所有通信和服务治理能力在Service Mesh之前的技术中均能找到。Service Mesh改变的是通信和服务治理能力提供的方式，通过将这些能力实现从各语言业务实现中解耦，下沉到基础设施层面，以一种更加通用和标准化的方式提供，屏蔽不同语言、不同平台的差异性，这样不仅有利于通信和服务治理能力的迭代和创新，业务使用的时候也会更加方便。</p>
+<h2 id="通信和服务治理的标准化">通信和服务治理的标准化</h2>
+<ol>
+<li>微服务治理层面，Service Mesh是标准化、体系化、无侵入的分布式服务治理平台。</li>
+<li>标准化方面，Sidecar成为所有微服务流量通信的约束标准，同时Service Mesh的数据平面和控制平面也通过标准协议进行交互。</li>
+<li>体系化方面，从全局考虑，提供多维度立体的微服务可观测能力（Metric、Trace、Logging），并且提供体系化的服务治理能力，比如限流、熔断、安全、灰度等；最为重要的是，Service Mesh通过透明无侵入的方式提供全面的服务治理能力，对微服务本身不会带来直接影响。</li>
+</ol>
+<h1 id="具体产品">具体产品</h1>
+<p>Google联合Lyft等公司推出的Istio，成为Service Mesh领域的明星项目。</p>
+<h1 id="service-mesh的基本模式">Service Mesh的基本模式</h1>
+<p>根据Service Mesh的发展历程和使用方式，我们可以把Service Mesh划分为两个模式：</p>
+<h2 id="sidecar模式">Sidecar模式</h2>
+<p>在Service Mesh发展早期，Service Mesh以Sidecar的形态存在。Sidecar模式下，网络代理服务在微服务旁边，为微服务提供通信和链路治理功能。因此，数据平面代理服务也经常被简称为Sidecar。此时，只有数据平面的网络代理服务没有控制平面，和外部基础设施服务的交互直接在网络代理服务中进行。</p>
+<p>Sidecar模式可以看作是第一代Service Mesh，代表有早期的Linkerd和Envoy。</p>
+<p>第一代Service Mesh通过采用Sidecar模式，通过将通信和通信链路治理功能从微服务中剥离出来，实现了通信基础设施的下沉和服务化，这里也体现了架构解耦的思想，通过解耦减少了微服务的负担。</p>
+<h2 id="第二代service-mesh模式">第二代Service Mesh模式</h2>
+<p>Sidecar模式的Service Mesh有一个突出的问题，将通信和通信链路治理的所有功能都放到这个代理服务中，导致数据平面代理很重，并且由于承载了太多的特性和功能，使得数据平面代理的更新和修改特别频繁，频繁的更新和升级会导致代理服务出问题的概率增大，影响代理服务的稳定性。同时，Service Mesh模式下，数据平面代理承载了微服务通信的全部流量，对稳定性要求极高，这个服务的任何故障都会对整个系统的稳定性产生很大的影响。为了解决上述频繁升级和稳定性之间的矛盾，将策略和配置决策逻辑从代理服务中脱离出来，形成了独立的控制平面，这就是第二代Service Mesh。</p>
+<p>第二代Service Mesh最重要的标志就是控制平面和数据平面分离。数据平面和控制平面并不是新的概念，路由器/交换机等数据通信产品架构上，就有运行于专门处理器上的控制平面和多个独立运行、用于路由或交换功能的数据平面。SDN（Software Defined Network，软件定义网络）将数据平面和控制平面分离，控制平面具有可编程性，使得网络更加智能、灵活和易扩展，激发了网络技术的又一次革命。</p>
+<p>第二代Service Mesh借鉴了SDN的思路，基于控制平面和数据平面分离思想，有了完善的控制平面：①所有的代理服务都由控制平面掌控，因为控制平面可以控制整个系统，所以提供了强大的控制能力和策略能力；②将具体的控制逻辑从数据平面移除，简化了数据平面的设计，数据平面不需要和外部系统进行交互，数据平面完全聚焦在变更频率很低的流量路由和转发逻辑上，提升了数据平面的稳定性。</p>
+<h1 id="service-mesh架构">Service Mesh架构</h1>
+<p>第二代Service Mesh的基本架构上分为数据平面和控制平面两个部分。</p>
+<h2 id="数据平面">数据平面</h2>
+<p>数据平面负责代理微服务之间的通信，具体包含RPC通信、服务发现、负载均衡、降级熔断、限流容错等，数据平面可以认为是将Spring Cloud、Dubbo等语言相关的微服务框架中通信和服务治理能力独立出来的一个语言无关的进程，并且更注重通用性和扩展性。在Service Mesh中，不再将数据平面代理视为一个个孤立的组件，而是将这些代理连接在一起形成一个全局的分布式网络。</p>
+<h2 id="控制平面">控制平面</h2>
+<p>控制平面负责对数据平面进行管理，定义服务发现、路由、流量控制、遥测统计等策略，这些策略可以是全局的，也可以通过配置某个数据平面节点单独指定。控制平面通过一定的机制将策略下发到各个数据平面节点，数据平面节点在通信时会使用这些策略。</p>
+
+                            </div>
+                            <div class="clear"></div>
+                        </section>
+                    </article>
+                    <div class="clear"></div>
+
+                    <section class="related section">
+                        
+                                
+
+                                        <div class="clear"></div>
+                    </section>
+
+                    <div class="clear"></div>
+
+                    
+                                <!--
+                                <div id="comments" class="bg-white hosted ">
+                                    
+                                    <p>请到客户端“主题--自定义配置--valine”中填入ID和KEY</p>
+                                    
+                                </div>
+                                -->
+                                <div class="clear"></div>
+                                
+
+                </div>
+            </div>
+        </main>
+
+        <footer id="footer" class="grid-container">
+    <div class="widgets row gradient-effect">
+        <div class="default-sidebar border-effect">
+            <div class="grid-33 tablet-grid-50 mobile-grid-100">
+                <section id="tag_cloud-2" class="widget widget_epcl_posts_thumbs underline-effect">
+                    <h4 class="widget-title title white bordered">Latest Posts</h4>
+                    
+                        
+                            <article class="item post-0 post type-post status-publish format-standard has-post-thumbnail hentry">
+                                <a href="https://ninglg.com/post/ffmpeg-intro-and-usage/" class="thumb hover-effect">
+                      <span class="fullimage cover" style="display:block;border-radius:50%;background-image: url('/media/images/dev-tool.jpg');"></span>
+                    </a>
+                                <div class="info gradient-effect">
+                                    <time datetime="2021-08-01">2021-08-01</time>
+                                    <h4 class="title usmall">
+                                        <a href="https://ninglg.com/post/ffmpeg-intro-and-usage/">
+                                            FFmpeg介绍和使用
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div class="clear"></div>
+                            </article>
+                            
+                                
+                        
+                            <article class="item post-1 post type-post status-publish format-standard has-post-thumbnail hentry">
+                                <a href="https://ninglg.com/post/annual-goals/" class="thumb hover-effect">
+                      <span class="fullimage cover" style="display:block;border-radius:50%;background-image: url('/media/images/life.jpg');"></span>
+                    </a>
+                                <div class="info gradient-effect">
+                                    <time datetime="2021-01-01">2021-01-01</time>
+                                    <h4 class="title usmall">
+                                        <a href="https://ninglg.com/post/annual-goals/">
+                                            年度目标
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div class="clear"></div>
+                            </article>
+                            
+                                
+                        
+                            <article class="item post-2 post type-post status-publish format-standard has-post-thumbnail hentry">
+                                <a href="https://ninglg.com/post/book-reading-list/" class="thumb hover-effect">
+                      <span class="fullimage cover" style="display:block;border-radius:50%;background-image: url('/media/images/read.jpg');"></span>
+                    </a>
+                                <div class="info gradient-effect">
+                                    <time datetime="2021-01-01">2021-01-01</time>
+                                    <h4 class="title usmall">
+                                        <a href="https://ninglg.com/post/book-reading-list/">
+                                            阅读书单
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div class="clear"></div>
+                            </article>
+                            
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                                    <div class="clear"></div>
+                </section>
+            </div>
+
+            <div class="grid-33 tablet-grid-50 mobile-grid-100">
+                <section id="tag_cloud-2" class="widget widget_tag_cloud underline-effect">
+                    <h4 class="widget-title title white bordered">Tags Cloud</h4>
+                    <div class="tagcloud">
+                        
+                            <a href="https://ninglg.com/tag/dev-tool/" class="ctag ctag-0 ctag-dev-tool" aria-label="">
+                                开发工具
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/life/" class="ctag ctag-1 ctag-life" aria-label="">
+                                生活
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/read/" class="ctag ctag-2 ctag-read" aria-label="">
+                                阅读
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/flutter/" class="ctag ctag-3 ctag-flutter" aria-label="">
+                                Flutter
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/html/" class="ctag ctag-4 ctag-html" aria-label="">
+                                HTML
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/algorithm/" class="ctag ctag-5 ctag-algorithm" aria-label="">
+                                算法
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/elasticsearch/" class="ctag ctag-6 ctag-elasticsearch" aria-label="">
+                                Elasticsearch
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/kafka/" class="ctag ctag-7 ctag-kafka" aria-label="">
+                                Kafka
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/golang/" class="ctag ctag-8 ctag-golang" aria-label="">
+                                Golang
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/system-design/" class="ctag ctag-9 ctag-system-design" aria-label="">
+                                系统设计
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/app/" class="ctag ctag-10 ctag-app" aria-label="">
+                                APP
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/linux/" class="ctag ctag-11 ctag-linux" aria-label="">
+                                Linux
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/bigdata/" class="ctag ctag-12 ctag-bigdata" aria-label="">
+                                大数据
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/http/" class="ctag ctag-13 ctag-http" aria-label="">
+                                HTTP
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/microservice/" class="ctag ctag-14 ctag-microservice" aria-label="">
+                                微服务
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/data-structure/" class="ctag ctag-15 ctag-data-structure" aria-label="">
+                                数据结构
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/docker/" class="ctag ctag-16 ctag-docker" aria-label="">
+                                Docker
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/english/" class="ctag ctag-17 ctag-english" aria-label="">
+                                英语
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/mysql/" class="ctag ctag-18 ctag-mysql" aria-label="">
+                                MySQL
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/redis/" class="ctag ctag-19 ctag-redis" aria-label="">
+                                Redis
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/work/" class="ctag ctag-20 ctag-work" aria-label="">
+                                工作
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/operating-system/" class="ctag ctag-21 ctag-operating-system" aria-label="">
+                                操作系统
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/vuejs/" class="ctag ctag-22 ctag-vuejs" aria-label="">
+                                Vue.js
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/php/" class="ctag ctag-23 ctag-php" aria-label="">
+                                PHP
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/distributed-system/" class="ctag ctag-24 ctag-distributed-system" aria-label="">
+                                分布式系统
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/movie/" class="ctag ctag-25 ctag-movie" aria-label="">
+                                电影
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/nginx/" class="ctag ctag-26 ctag-nginx" aria-label="">
+                                Nginx
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/network/" class="ctag ctag-27 ctag-network" aria-label="">
+                                网络
+                            </a>
+                            
+                    </div>
+                    <div class="clear"></div>
+                </section>
+            </div>
+
+            <div class="grid-33 tablet-grid-50 mobile-grid-100">
+                <section id="epcl_about-2" class="widget widget_epcl_about underline-effect">
+                    <h4 class="widget-title title white bordered">About Me</h4>
+                    <div class="avatar">
+                        <a href="/post/about/" class="translate-effect thumb"><span class="fullimage cover" style="background-image: url(https://ninglg.com/images/avatar.png);"></span></a>
+                    </div>
+                    <div class="info">
+                        <h4 class="title small author-name gradient-effect no-margin">
+                            <a href="/">
+                                Light Ning
+                            </a>
+                        </h4>
+                        <p class="founder">
+                            永远奔腾，永远闪光
+                        </p>
+                        <div class="social">
+                            
+                                
+                                        
+                                
+                                        
+                                
+                                        
+                                
+                                        
+                                
+                                        
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                </section>
+            </div>
+
+        </div>
+        <div class="clear"></div>
+    </div>
+
+    <div class="logo">
+        <a href="javascript: scroll(0, 0)"><img src="/media/images/custom-footerLogo.png" alt=""></a>
+    </div>
+    <p class="published border-effect">
+        ©2021 共
+        176 篇文章
+            <br/> Theme <a href="https://github.com/lmm214/gridea-theme-breek/" target="_blank">「breek」</a> Powered by <a href="https://gridea.dev/" target="_blank">「Gridea」</a>
+    </p>
+
+    <a href="javascript:void(0)" id="back-to-top" class="epcl-button dark" style="display:none">
+        <i class="fa fa-arrow"></i>
+    </a>
+</footer>
+
+<div class="clear"></div>
+
+
+
+            <script src="https://ninglg.com/media/js/functions-post.js"></script>
+
+            </div>
+            <!-- end: #wrapper -->
+</body>
+
+</html>

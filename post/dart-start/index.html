@@ -1,0 +1,1000 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Flutter Dart语言基础 | Light Ning</title>
+<meta name="description" content="永远奔腾，永远闪光" />
+<link rel="shortcut icon" href="https://ninglg.com/favicon.ico">
+<link rel="stylesheet" href="https://ninglg.com/styles/main.css">
+
+<script src="https://ninglg.com/media/js/jquery.min.js"></script>
+<script src="https://ninglg.com/media/js/masonry.pkgd.min.js"></script>
+<script src="https://ninglg.com/media/js/aos.js"></script>
+<script src="https://ninglg.com/media/js/pace.min.js"></script>
+<script src="https://ninglg.com/media/js/view-image.min.js"></script>
+<script src="https://ninglg.com/media/js/jquery.magnific-popup.min.js"></script>
+<script src="https://ninglg.com/media/js/functions.js"></script>
+        <meta name="referrer" content="never">
+        <meta name="description" content="此篇介绍一下Dart语言的基础知识
+
+说明
+
+Dart是Fuchsia操作系统的官方开发语言
+Dart是一门强类型语言，但同时仍然支持弱类型语言的某些特性
+Dart有自己的VM，可以像Java语言一样运行在虚拟机上，又可以被编译成Nativ..." />
+        <meta name="keywords" content="Flutter" />
+        <script src="https://ninglg.com/media/js/waterfall.min.js"></script>
+        <script src="https://ninglg.com/media/js/prism.min.js"></script>
+</head>
+
+<body>
+    <header id="header" class="grid-container">
+    <!-- start: .menu-wrapper -->
+    <div class="menu-mobile">
+        <i class="fa fa-reorder"></i>
+    </div>
+    <div class="menu-wrapper">
+        <div class="">
+            <div class="logo">
+                <a href="https://ninglg.com"><img src="/media/images/custom-headerLogo.png" alt=""></a>
+            </div>
+            <!-- start: .main-nav -->
+
+            <nav class="main-nav grid-container grid-parent">
+                <ul id="menu-header" class="menu gradient-effect">
+                    <li class=""><a href="https://ninglg.com" class="menu">首页</a></li>
+                    
+                        <li class="">
+                            <a href="/archives" class="menu">
+                                存档
+                            </a>
+                        </li>
+                        
+                        <li class="">
+                            <a href="/tags" class="menu">
+                                标签
+                            </a>
+                        </li>
+                        
+                        <li class="">
+                            <a href="/post/about/" class="menu">
+                                关于
+                            </a>
+                        </li>
+                        
+                            <li class="search-menu-item hide-on-mobile hide-on-tablet"><a href="#search-lightbox" class="lightbox mfp-inline"><i class="fa fa-search-line"></i></a></li>
+                </ul>
+            </nav>
+            <a href="#search-lightbox" class="lightbox epcl-search-button mfp-inline hide-on-tablet hide-on-desktop"><i class="fa fa-search-line"></i></a>
+            <!-- end: .main-nav -->
+            <div class="clear"></div>
+            <div class="border hide-on-tablet hide-on-mobile"></div>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <!-- end: .menu-wrapper -->
+    <div class="clear"></div>
+</header>
+<div class="hide-on-mobile hide-on-tablet hide-on-desktop">
+    <div id="search-lightbox" class="grid-container grid-small grid-parent mfp-hide">
+        <div class="search-wrapper section">
+            <form id="gridea-search-form" data-update="1728915775825" action="/search/index.html" class="search-form" _lpchecked="1">
+                <input type="text" name="q" id="s" value="" class="search-field" placeholder="搜点啥..." aria-label="搜点啥..." required="">
+                <button type="submit" class="submit" aria-label="Submit">
+                <i class="fa fa-search-line"></i>
+              </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+        <main id="single" class="main grid-container fullcover no-sidebar aos-init aos-animate" data-aos="fade">
+
+            <div class="center content">
+                <div class="featured-image cover" style="background-image: url('/media/images/flutter.jpg');">
+                    <div class="meta top">
+                        <time class="meta-info" style="float:left;" datetime="2020-11-09"><i class="fa fa-calendar"></i><span class="lately">4 年前</span></time>
+                        
+                            <a href="https://ninglg.com/post/dart-start/#comments" class="comments meta-info" title="">
+                                <i class="fa fa-comment remixicon"></i><span class="comment-count valine-comment-count" data-xid="/dart-start/"> </span>
+                            </a>
+                            <span id="/dart-start/" class="leancloud_visitors views-counter meta-info" title=""><i class="fa fa-leancloud remixicon"></i><span class="leancloud-visitors-count"></span></span>
+                            
+                    </div>
+                    <div class="info">
+                        <div class="tags ">
+                            
+                                <a href="https://ninglg.com/tag/flutter/" class="ctag ctag-0 ctag-flutter" aria-label="">
+                                    Flutter
+                                </a>
+                                
+                        </div>
+                        <h1 class="title ularge white bold">
+                            Flutter Dart语言基础
+                        </h1>
+                    </div>
+                </div>
+            </div>
+
+            <div class="epcl-page-wrapper">
+                <div class="left-content grid-70 np-mobile">
+                    <article class="main-article post">
+                        <section class="post-content">
+                            <div class="text">
+                                <p>此篇介绍一下Dart语言的基础知识</p>
+<!-- more -->
+<h1 id="说明">说明</h1>
+<ol>
+<li>Dart是Fuchsia操作系统的官方开发语言</li>
+<li>Dart是一门强类型语言，但同时仍然支持弱类型语言的某些特性</li>
+<li>Dart有自己的VM，可以像Java语言一样运行在虚拟机上，又可以被编译成Native Code直接运行在硬件上（比如Flutter）</li>
+<li>在Dart中，一切皆是对象，一切数据类型均继承自Object，即使是一个整数或方法，甚至null</li>
+<li>Dart可以推断变量的类型，除非开发者明确表示某个变量不被指定为任何一种类型。建议使用静态类型，这样可以增强代码可读性，也方便代码分析。</li>
+<li>没有指定类型的变量将会默认指定为dynamic类型</li>
+<li>Dart可以应用于前后端。比如可以开发客户端Web应用（Angular 2框架），同时也可以运行在服务端（借助DartVM）</li>
+<li>作为库，可能包含一个或多个*.dart文件</li>
+<li>在大多数情况下，所有的变量、方法和类等对外均可见，除非它们以“_”开头</li>
+<li>Dart提供两种运行模式：Production和Checked。默认情况下以Production方式运行，优先考虑性能，关闭类型检查和断言；而Checked模式更利于在开发阶段调试使用</li>
+<li>Dart支持顶级方法和顶级变量</li>
+<li>Dart代码分析工具可以指出警告和错误，错误分为编译错误和运行错误，编译错误会直接阻止代码运行，运行错误会在运行时抛出异常</li>
+<li>代码简单示例</li>
+</ol>
+<pre><code class="language-dart">main(List&lt;String&gt; args) {
+  print(&quot;Hello Dart!&quot;);
+}
+</code></pre>
+<h1 id="变量">变量</h1>
+<ol>
+<li>变量的初始化方法</li>
+</ol>
+<blockquote>
+<p>var name = &quot;XiaoWang&quot;<br>
+print(name)</p>
+</blockquote>
+<p>当然也可以使用String或dynamic类型，而不是用var类对name进行声明。<br>
+对于局部变量，根据代码建议风格来说，优先建议使用var来声明变量。</p>
+<ol start="2">
+<li>未经初始化的变量的默认值为null</li>
+</ol>
+<h1 id="常量">常量</h1>
+<ol>
+<li>在Dart语言中，可以使用final或const关键字来声明一个常量</li>
+</ol>
+<blockquote>
+<p>final weight = 60.5<br>
+final int height = 180<br>
+const int age = 17<br>
+const gender = &quot;male&quot;</p>
+</blockquote>
+<ol start="2">
+<li>const声明的常量是一种编译时常量。const关键字也可以用来创建不变的值，甚至定义构造函数为const类型，即不可变对象，且任意变量都可以有一个不变的值。</li>
+</ol>
+<pre><code class="language-dart">// 使用const创建常量值
+var intList = const[];
+intList = [1, 2, 3];
+</code></pre>
+<p>虽然intList的值为常量不可变，但由于其本身声明使用了var，因此它仍然可以改变其引用。相当于：</p>
+<pre><code class="language-dart">// 使用const创建常量值
+const temp = [];
+var intList_2 = temp;
+intList_2 = [1, 2, 3];
+</code></pre>
+<h1 id="基本数据类型">基本数据类型</h1>
+<ol>
+<li>Dart的数值包含Int和Double两种类型。声明Double类型的变量，如果值是一个整数，则会自动转换成Double类型。</li>
+<li>字符串有单引号字符串和双引号字符串。有转义符，另外可以用加号连接字符串。还有三个单引号或双引号，可以保持大段文本的原格式。</li>
+</ol>
+<pre><code class="language-dart">var userName = &quot;小刚&quot;;
+final welcome = &quot;$userName，欢迎使用&quot;;
+print(welcome);
+</code></pre>
+<ol start="3">
+<li>类型转换</li>
+</ol>
+<pre><code class="language-dart">// String转换为int
+String s = &quot;1000&quot;;
+int i = int.parse(s);
+
+// int转换为String
+int i = 1000;
+String s = i.toString();
+
+// 指定位数，输出3.14
+print(3.14159.toStringAsFixed(2));
+</code></pre>
+<ol start="4">
+<li>Dart提供三种核心集合类型：<br>
+（1）列表List</li>
+</ol>
+<blockquote>
+<p>var listExp = [1, &quot;Hello&quot;, 3.14]      // 列表中的元素可以混合不同类型<br>
+print(listExp.length)<br>
+print(&quot;长度为：&quot; + listExp.length.toString())</p>
+</blockquote>
+<p>（2）集合Set</p>
+<blockquote>
+<p>var setExp = {'A', 'B', 'C', 1, 2, 3}<br>
+// 集合提供add()、remove()、contains()、clear()等方法<br>
+setExp.add('D')<br>
+setExp.remove('C')<br>
+print(setExp.contains(3))<br>
+setExp.clear()<br>
+// 另外还有一次性追加多个二元素的addAll()方法，以及removeAll()方法和containsAll()方法。<br>
+// 集合运算操作，有difference()、union()、intersection()等。</p>
+</blockquote>
+<p>（3）映射Map</p>
+<blockquote>
+<p>var mapExp = {<br>
+&quot;a&quot; : &quot;aaa&quot;,<br>
+&quot;b&quot; : &quot;bbb&quot;,<br>
+};<br>
+// 提供remove()方法和containsKey()判断，提供length()长度。</p>
+</blockquote>
+<ol start="5">
+<li>Dart中的字符串是UTF-16编码的，对于超过的情况需要接入Runes类型。</li>
+<li>只有一个表达式的方法，可以简单写法成：</li>
+</ol>
+<blockquote>
+<p>int getInt() =&gt; 2 * getNumber();<br>
+// 这里=&gt;等同于return，称为箭头语法</p>
+</blockquote>
+<ol start="7">
+<li>参数：必选参数和可选参数<br>
+（1）在参数列表中，必选参数在最前面，可选参数随后。<br>
+（2）参数在方法体中的引用方式需要使用$。<br>
+（3）在Dart中，可选参数分为可选命名参数和基于位置的参数，二者是互斥关系，不能同时出现。</li>
+</ol>
+<pre><code class="language-dart">// 可选命名参数示例：大括号
+int getPrice({bookName : &quot;一般图书&quot;}) {
+    if (bookName == &quot;热门图书&quot;) {
+             return 50;
+        } else {
+            return 10;
+        }
+}
+
+// 可选位置参数示例：中括号
+String sayWelcome([String name = &quot;你好&quot;]) {
+    return   &quot;$name，欢迎使用&quot;;
+}
+</code></pre>
+<ol start="8">
+<li>主方法main方法返回void（即无返回值），有一个可选的参数List<String>。</li>
+<li>检查两个方法是否相等，使用连等号（==）来判断。</li>
+<li>在Dart中，如果一个方法没有声明返回类型和return语句，则默认为return null。</li>
+<li>在Dart中，做除法无法整除时，会返回小数。如果只想要整数部分，可以使用“~/”。</li>
+</ol>
+<blockquote>
+<p>print(9 ~/2);</p>
+</blockquote>
+<ol start="12">
+<li>如果两个对象均返回null，即使其类型不同，但其值相同，也是相等的。</li>
+<li>类型判定运算符<br>
+(1) as    类型转换<br>
+(2) is    是指定类型<br>
+(3) is!   非指定类型</li>
+<li>级联运算符<br>
+(1) 本质是一个特殊语法<br>
+(2) 写法是两个点，用于在同一对象上的连续调用<br>
+示例如：</li>
+</ol>
+<pre><code class="language-dart">// 原始写法
+Point pExp = new Point();
+pExp.setX(10);
+pExp.setY(20);
+pExp.setZ(30);
+print(pExp.toString());
+
+// 级联写法
+print(new Point()..setX(10)..setY(20)..setZ(30)..toString())
+</code></pre>
+<ol start="15">
+<li>条件成员访问运算符</li>
+</ol>
+<blockquote>
+<p>?.    如果左边的对象不是null，则返回右边的值；反之则返回null</p>
+</blockquote>
+<ol start="16">
+<li>断言只在开发模式下起作用，在生产环境中无效。断言可以检查程序中某些可能出现的运行逻辑错误。</li>
+</ol>
+<pre><code class="language-dart">var intValue = 1000;
+assert(intValue == 999);    // 开发环境中看到控制台报错，在生产环境中不会收到提示
+</code></pre>
+<ol start="17">
+<li>异常<br>
+(1) Dart语言提供了 Exception 和 Error 两类异常。还有它们的子类，还可以自定义异常类型，其中自定义的异常类型不能为空值。</li>
+</ol>
+<pre><code class="language-dart">throw new FormatException(&quot;Data format exception occurred&quot;);
+// 抛出一个自定义的异常
+throw 'custom exception';
+</code></pre>
+<p>(2) 在实际生产环境中，自定义异常通常的做法是写一个类，声明Error或Exception类中的方法。</p>
+<ol start="18">
+<li>Catch</li>
+</ol>
+<pre><code class="language-dart">try {
+    // xxxxx
+} catch (e) {
+    print(e.toString());
+    // yyyyy
+}
+
+// 捕捉不同的多种类型异常
+try {
+} on RangeError {
+} on FormatError {
+} catch(e) {
+}
+
+// 再次抛出异常使用rethrow
+try {
+} on RangeError {
+    // xxxxx
+    rethrow;
+} catch (e) {
+}
+</code></pre>
+<ol start="19">
+<li>Finally</li>
+</ol>
+<pre><code class="language-dart">try {
+} catch (e) {
+} finally {
+    print(&quot;done&quot;);
+}
+</code></pre>
+
+                            </div>
+                            <div class="clear"></div>
+                        </section>
+                    </article>
+                    <div class="clear"></div>
+
+                    <section class="related section">
+                        
+                            <article class="prev grid-50 tablet-grid-50 grid-parent">
+                                <div class="thumb cover lazy loaded" style="background-image: url('https://ninglg.com/media/images/flutter.jpg');"></div>
+                                <a href="https://ninglg.com/post/dart-object/" class="full-link"></a>
+                                <div class="info">
+                                    <time datetime="2020-11-13">2020-11-13</time>
+                                    <h4 class="title white no-margin">
+                                        Flutter Dart面向对象
+                                    </h4>
+                                </div>
+                                <span class="epcl-button red">
+                  <img src="https://ninglg.com/media/images/left-arrow.svg" width="15" alt="Left Arrow">
+                </span>
+                                <div class="overlay"></div>
+                            </article>
+                            
+                                
+                                    <article class="next grid-50 tablet-grid-50 grid-parent">
+                                        <div class="thumb cover lazy loaded" style="background-image: url('https://ninglg.com/media/images/flutter.jpg');"></div>
+                                        <a href="https://ninglg.com/post/flutter-start/" class="full-link"></a>
+                                        <div class="info">
+                                            <time datetime="2020-10-28">2020-10-28</time>
+                                            <h4 class="title white no-margin">
+                                                Flutter开发环境
+                                            </h4>
+                                        </div>
+                                        <span class="epcl-button red">
+                  <img src="https://ninglg.com/media/images/right-arrow.svg" width="15" alt="Left Arrow">
+                </span>
+                                        <div class="overlay"></div>
+                                    </article>
+                                    
+
+                                        <div class="clear"></div>
+                    </section>
+
+                    <div class="clear"></div>
+
+                    
+                                <!--
+                                <div id="comments" class="bg-white hosted ">
+                                    
+                                    <p>请到客户端“主题--自定义配置--valine”中填入ID和KEY</p>
+                                    
+                                </div>
+                                -->
+                                <div class="clear"></div>
+                                
+
+                </div>
+            </div>
+        </main>
+
+        <footer id="footer" class="grid-container">
+    <div class="widgets row gradient-effect">
+        <div class="default-sidebar border-effect">
+            <div class="grid-33 tablet-grid-50 mobile-grid-100">
+                <section id="tag_cloud-2" class="widget widget_epcl_posts_thumbs underline-effect">
+                    <h4 class="widget-title title white bordered">Latest Posts</h4>
+                    
+                        
+                            <article class="item post-0 post type-post status-publish format-standard has-post-thumbnail hentry">
+                                <a href="https://ninglg.com/post/ffmpeg-intro-and-usage/" class="thumb hover-effect">
+                      <span class="fullimage cover" style="display:block;border-radius:50%;background-image: url('/media/images/dev-tool.jpg');"></span>
+                    </a>
+                                <div class="info gradient-effect">
+                                    <time datetime="2021-08-01">2021-08-01</time>
+                                    <h4 class="title usmall">
+                                        <a href="https://ninglg.com/post/ffmpeg-intro-and-usage/">
+                                            FFmpeg介绍和使用
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div class="clear"></div>
+                            </article>
+                            
+                                
+                        
+                            <article class="item post-1 post type-post status-publish format-standard has-post-thumbnail hentry">
+                                <a href="https://ninglg.com/post/annual-goals/" class="thumb hover-effect">
+                      <span class="fullimage cover" style="display:block;border-radius:50%;background-image: url('/media/images/life.jpg');"></span>
+                    </a>
+                                <div class="info gradient-effect">
+                                    <time datetime="2021-01-01">2021-01-01</time>
+                                    <h4 class="title usmall">
+                                        <a href="https://ninglg.com/post/annual-goals/">
+                                            年度目标
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div class="clear"></div>
+                            </article>
+                            
+                                
+                        
+                            <article class="item post-2 post type-post status-publish format-standard has-post-thumbnail hentry">
+                                <a href="https://ninglg.com/post/book-reading-list/" class="thumb hover-effect">
+                      <span class="fullimage cover" style="display:block;border-radius:50%;background-image: url('/media/images/read.jpg');"></span>
+                    </a>
+                                <div class="info gradient-effect">
+                                    <time datetime="2021-01-01">2021-01-01</time>
+                                    <h4 class="title usmall">
+                                        <a href="https://ninglg.com/post/book-reading-list/">
+                                            阅读书单
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div class="clear"></div>
+                            </article>
+                            
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                                    <div class="clear"></div>
+                </section>
+            </div>
+
+            <div class="grid-33 tablet-grid-50 mobile-grid-100">
+                <section id="tag_cloud-2" class="widget widget_tag_cloud underline-effect">
+                    <h4 class="widget-title title white bordered">Tags Cloud</h4>
+                    <div class="tagcloud">
+                        
+                            <a href="https://ninglg.com/tag/dev-tool/" class="ctag ctag-0 ctag-dev-tool" aria-label="">
+                                开发工具
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/life/" class="ctag ctag-1 ctag-life" aria-label="">
+                                生活
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/read/" class="ctag ctag-2 ctag-read" aria-label="">
+                                阅读
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/flutter/" class="ctag ctag-3 ctag-flutter" aria-label="">
+                                Flutter
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/html/" class="ctag ctag-4 ctag-html" aria-label="">
+                                HTML
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/algorithm/" class="ctag ctag-5 ctag-algorithm" aria-label="">
+                                算法
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/elasticsearch/" class="ctag ctag-6 ctag-elasticsearch" aria-label="">
+                                Elasticsearch
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/kafka/" class="ctag ctag-7 ctag-kafka" aria-label="">
+                                Kafka
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/golang/" class="ctag ctag-8 ctag-golang" aria-label="">
+                                Golang
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/system-design/" class="ctag ctag-9 ctag-system-design" aria-label="">
+                                系统设计
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/app/" class="ctag ctag-10 ctag-app" aria-label="">
+                                APP
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/linux/" class="ctag ctag-11 ctag-linux" aria-label="">
+                                Linux
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/bigdata/" class="ctag ctag-12 ctag-bigdata" aria-label="">
+                                大数据
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/http/" class="ctag ctag-13 ctag-http" aria-label="">
+                                HTTP
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/microservice/" class="ctag ctag-14 ctag-microservice" aria-label="">
+                                微服务
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/data-structure/" class="ctag ctag-15 ctag-data-structure" aria-label="">
+                                数据结构
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/docker/" class="ctag ctag-16 ctag-docker" aria-label="">
+                                Docker
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/english/" class="ctag ctag-17 ctag-english" aria-label="">
+                                英语
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/mysql/" class="ctag ctag-18 ctag-mysql" aria-label="">
+                                MySQL
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/redis/" class="ctag ctag-19 ctag-redis" aria-label="">
+                                Redis
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/work/" class="ctag ctag-20 ctag-work" aria-label="">
+                                工作
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/operating-system/" class="ctag ctag-21 ctag-operating-system" aria-label="">
+                                操作系统
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/vuejs/" class="ctag ctag-22 ctag-vuejs" aria-label="">
+                                Vue.js
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/php/" class="ctag ctag-23 ctag-php" aria-label="">
+                                PHP
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/distributed-system/" class="ctag ctag-24 ctag-distributed-system" aria-label="">
+                                分布式系统
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/movie/" class="ctag ctag-25 ctag-movie" aria-label="">
+                                电影
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/nginx/" class="ctag ctag-26 ctag-nginx" aria-label="">
+                                Nginx
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/network/" class="ctag ctag-27 ctag-network" aria-label="">
+                                网络
+                            </a>
+                            
+                    </div>
+                    <div class="clear"></div>
+                </section>
+            </div>
+
+            <div class="grid-33 tablet-grid-50 mobile-grid-100">
+                <section id="epcl_about-2" class="widget widget_epcl_about underline-effect">
+                    <h4 class="widget-title title white bordered">About Me</h4>
+                    <div class="avatar">
+                        <a href="/post/about/" class="translate-effect thumb"><span class="fullimage cover" style="background-image: url(https://ninglg.com/images/avatar.png);"></span></a>
+                    </div>
+                    <div class="info">
+                        <h4 class="title small author-name gradient-effect no-margin">
+                            <a href="/">
+                                Light Ning
+                            </a>
+                        </h4>
+                        <p class="founder">
+                            永远奔腾，永远闪光
+                        </p>
+                        <div class="social">
+                            
+                                
+                                        
+                                
+                                        
+                                
+                                        
+                                
+                                        
+                                
+                                        
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                </section>
+            </div>
+
+        </div>
+        <div class="clear"></div>
+    </div>
+
+    <div class="logo">
+        <a href="javascript: scroll(0, 0)"><img src="/media/images/custom-footerLogo.png" alt=""></a>
+    </div>
+    <p class="published border-effect">
+        ©2021 共
+        176 篇文章
+            <br/> Theme <a href="https://github.com/lmm214/gridea-theme-breek/" target="_blank">「breek」</a> Powered by <a href="https://gridea.dev/" target="_blank">「Gridea」</a>
+    </p>
+
+    <a href="javascript:void(0)" id="back-to-top" class="epcl-button dark" style="display:none">
+        <i class="fa fa-arrow"></i>
+    </a>
+</footer>
+
+<div class="clear"></div>
+
+
+
+            <script src="https://ninglg.com/media/js/functions-post.js"></script>
+
+            </div>
+            <!-- end: #wrapper -->
+</body>
+
+</html>

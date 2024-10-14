@@ -1,0 +1,1358 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Go程序性能分析工具 | Light Ning</title>
+<meta name="description" content="永远奔腾，永远闪光" />
+<link rel="shortcut icon" href="https://ninglg.com/favicon.ico">
+<link rel="stylesheet" href="https://ninglg.com/styles/main.css">
+
+<script src="https://ninglg.com/media/js/jquery.min.js"></script>
+<script src="https://ninglg.com/media/js/masonry.pkgd.min.js"></script>
+<script src="https://ninglg.com/media/js/aos.js"></script>
+<script src="https://ninglg.com/media/js/pace.min.js"></script>
+<script src="https://ninglg.com/media/js/view-image.min.js"></script>
+<script src="https://ninglg.com/media/js/jquery.magnific-popup.min.js"></script>
+<script src="https://ninglg.com/media/js/functions.js"></script>
+        <meta name="referrer" content="never">
+        <meta name="description" content="此篇介绍一下对Go程序进行性能分析的常用工具及用法。
+
+常用命令和工具
+pprof
+go tool [xxx]
+go test
+delve
+go race
+gdb
+
+程序编译时的参数传递（gcflags和ldflags）
+gcflags
+g..." />
+        <meta name="keywords" content="Golang" />
+        <script src="https://ninglg.com/media/js/waterfall.min.js"></script>
+        <script src="https://ninglg.com/media/js/prism.min.js"></script>
+</head>
+
+<body>
+    <header id="header" class="grid-container">
+    <!-- start: .menu-wrapper -->
+    <div class="menu-mobile">
+        <i class="fa fa-reorder"></i>
+    </div>
+    <div class="menu-wrapper">
+        <div class="">
+            <div class="logo">
+                <a href="https://ninglg.com"><img src="/media/images/custom-headerLogo.png" alt=""></a>
+            </div>
+            <!-- start: .main-nav -->
+
+            <nav class="main-nav grid-container grid-parent">
+                <ul id="menu-header" class="menu gradient-effect">
+                    <li class=""><a href="https://ninglg.com" class="menu">首页</a></li>
+                    
+                        <li class="">
+                            <a href="/archives" class="menu">
+                                存档
+                            </a>
+                        </li>
+                        
+                        <li class="">
+                            <a href="/tags" class="menu">
+                                标签
+                            </a>
+                        </li>
+                        
+                        <li class="">
+                            <a href="/post/about/" class="menu">
+                                关于
+                            </a>
+                        </li>
+                        
+                            <li class="search-menu-item hide-on-mobile hide-on-tablet"><a href="#search-lightbox" class="lightbox mfp-inline"><i class="fa fa-search-line"></i></a></li>
+                </ul>
+            </nav>
+            <a href="#search-lightbox" class="lightbox epcl-search-button mfp-inline hide-on-tablet hide-on-desktop"><i class="fa fa-search-line"></i></a>
+            <!-- end: .main-nav -->
+            <div class="clear"></div>
+            <div class="border hide-on-tablet hide-on-mobile"></div>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <!-- end: .menu-wrapper -->
+    <div class="clear"></div>
+</header>
+<div class="hide-on-mobile hide-on-tablet hide-on-desktop">
+    <div id="search-lightbox" class="grid-container grid-small grid-parent mfp-hide">
+        <div class="search-wrapper section">
+            <form id="gridea-search-form" data-update="1728915775825" action="/search/index.html" class="search-form" _lpchecked="1">
+                <input type="text" name="q" id="s" value="" class="search-field" placeholder="搜点啥..." aria-label="搜点啥..." required="">
+                <button type="submit" class="submit" aria-label="Submit">
+                <i class="fa fa-search-line"></i>
+              </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+        <main id="single" class="main grid-container fullcover no-sidebar aos-init aos-animate" data-aos="fade">
+
+            <div class="center content">
+                <div class="featured-image cover" style="background-image: url('/media/images/golang.jpg');">
+                    <div class="meta top">
+                        <time class="meta-info" style="float:left;" datetime="2016-05-09"><i class="fa fa-calendar"></i><span class="lately">8 年前</span></time>
+                        
+                            <a href="https://ninglg.com/post/golang-program-performance-analysis-tools/#comments" class="comments meta-info" title="">
+                                <i class="fa fa-comment remixicon"></i><span class="comment-count valine-comment-count" data-xid="/golang-program-performance-analysis-tools/"> </span>
+                            </a>
+                            <span id="/golang-program-performance-analysis-tools/" class="leancloud_visitors views-counter meta-info" title=""><i class="fa fa-leancloud remixicon"></i><span class="leancloud-visitors-count"></span></span>
+                            
+                    </div>
+                    <div class="info">
+                        <div class="tags ">
+                            
+                                <a href="https://ninglg.com/tag/golang/" class="ctag ctag-0 ctag-golang" aria-label="">
+                                    Golang
+                                </a>
+                                
+                        </div>
+                        <h1 class="title ularge white bold">
+                            Go程序性能分析工具
+                        </h1>
+                    </div>
+                </div>
+            </div>
+
+            <div class="epcl-page-wrapper">
+                <div class="left-content grid-70 np-mobile">
+                    <article class="main-article post">
+                        <section class="post-content">
+                            <div class="text">
+                                <p>此篇介绍一下对Go程序进行性能分析的常用工具及用法。</p>
+<!-- more -->
+<h1 id="常用命令和工具">常用命令和工具</h1>
+<pre><code class="language-txt">pprof
+go tool [xxx]
+go test
+delve
+go race
+gdb
+</code></pre>
+<h1 id="程序编译时的参数传递gcflags和ldflags">程序编译时的参数传递（gcflags和ldflags）</h1>
+<h2 id="gcflags">gcflags</h2>
+<pre><code class="language-txt">go build -gcflags '-N -m -l' main.go //可使用go tool compile --help查看可用参数及含义。
+比如-N禁用编译优化，-l禁止内联，-m打印编译优化策略（包括逃逸情况和函数是否内联，以及变量分配在堆或栈），-S是打印汇编。
+
+如果只在编译特定包时需要传递参数，格式应遵守“包名=参数列表”，如go build -gcflags='log=-N -l' main.go
+
+开启逃逸分析日志很简单，只要在编译的时候加上-gcflags '-m'，另外为了不让编译时自动内联函数，一般也会加-l参数，最终成为-gcflags '-m -l'。即执行如下命令：
+$ go build -gcflags '-m -l' main.go
+</code></pre>
+<h2 id="ldflags">ldflags</h2>
+<pre><code class="language-txt">go build用 -ldflags 给go链接器传入参数，实际是给go tool link的参数，可以用go tool link --help查看可用的参数。
+
+常用 -X 来指定版本号等编译时才决定的参数值。例如代码中定义var buildVer string，然后在编译时用go build -ldflags &quot;-X main.buildVer=1.0&quot; 来赋值。注意 -X 只能给string类型变量赋值。
+</code></pre>
+<blockquote>
+<p>传值会拷贝整个对象，而传指针只会拷贝指针地址，指向的对象是同一个。传指针可以减少值的拷贝，但是会导致内存分配逃逸到堆中，增加垃圾回收(GC)的负担。在对象频繁创建和删除的场景下，传递指针导致的 GC 开销可能会严重影响性能。<br>
+一般情况下，对于需要修改原对象值，或占用内存比较大的结构体，选择传指针。对于只读的占用内存较小的结构体，直接传值能够获得更好的性能。</p>
+</blockquote>
+<h2 id="go-build-x">go build -x</h2>
+<p>列出了go build触发的所有命令。<br>
+比如工具链、跨平台编译、传入外部编译器的flags、链接器等，可使用 -x 来查看所有的触发。</p>
+<h1 id="竞争检测">竞争检测</h1>
+<p>使用</p>
+<blockquote>
+<p>go run -race main.go<br>
+或<br>
+go build -race main.go<br>
+来进行竞争检测。</p>
+</blockquote>
+<h1 id="gc日志和调度器事件">GC日志和调度器事件</h1>
+<ol>
+<li>执行前添加系统环境变量 GODEBUG='gctrace=1' 来跟踪打印垃圾回收器信息</li>
+<li>在代码中使用 runtime.ReadMemStats 来获取程序当前内存的使用情况</li>
+<li>使用pprof工具</li>
+</ol>
+<blockquote>
+<p>GODEBUG=gctrace=1 go run main.go  //跟踪打印垃圾回收器信息。Go程序会每隔一段时间打印一些gc信息。<br>
+GODEBUG=schedtrace=1 go run main.go //参数 schedtrace=1 会按毫秒打印 Go 调度器的调度事件</p>
+</blockquote>
+<ol start="4">
+<li>字段解释</li>
+</ol>
+<pre><code class="language-shell">GODEBUG=gctrace=1 go run main.go
+gc 1 @0.006s 1%: 0.015+0.76+0.034 ms clock, 0.24+0.45/0.67/0.011+0.55 ms cpu, 4-&gt;4-&gt;0 MB, 5 MB goal, 16 P
+
+gc 1: 1 是垃圾回收的编号，逐步递增，一般从 1 开始
+@0.006s: 自程序开始经历了多少时间
+1%: 自程序启动花在 GC 上的 CPU 时间百分比, CPU 1%花在了 GC 上
+0.015+0.76+0.034 ms clock: GC 各阶段的墙上时间(wall-clock)，各阶段包括STW sweep termination、concurrent mark and scan、STW mark termination
+0.24+0.45/0.67/0.011+0.55 ms cpu: 各阶段的 CPU 时间。各阶段同上，其中 mark/scan 阶段又分成了assist time、background GC time和idle GC time阶段
+4-&gt;4-&gt;0 MB: GC 开始时、GC 结束的 heap 大小、存活(live)的 heap 大小
+5 MB goal:下一次垃圾回收的目标值
+16 P: 使用的处理器的数量
+
+程序中可以调用runtime.GC()进行强制垃圾回收。
+</code></pre>
+<h1 id="pprof">Pprof</h1>
+<h2 id="go语言内置了获取程序运行数据的工具包括以下两个标准库">Go语言内置了获取程序运行数据的工具，包括以下两个标准库</h2>
+<blockquote>
+<p>runtime/pprof：采集工具型应用运行数据进行分析<br>
+net/http/pprof：采集服务型应用运行时数据进行分析</p>
+</blockquote>
+<h2 id="工具型应用分析">工具型应用分析</h2>
+<h3 id="cpu分析">CPU分析</h3>
+<pre><code class="language-go">f, err := os.Create(*cpuprofile)
+...
+pprof.StartCPUProfile(f)
+defer pprof.StopCPUProfile()
+</code></pre>
+<h3 id="内存分析">内存分析</h3>
+<pre><code class="language-go">f, err := os.Create(*memprofile)
+pprof.WriteHeapProfile(f)
+f.Close()
+</code></pre>
+<h2 id="使用nethttp包时启用pprof">使用net/http包时启用Pprof</h2>
+<pre><code class="language-go">package main
+
+import (
+	&quot;log&quot;
+	&quot;net/http&quot;
+	_ &quot;net/http/pprof&quot;
+)
+
+func main() {
+	//... do something
+
+	log.Println(http.ListenAndServe(&quot;localhost:8090&quot;, nil))
+}
+</code></pre>
+<h2 id="使用gin框架时启用pprof">使用Gin框架时启用Pprof</h2>
+<pre><code class="language-go">package main
+
+import (
+	&quot;github.com/gin-contrib/pprof&quot;
+	&quot;github.com/gin-gonic/gin&quot;
+)
+
+func main() {
+	app := gin.Default()
+
+	pprof.Register(app)
+
+	app.Run(&quot;:8090&quot;)
+}
+</code></pre>
+<h2 id="访问web页获取分析结果http1270018090debugpprof适合http服务">访问web页获取分析结果（http://127.0.0.1:8090/debug/pprof，适合http服务）</h2>
+<pre><code class="language-txt">/debug/pprof/
+
+Types of profiles available:
+Count	Profile
+3	allocs
+0	block    //goroutine的阻塞信息
+0	cmdline
+4	goroutine    //此项可排查是否创建了大量的 goroutine
+3	heap    //堆内存的分配信息
+0	mutex    //锁的信息
+0	profile
+7	threadcreate    //线程信息
+0	trace
+full goroutine stack dump  //此项可排查是否有 goroutine 运行时间过长
+Profile Descriptions:
+
+allocs: A sampling of all past memory allocations
+block: Stack traces that led to blocking on synchronization primitives
+cmdline: The command line invocation of the current program
+goroutine: Stack traces of all current goroutines
+heap: A sampling of memory allocations of live objects. You can specify the gc GET parameter to run GC before taking the heap sample.
+mutex: Stack traces of holders of contended mutexes
+profile: CPU profile. You can specify the duration in the seconds GET parameter. After you get the profile file, use the go tool pprof command to investigate the profile.
+threadcreate: Stack traces that led to the creation of new OS threads
+trace: A trace of execution of the current program. You can specify the duration in the seconds GET parameter. After you get the trace file, use the go tool trace command to investigate the trace.
+</code></pre>
+<h2 id="pprof-支持四种类型的分析">pprof 支持四种类型的分析</h2>
+<p>pprof开启后，每隔一段时间（10ms）就会收集当前的堆栈信息，获取各个函数占用的CPU以及内存资源，然后通过对这些采样数据进行分析，形成一个性能分析报告。</p>
+<pre><code class="language-txt">CPU Profile：CPU 分析，采样消耗 cpu 的调用，这个一般用来定位排查程序里耗费计算资源的地方
+
+Memory Profile（Heap Profile）：内存分析，一般用来排查内存占用，内存泄露等问题。堆内存分配情况的记录。默认每分配512K字节时取样一次。
+
+Block Profile：阻塞分析，报告导致阻塞的同步原语的情况，可以用来分析和查找锁的性能瓶颈。Goroutine阻塞事件的堆栈跟踪记录。默认每发生一次阻塞事件时取样一次。
+
+Goroutine Profile ：报告goroutines的使用情况，有哪些goroutine，它们的调用关系是怎样的。活跃Goroutine的信息的记录，以及调用关系。仅在获取时取样一次。
+</code></pre>
+<h3 id="pprof可视化">Pprof可视化</h3>
+<p>在Mac上安装graphviz执行以下命令</p>
+<pre><code class="language-txt">brew install graphviz
+</code></pre>
+<h2 id="以本地文件形式获取分析结果">以本地文件形式获取分析结果</h2>
+<pre><code class="language-txt">先把信息 dump 到本地文件，然后用 go tool 去分析（生产环境通用的方式）
+</code></pre>
+<h1 id="第三方工具debugcharts">第三方工具：debugcharts</h1>
+<p>一个可以实时查看go程序内存、CPU、GC、协程等变化情况的可视化工具。启用方式跟pprof类似，都是先import引入，然后开启端口监听即可。</p>
+<pre><code class="language-go">package main
+
+import (
+	_ &quot;github.com/mkevac/debugcharts&quot;
+	&quot;log&quot;
+	&quot;net/http&quot;
+)
+
+func main() {
+	//... do something
+
+	log.Println(http.ListenAndServe(&quot;localhost:8090&quot;, nil))
+}
+</code></pre>
+<p>然后在浏览器中打开查看：</p>
+<blockquote>
+<p>http://127.0.0.1:8090/debug/charts/</p>
+</blockquote>
+<h2 id="第三方工具prometheus">第三方工具：prometheus</h2>
+<p>prometheus是grafana的插件，支持go监控的可视化。<br>
+启用方式先引入包：</p>
+<pre><code class="language-go">_ &quot;github.com/prometheus/client_golang/prometheus/promhttp&quot;
+</code></pre>
+<p>然后增加路由：</p>
+<pre><code class="language-go">//prometheus
+http.Handle(&quot;/metrics&quot;, promhttp.Handler())
+http.ListenAndServe(&quot;:8090&quot;, nil)
+</code></pre>
+<p>最后，通过访问 http://127.0.0.1:8090/metrics 查看采集到的指标数据。</p>
+<p>** 可以通过一个端口同时开启pprof + charts + prometheus **</p>
+<h1 id="go-tool-xxx">go tool [xxx]</h1>
+<p>输入 go tool 查看内置的所有[xxx]工具命令</p>
+<pre><code class="language-txt">addr2line
+api
+asm
+buildid
+cgo
+compile：代码汇编
+cover：生成代码覆盖率
+dist
+doc
+fix
+link
+nm：查看符号表（等同于系统 nm 命令）
+objdump：反汇编工具，分析二进制文件（等同于系统 objdump 命令）
+oldlink
+pack
+pprof：性能和指标分析工具
+test2json
+trace：采样一段时间，指标跟踪分析工具
+vet
+</code></pre>
+<h2 id="go-tool-nm-查看符号表的命令">go tool nm 查看符号表的命令</h2>
+<p>在断点的时候，如果不知道断点的函数符号，可以用这个命令进行查询（命令处理的是二进制程序文件）。</p>
+<blockquote>
+<p>go tool nm ./main<br>
+输出的第一列是地址，第二列是类型，第三列是符号。</p>
+</blockquote>
+<pre><code class="language-txt"> 115aa00 T bufio.(*ReadWriter).Available
+ 115aa20 T bufio.(*ReadWriter).Discard
+ 115aa60 T bufio.(*ReadWriter).Flush
+ 115aa80 T bufio.(*ReadWriter).Peek
+</code></pre>
+<h2 id="go-tool-compile-汇编某个文件">go tool compile 汇编某个文件</h2>
+<pre><code class="language-txt">go tool compile -N -l -S main.go
+</code></pre>
+<h2 id="go-tool-objdump-反汇编二进制的工具">go tool objdump 反汇编二进制的工具</h2>
+<blockquote>
+<p>go tool objdump main.o<br>
+go tool objdump -s DoFunc main.o  //反汇编具体函数</p>
+</blockquote>
+<h2 id="go-tool-pprof-性能指标分析工具">go tool pprof 性能指标分析工具</h2>
+<h3 id="命令行分析模式">命令行分析模式</h3>
+<blockquote>
+<p>go tool pprof http://localhost:8090/debug/pprof/heap?second=10 分析heap，进入命令行模式，输入 web 即可以web方式打开（前提是安装了graphviz）。或者继续输入命令：<br>
+在命令行输入top默认查看程序中占用内存前10位的函数<br>
+在命令行输入top 3可以查看程序中占用内存前3位的函数<br>
+同样，如果采集的是cpu使用top命令可以看占用cpu的函数</p>
+</blockquote>
+<p>输入top后显示的最后一列为函数名称，其他各项内容意义如下：</p>
+<pre><code class="language-txt">flat：当前函数占用CPU的耗时
+flat%：当前函数占用CPU的耗时百分比
+sum%：函数占用CPU的累积耗时百分比
+cum：当前函数+调用的子函数 占用CPU总耗时
+cum%：当前函数+调用的子函数 占用CPU总耗时百分比
+</code></pre>
+<blockquote>
+<p>可以在命令行输入 list+函数名 命令查看具体的函数分析<br>
+可以在命令行输入 pdf 生成可视化的pdf文件<br>
+可以在命令行输入 help 提供所有pprof支持的命令说明</p>
+</blockquote>
+<h3 id="web分析模式">web分析模式</h3>
+<blockquote>
+<p>go tool pprof -http=:1234 http://localhost:8090/debug/pprof/heap?second=10 会直接以web方式打开。或者：<br>
+http://localhost:1234/ui/ 也可以直接打开，从中可以直接筛选查看火焰图（Flame Graph）。<br>
+-http 表示使用交互式web接口查看获取的性能信息，指定可用的端口即可。<br>
+debug/pprof/需要查看的指标（allocs,block,goroutine,heap等）<br>
+火焰图从上往下是方法的调用栈，长度代表使用的cpu时长。</p>
+</blockquote>
+<h3 id="其他的一些go-tool-pprof-分析命令">其他的一些go tool pprof 分析命令</h3>
+<blockquote>
+<p>go tool pprof -http=:1234 http://localhost:8090/debug/pprof/goroutine?second=10<br>
+go tool pprof --seconds 10 http://localhost:8090/debug/pprof/goroutine</p>
+</blockquote>
+<blockquote>
+<p>如果应用比较复杂，生成的调用图特别大，看起来很乱，有两个办法可以优化：<br>
+使用 web [funcName] 的方式，只打印和某个函数相关的内容<br>
+运行 go tool pprof 命令时加上 --nodefration 参数，可以忽略内存使用较少的函数，比如--nodefration=0.05表示如果调用的子函数使用的 CPU、memory 不超过 5%，就忽略它，不要显示在图片中</p>
+</blockquote>
+<h1 id="go-test-单元测试">go test 单元测试</h1>
+<blockquote>
+<p>_test.go 结尾的文件认为是测试文件<br>
+本质上，golang 跑单测是先编译 *_test.go 文件，编译成二进制后，再运行这个二进制文件</p>
+</blockquote>
+<pre><code class="language-txt">go test .    //直接在本目录中运行go test
+go test -run=TestPutAndGetKeyValue    //指定运行函数
+go test -v    //提供详细的测试输出，打印测试名称、状态（通过或者失败）、耗时、测试用例的日志等
+
+go test -race    //测试时支持对竞争进行检测和报告
+go test -coverprofile=c.out &amp;&amp; go tool cover -html=c.out    //输出一个覆盖信息结果并可在浏览器上可视化观看
+</code></pre>
+<h2 id="编译生成单元测试可执行文件">编译生成单元测试可执行文件</h2>
+<pre><code class="language-txt">// 先编译出 .test 文件
+$ go test -c 
+// 指定跑某一个文件
+$ ./raftexample.test -test.timeout=10m0s -test.v=true -test.run=TestPutAndGetKeyValue
+</code></pre>
+<h2 id="统计代码覆盖率">统计代码覆盖率</h2>
+<ol>
+<li>加一个 -coverprofile 的参数，声明在跑单测的时候，记录代码覆盖率</li>
+</ol>
+<blockquote>
+<p>go test -coverprofile=coverage.out</p>
+</blockquote>
+<ol start="2">
+<li>使用 go tool cover 命令分析，得出覆盖率报告</li>
+</ol>
+<blockquote>
+<p>go tool cover -func=coverage.out</p>
+</blockquote>
+<h1 id="delve">Delve</h1>
+<blockquote>
+<p>delve 当前是最友好的 golang 调试程序，ide 调试其实也是调用 dlv 而已，比如 goland<br>
+安装dlv：<br>
+go get -u github.com/go-delve/delve/cmd/dlv<br>
+检查安装版本信息：<br>
+dlv version</p>
+</blockquote>
+<h2 id="把程序加载进-delve-调试器的两种方式事先需要有gomod">把程序加载进 Delve 调试器的两种方式（事先需要有go.mod）</h2>
+<h3 id="加载源码进行调试">加载源码进行调试</h3>
+<blockquote>
+<p>dlv debug</p>
+</blockquote>
+<ol>
+<li>执行 dlv debug 进入命令行模式，此时同目录下会自动生成一个 __debug_bin 文件。这个文件是由源码编译生成的，并会自动加载进调试器。</li>
+<li>Delve 期望的是从单个程序或项目中构建出单个二进制文件，如果目录中有多个源文件且每个文件都有自己的主函数， Delve 则可能抛出错误。此种情况下应该使用下面第二种方式，加载二进制文件进行调试。</li>
+</ol>
+<h3 id="加载二进制文件进行调试">加载二进制文件进行调试</h3>
+<blockquote>
+<p>dlv exec ./main</p>
+</blockquote>
+<ol>
+<li>使用 dlv exec 命令将二进制文件加载进调试器。</li>
+<li>在命令行模式下输入 help 查看可用命令。</li>
+<li>常使用的一些命令：</li>
+</ol>
+<pre><code class="language-txt">b main.main     //在 main 函数处设置断点，等同于 break main.main
+b func.go:5     //使用 文件名:行号 的格式来设置断点，也可以直接用行号设置断点
+bp                  //查看设置的断点，等同于 breakpoints
+clear [断点标号如2]          //清除单个断点
+clearall            //清除所有断点
+on                  //设置一段命令，当断点命中的时候
+c                   //继续运行程序，运行到断点处中止，等同于 continue
+n                   //单步调试下一行源码，等同于 next。默认情况下，Delve不会更深入地调试函数调用。
+s                   //单步调试下一个函数，等同于 step
+step-instruction    //单步调试某个汇编指令
+stack              //打印当前堆栈的内容信息，可以看到0、1、2、3...等栈位置的函数
+frame 0           //实现帧之间的跳转，可以使用 stack 输出的位置序号
+args                //打印出命令行传给函数的参数
+disassemble    //查看编译器生成的汇编语言指令
+stepout           //跳回到函数被调用的地方
+print [var_name]         //打印变量的值
+whatis [var_name]        //打印变量的类型
+locals                //打印函数内的所有局部变量
+regs                    //打印寄存器的信息
+x                       //等同于examinemem，这个是解析内存用的，和 gdb 的 x 命令一样
+set                     //set赋值
+vars                    //打印全局变量（包变量）
+whatis                  //打印类型信息
+r                       //重新启动并调试执行程序，等同于restart
+call                    //整个程序执行
+quit                //退出调试器
+
+协程相关
+goroutine (alias: gr)       //打印某个特定协程的信息
+goroutines (alias: grs)     //列举所有的协程
+goroutines -t                   //展开所有协程详细信息
+thread (alias: tr)              //切换到某个线程
+threads                         //打印所有的线程信息
+
+栈相关
+deferred                    //在 defer 函数上下文里执行命令
+down                        //上堆栈
+frame                       //跳到某个具体的堆栈
+stack (alias: bt)          //打印堆栈信息
+up                           //下堆栈
+
+其他命令
+config                      //配置变更
+disassemble (alias: disass)     //反汇编
+funcs                           //打印所有函数符号
+libraries                       //打印所有加载的动态库
+list (alias: ls | l)            //显示源码
+source                      //加载命令
+sources                     //打印源码
+types                       //打印所有类型信息
+</code></pre>
+<h2 id="dlv的其它命令">dlv的其它命令</h2>
+<pre><code class="language-txt">dlv debug：使用dlv debug可以在main函数文件所在目录直接对main函数进行调试，也可以在根目录以指定包路径的方式对main函数进行调试
+dlv exec：使用dlv exec可以对编译好的二进制进行调试
+dlv test：使用dlv test可以对test包进行调试
+dlv attach：使用dlv attach可以附加到一个已在运行的进程进行调试
+dlv connect：使用dlv connect可以连接到调试服务器进行调试
+dlv trace：使用dlv trace可以追踪程序
+</code></pre>
+<h1 id="go-race">go race</h1>
+<ol>
+<li>Go 语言提供了 race 检测（Go race detector）来进行竞争分析和发现</li>
+<li>go run -race main.go 是运行时检测，并不是编译时。且使用 race 时存在明显的性能开销，因此不要在生产环境中使用这个。</li>
+</ol>
+<h1 id="gdb">GDB</h1>
+<h2 id="gdb当前只支持6个命令">gdb当前只支持6个命令</h2>
+<ol>
+<li>3个 cmd 命令</li>
+</ol>
+<pre><code class="language-txt">info goroutines         //打印所有的goroutines
+goroutine ${id} bt      //打印一个goroutine的堆栈
+iface                       //打印静态或者动态的接口类型
+</code></pre>
+<ol start="2">
+<li>3个函数</li>
+</ol>
+<pre><code class="language-txt">len                         //打印string，slices，map，channels 这四种类型的长度
+cap                         //打印slices，channels 这两种类型的cap
+dtype                       //强制转换接口到动态类型。
+</code></pre>
+<blockquote>
+<p>gdb 有一个功能是无法替代的，就是 gcore 的功能</p>
+</blockquote>
+<h1 id="gogc-环境变量">GOGC 环境变量</h1>
+<ol>
+<li>Go垃圾回收提供了一个参数GOGC。</li>
+<li>GOGC代表了占用中的内存增长比率，达到该比率时应当触发1次GC，该参数可以通过环境变量进行设置。。</li>
+<li>GOGC参数取值范围为0~100，其默认值是100，单位是百分比。<br>
+假如当前heap占用内存为4MB，GOGC = 75，则 4*(1+75%)=7MB，即heap占用内存大小达到7MB时会触发1轮GC。</li>
+<li>GOGC还有2个特殊值：<br>
+“off” : 代表关闭GC<br>
+0 : 代表持续进行垃圾回收，只用于调试。</li>
+</ol>
+<h1 id="runtimememstats">runtime.MemStats</h1>
+<p>通过runtime.MemStats可以实时的获取 Go 运行时的内存统计信息，这个数据结构包含很多的字段。</p>
+<pre><code class="language-go">type MemStats struct {
+        // 已分配的对象的字节数.
+        //
+        // 和HeapAlloc相同.
+        Alloc uint64
+
+        // 分配的字节数累积之和.
+        //
+        // 所以对象释放的时候这个值不会减少.
+        TotalAlloc uint64
+
+        // 从操作系统获得的内存总数.
+        //
+        // Sys是下面的XXXSys字段的数值的和, 是为堆、栈、其它内部数据保留的虚拟内存空间.
+        // 注意虚拟内存空间和物理内存的区别.
+        Sys uint64
+
+        // 运行时地址查找的次数，主要用在运行时内部调试上.
+        Lookups uint64
+
+        // 堆对象分配的次数累积和.
+        // 活动对象的数量等于`Mallocs - Frees`.
+        Mallocs uint64
+
+        // 释放的对象数.
+        Frees uint64
+
+        // 分配的堆对象的字节数.
+        //
+        // 包括所有可访问的对象以及还未被垃圾回收的不可访问的对象.
+        // 所以这个值是变化的，分配对象时会增加，垃圾回收对象时会减少.
+        HeapAlloc uint64
+
+        // 从操作系统获得的堆内存大小.
+        //
+        // 虚拟内存空间为堆保留的大小，包括还没有被使用的.
+        // HeapSys 可被估算为堆已有的最大尺寸.
+        HeapSys uint64
+
+        // HeapIdle是idle(未被使用的) span中的字节数.
+        //
+        // Idle span是指没有任何对象的span,这些span **可以**返还给操作系统，或者它们可以被重用,
+        // 或者它们可以用做栈内存.
+        //
+        // HeapIdle 减去 HeapReleased 的值可以当作&quot;可以返回到操作系统但由运行时保留的内存量&quot;.
+        // 以便在不向操作系统请求更多内存的情况下增加堆，也就是运行时的&quot;小金库&quot;.
+        //
+        // 如果这个差值明显比堆的大小大很多，说明最近在活动堆的上有一次尖峰.
+        HeapIdle uint64
+
+        // 正在使用的span的字节大小.
+        //
+        // 正在使用的span是值它至少包含一个对象在其中.
+        // HeapInuse 减去 HeapAlloc的值是为特殊大小保留的内存，但是当前还没有被使用.
+        HeapInuse uint64
+
+        // HeapReleased 是返还给操作系统的物理内存的字节数.
+        //
+        // 它统计了从idle span中返还给操作系统，没有被重新获取的内存大小.
+        HeapReleased uint64
+
+
+        // HeapObjects 实时统计的分配的堆对象的数量,类似HeapAlloc.
+        HeapObjects uint64
+
+        // 栈span使用的字节数。
+        // 正在使用的栈span是指至少有一个栈在其中.
+        //
+        // 注意并没有idle的栈span,因为未使用的栈span会被返还给堆(HeapIdle).
+        StackInuse uint64
+
+        // 从操作系统取得的栈内存大小.
+        // 等于StackInuse 再加上为操作系统线程栈获得的内存.
+        StackSys uint64
+
+        // 分配的mspan数据结构的字节数.
+        MSpanInuse uint64
+
+        // 从操作系统为mspan获取的内存字节数.
+        MSpanSys uint64
+
+        // 分配的mcache数据结构的字节数.
+        MCacheInuse uint64
+
+        // 从操作系统为mcache获取的内存字节数.
+        MCacheSys uint64
+
+        // 在profiling bucket hash tables中的内存字节数.
+        BuckHashSys uint64
+
+        // 垃圾回收元数据使用的内存字节数.
+        GCSys uint64 // Go 1.2
+
+        // off-heap的杂项内存字节数.
+        OtherSys uint64 // Go 1.2
+
+        // 下一次垃圾回收的目标大小，保证 HeapAlloc ≤ NextGC.
+        // 基于当前可访问的数据和GOGC的值计算而得.
+        NextGC uint64
+
+        // 上一次垃圾回收的时间.
+        LastGC uint64
+
+        // 自程序开始 STW 暂停的累积纳秒数.
+        // STW的时候除了垃圾回收器之外所有的goroutine都会暂停.
+        PauseTotalNs uint64
+
+        // 一个循环buffer，用来记录最近的256个GC STW的暂停时间.
+        PauseNs [256]uint64
+
+        // 最近256个GC暂停截止的时间.
+        PauseEnd [256]uint64 // Go 1.4
+
+        // GC的总次数.
+        NumGC uint32
+
+        // 强制GC的次数.
+        NumForcedGC uint32 // Go 1.8
+
+        // 自程序启动后由GC占用的CPU可用时间，数值在 0 到 1 之间.
+        // 0代表GC没有消耗程序的CPU. GOMAXPROCS * 程序运行时间等于程序的CPU可用时间.
+        GCCPUFraction float64 // Go 1.5
+
+        // 是否允许GC.
+        EnableGC bool
+
+        // 未使用.
+        DebugGC bool
+
+        // 按照大小进行的内存分配的统计,具体可以看Go内存分配的文章介绍.
+        BySize [61]struct {
+                // Size is the maximum byte size of an object in this
+                // size class.
+                Size uint32
+
+                // Mallocs is the cumulative count of heap objects
+                // allocated in this size class. The cumulative bytes
+                // of allocation is Size*Mallocs. The number of live
+                // objects in this size class is Mallocs - Frees.
+                Mallocs uint64
+
+                // Frees is the cumulative count of heap objects freed
+                // in this size class.
+                Frees uint64
+        }
+}
+</code></pre>
+<h1 id="runtimesetgcpercent">runtime.SetGCPercent</h1>
+<p>可以通过设置runtime.SetGCPercent参数来调整GOGC垃圾回收的目标百分比。<br>
+当这次新分配的数据和上一次垃圾回收后存活数据之比达到这个数值之后就会触发一次垃圾回收。<br>
+GOGC的默认值是 100。设置GOGC=off会禁止垃圾回收。</p>
+
+                            </div>
+                            <div class="clear"></div>
+                        </section>
+                    </article>
+                    <div class="clear"></div>
+
+                    <section class="related section">
+                        
+                            <article class="prev grid-50 tablet-grid-50 grid-parent">
+                                <div class="thumb cover lazy loaded" style="background-image: url('https://ninglg.com/media/images/golang.jpg');"></div>
+                                <a href="https://ninglg.com/post/golang-strings/" class="full-link"></a>
+                                <div class="info">
+                                    <time datetime="2016-05-27">2016-05-27</time>
+                                    <h4 class="title white no-margin">
+                                        Go字符串处理
+                                    </h4>
+                                </div>
+                                <span class="epcl-button red">
+                  <img src="https://ninglg.com/media/images/left-arrow.svg" width="15" alt="Left Arrow">
+                </span>
+                                <div class="overlay"></div>
+                            </article>
+                            
+                                
+                                    <article class="next grid-50 tablet-grid-50 grid-parent">
+                                        <div class="thumb cover lazy loaded" style="background-image: url('https://ninglg.com/media/images/golang.jpg');"></div>
+                                        <a href="https://ninglg.com/post/golang-concurrent-programming-practices/" class="full-link"></a>
+                                        <div class="info">
+                                            <time datetime="2016-05-02">2016-05-02</time>
+                                            <h4 class="title white no-margin">
+                                                Go并发编程实践
+                                            </h4>
+                                        </div>
+                                        <span class="epcl-button red">
+                  <img src="https://ninglg.com/media/images/right-arrow.svg" width="15" alt="Left Arrow">
+                </span>
+                                        <div class="overlay"></div>
+                                    </article>
+                                    
+
+                                        <div class="clear"></div>
+                    </section>
+
+                    <div class="clear"></div>
+
+                    
+                                <!--
+                                <div id="comments" class="bg-white hosted ">
+                                    
+                                    <p>请到客户端“主题--自定义配置--valine”中填入ID和KEY</p>
+                                    
+                                </div>
+                                -->
+                                <div class="clear"></div>
+                                
+
+                </div>
+            </div>
+        </main>
+
+        <footer id="footer" class="grid-container">
+    <div class="widgets row gradient-effect">
+        <div class="default-sidebar border-effect">
+            <div class="grid-33 tablet-grid-50 mobile-grid-100">
+                <section id="tag_cloud-2" class="widget widget_epcl_posts_thumbs underline-effect">
+                    <h4 class="widget-title title white bordered">Latest Posts</h4>
+                    
+                        
+                            <article class="item post-0 post type-post status-publish format-standard has-post-thumbnail hentry">
+                                <a href="https://ninglg.com/post/ffmpeg-intro-and-usage/" class="thumb hover-effect">
+                      <span class="fullimage cover" style="display:block;border-radius:50%;background-image: url('/media/images/dev-tool.jpg');"></span>
+                    </a>
+                                <div class="info gradient-effect">
+                                    <time datetime="2021-08-01">2021-08-01</time>
+                                    <h4 class="title usmall">
+                                        <a href="https://ninglg.com/post/ffmpeg-intro-and-usage/">
+                                            FFmpeg介绍和使用
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div class="clear"></div>
+                            </article>
+                            
+                                
+                        
+                            <article class="item post-1 post type-post status-publish format-standard has-post-thumbnail hentry">
+                                <a href="https://ninglg.com/post/annual-goals/" class="thumb hover-effect">
+                      <span class="fullimage cover" style="display:block;border-radius:50%;background-image: url('/media/images/life.jpg');"></span>
+                    </a>
+                                <div class="info gradient-effect">
+                                    <time datetime="2021-01-01">2021-01-01</time>
+                                    <h4 class="title usmall">
+                                        <a href="https://ninglg.com/post/annual-goals/">
+                                            年度目标
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div class="clear"></div>
+                            </article>
+                            
+                                
+                        
+                            <article class="item post-2 post type-post status-publish format-standard has-post-thumbnail hentry">
+                                <a href="https://ninglg.com/post/book-reading-list/" class="thumb hover-effect">
+                      <span class="fullimage cover" style="display:block;border-radius:50%;background-image: url('/media/images/read.jpg');"></span>
+                    </a>
+                                <div class="info gradient-effect">
+                                    <time datetime="2021-01-01">2021-01-01</time>
+                                    <h4 class="title usmall">
+                                        <a href="https://ninglg.com/post/book-reading-list/">
+                                            阅读书单
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div class="clear"></div>
+                            </article>
+                            
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                        
+                                
+                                    <div class="clear"></div>
+                </section>
+            </div>
+
+            <div class="grid-33 tablet-grid-50 mobile-grid-100">
+                <section id="tag_cloud-2" class="widget widget_tag_cloud underline-effect">
+                    <h4 class="widget-title title white bordered">Tags Cloud</h4>
+                    <div class="tagcloud">
+                        
+                            <a href="https://ninglg.com/tag/dev-tool/" class="ctag ctag-0 ctag-dev-tool" aria-label="">
+                                开发工具
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/life/" class="ctag ctag-1 ctag-life" aria-label="">
+                                生活
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/read/" class="ctag ctag-2 ctag-read" aria-label="">
+                                阅读
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/flutter/" class="ctag ctag-3 ctag-flutter" aria-label="">
+                                Flutter
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/html/" class="ctag ctag-4 ctag-html" aria-label="">
+                                HTML
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/algorithm/" class="ctag ctag-5 ctag-algorithm" aria-label="">
+                                算法
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/elasticsearch/" class="ctag ctag-6 ctag-elasticsearch" aria-label="">
+                                Elasticsearch
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/kafka/" class="ctag ctag-7 ctag-kafka" aria-label="">
+                                Kafka
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/golang/" class="ctag ctag-8 ctag-golang" aria-label="">
+                                Golang
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/system-design/" class="ctag ctag-9 ctag-system-design" aria-label="">
+                                系统设计
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/app/" class="ctag ctag-10 ctag-app" aria-label="">
+                                APP
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/linux/" class="ctag ctag-11 ctag-linux" aria-label="">
+                                Linux
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/bigdata/" class="ctag ctag-12 ctag-bigdata" aria-label="">
+                                大数据
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/http/" class="ctag ctag-13 ctag-http" aria-label="">
+                                HTTP
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/microservice/" class="ctag ctag-14 ctag-microservice" aria-label="">
+                                微服务
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/data-structure/" class="ctag ctag-15 ctag-data-structure" aria-label="">
+                                数据结构
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/docker/" class="ctag ctag-16 ctag-docker" aria-label="">
+                                Docker
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/english/" class="ctag ctag-17 ctag-english" aria-label="">
+                                英语
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/mysql/" class="ctag ctag-18 ctag-mysql" aria-label="">
+                                MySQL
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/redis/" class="ctag ctag-19 ctag-redis" aria-label="">
+                                Redis
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/work/" class="ctag ctag-20 ctag-work" aria-label="">
+                                工作
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/operating-system/" class="ctag ctag-21 ctag-operating-system" aria-label="">
+                                操作系统
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/vuejs/" class="ctag ctag-22 ctag-vuejs" aria-label="">
+                                Vue.js
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/php/" class="ctag ctag-23 ctag-php" aria-label="">
+                                PHP
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/distributed-system/" class="ctag ctag-24 ctag-distributed-system" aria-label="">
+                                分布式系统
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/movie/" class="ctag ctag-25 ctag-movie" aria-label="">
+                                电影
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/nginx/" class="ctag ctag-26 ctag-nginx" aria-label="">
+                                Nginx
+                            </a>
+                            
+                            <a href="https://ninglg.com/tag/network/" class="ctag ctag-27 ctag-network" aria-label="">
+                                网络
+                            </a>
+                            
+                    </div>
+                    <div class="clear"></div>
+                </section>
+            </div>
+
+            <div class="grid-33 tablet-grid-50 mobile-grid-100">
+                <section id="epcl_about-2" class="widget widget_epcl_about underline-effect">
+                    <h4 class="widget-title title white bordered">About Me</h4>
+                    <div class="avatar">
+                        <a href="/post/about/" class="translate-effect thumb"><span class="fullimage cover" style="background-image: url(https://ninglg.com/images/avatar.png);"></span></a>
+                    </div>
+                    <div class="info">
+                        <h4 class="title small author-name gradient-effect no-margin">
+                            <a href="/">
+                                Light Ning
+                            </a>
+                        </h4>
+                        <p class="founder">
+                            永远奔腾，永远闪光
+                        </p>
+                        <div class="social">
+                            
+                                
+                                        
+                                
+                                        
+                                
+                                        
+                                
+                                        
+                                
+                                        
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                </section>
+            </div>
+
+        </div>
+        <div class="clear"></div>
+    </div>
+
+    <div class="logo">
+        <a href="javascript: scroll(0, 0)"><img src="/media/images/custom-footerLogo.png" alt=""></a>
+    </div>
+    <p class="published border-effect">
+        ©2021 共
+        176 篇文章
+            <br/> Theme <a href="https://github.com/lmm214/gridea-theme-breek/" target="_blank">「breek」</a> Powered by <a href="https://gridea.dev/" target="_blank">「Gridea」</a>
+    </p>
+
+    <a href="javascript:void(0)" id="back-to-top" class="epcl-button dark" style="display:none">
+        <i class="fa fa-arrow"></i>
+    </a>
+</footer>
+
+<div class="clear"></div>
+
+
+
+            <script src="https://ninglg.com/media/js/functions-post.js"></script>
+
+            </div>
+            <!-- end: #wrapper -->
+</body>
+
+</html>
