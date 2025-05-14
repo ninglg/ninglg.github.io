@@ -1,0 +1,58 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8" data-next-head=""/><meta name="viewport" content="width=device-width" data-next-head=""/><link rel="preload" href="/_next/static/css/f7f849eb29140580.css" as="style"/><link rel="preload" href="/_next/static/css/2c7ffd10416756d7.css" as="style"/><link rel="stylesheet" href="/_next/static/css/f7f849eb29140580.css" data-n-g=""/><link rel="stylesheet" href="/_next/static/css/2c7ffd10416756d7.css" data-n-p=""/><noscript data-n-css=""></noscript><script defer="" noModule="" src="/_next/static/chunks/polyfills-42372ed130431b0a.js"></script><script src="/_next/static/chunks/webpack-8cac0b4b405cede1.js" defer=""></script><script src="/_next/static/chunks/framework-2f335d22a7318891.js" defer=""></script><script src="/_next/static/chunks/main-6f8766cf045e0663.js" defer=""></script><script src="/_next/static/chunks/pages/_app-0d1ac66d38199a83.js" defer=""></script><script src="/_next/static/chunks/8-20d97a1f65308574.js" defer=""></script><script src="/_next/static/chunks/pages/posts/%5Bid%5D-9642aa333720a6ed.js" defer=""></script><script src="/_next/static/1uQtDGz8MNx0P-gGWjhsM/_buildManifest.js" defer=""></script><script src="/_next/static/1uQtDGz8MNx0P-gGWjhsM/_ssgManifest.js" defer=""></script></head><body class="antialiased"><div id="__next"><div class="Post_container__ictJu"><nav class="Nav_nav__o8sSc"><div class="Nav_navContainer__KuO9f"><a class="Nav_navLogo__aczrM" href="/">Light Ning</a><div class="Nav_navLinks__sb_3K"><a class="Nav_navLink__z2PDT " href="/">首页</a><a class="Nav_navLink__z2PDT " href="/about">关于</a></div></div></nav><main class="Post_main__X4Tic"><article class="Post_post__1KH4p"><p>Tags: <!-- -->Kafka</p><h1 class="Post_title__pen_7">在Mac系统上使用Kafka环境</h1><time class="Post_date__YGL_Q">2015-06-05</time><div class="Post_content__aWM2C"><p>此篇介绍一下如何在Mac系统上进行安装和使用Kafka环境。</p>
+<h2>环境安装</h2>
+<p>在Mac系统上安装最方便的还是使用brew工具命令：</p>
+<pre><code>brew cask install java
+brew install zookeeper
+brew install kafka
+</code></pre>
+<h2>安装后的目录</h2>
+<pre><code>二进制文件和脚本文件在 /usr/local/bin 目录下
+Kafka 配置文件在 /usr/local/etc/kafka 目录下
+Zookeeper 配置文件在 /usr/local/etc/zookeeper 目录下
+log.dirs(Kafka 的数据目录)被设置为 /usr/local/var/lib/kafka-logs
+</code></pre>
+<h2>配置修改</h2>
+<p>修改 /usr/local/etc/kafka/server.properties 文件，将</p>
+<blockquote>
+<p>#listeners=PLAINTEXT://:9092</p>
+</blockquote>
+<p>修改为</p>
+<blockquote>
+<p>listeners=PLAINTEXT://localhost:9092</p>
+</blockquote>
+<h2>功能验证</h2>
+<h3>启动服务</h3>
+<pre><code>brew services start zookeeper
+brew services start kafka
+</code></pre>
+<h3>创建Topic</h3>
+<blockquote>
+<p>kafka-topics --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic testkafka</p>
+</blockquote>
+<p>2181是zookeeper使用的端口</p>
+<h3>查看Topic列表</h3>
+<blockquote>
+<p>kafka-topics --list --zookeeper localhost:2181</p>
+</blockquote>
+<h3>生产消息</h3>
+<pre><code>$ kafka-console-producer --broker-list localhost:9092 --topic testkafka
+>hello, kafka!
+</code></pre>
+<h3>消费消息</h3>
+<ol>
+<li>直接消费</li>
+</ol>
+<blockquote>
+<p>kafka-console-consumer --bootstrap-server localhost:9092 --topic testkafka --from-beginning</p>
+</blockquote>
+<ol start="2">
+<li>组(group)消费</li>
+</ol>
+<blockquote>
+<p>kafka-console-consumer --bootstrap-server localhost:9092 --topic testkafka --group test-consumer1 --from-beginning</p>
+</blockquote>
+<h3>关闭服务</h3>
+<pre><code>brew services stop kafka
+brew services stop zookeeper
+</code></pre>
+</div></article><div class="Post_postNavigation__TSrfz"><a class="Post_navLink__iyGDb" href="/posts/concepts-of-kafka">← <!-- -->Kafka组件中的常用概念介绍</a><a class="Post_navLink__iyGDb Post_nextLink__THXHn" href="/posts/go-unit-test">Go语言的单元测试<!-- --> →</a></div></main><footer class="footer_footer__mqdak"><p>© <!-- -->2025<!-- --> <!-- -->Light Ning<!-- --> All rights reserved.</p></footer></div></div><script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{"post":{"summary":null,"tags":["Kafka"],"id":"use-kafka-on-mac-system","contentHtml":"\u003cp\u003e此篇介绍一下如何在Mac系统上进行安装和使用Kafka环境。\u003c/p\u003e\n\u003ch2\u003e环境安装\u003c/h2\u003e\n\u003cp\u003e在Mac系统上安装最方便的还是使用brew工具命令：\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003ebrew cask install java\nbrew install zookeeper\nbrew install kafka\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003e安装后的目录\u003c/h2\u003e\n\u003cpre\u003e\u003ccode\u003e二进制文件和脚本文件在 /usr/local/bin 目录下\nKafka 配置文件在 /usr/local/etc/kafka 目录下\nZookeeper 配置文件在 /usr/local/etc/zookeeper 目录下\nlog.dirs(Kafka 的数据目录)被设置为 /usr/local/var/lib/kafka-logs\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003e配置修改\u003c/h2\u003e\n\u003cp\u003e修改 /usr/local/etc/kafka/server.properties 文件，将\u003c/p\u003e\n\u003cblockquote\u003e\n\u003cp\u003e#listeners=PLAINTEXT://:9092\u003c/p\u003e\n\u003c/blockquote\u003e\n\u003cp\u003e修改为\u003c/p\u003e\n\u003cblockquote\u003e\n\u003cp\u003elisteners=PLAINTEXT://localhost:9092\u003c/p\u003e\n\u003c/blockquote\u003e\n\u003ch2\u003e功能验证\u003c/h2\u003e\n\u003ch3\u003e启动服务\u003c/h3\u003e\n\u003cpre\u003e\u003ccode\u003ebrew services start zookeeper\nbrew services start kafka\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch3\u003e创建Topic\u003c/h3\u003e\n\u003cblockquote\u003e\n\u003cp\u003ekafka-topics --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic testkafka\u003c/p\u003e\n\u003c/blockquote\u003e\n\u003cp\u003e2181是zookeeper使用的端口\u003c/p\u003e\n\u003ch3\u003e查看Topic列表\u003c/h3\u003e\n\u003cblockquote\u003e\n\u003cp\u003ekafka-topics --list --zookeeper localhost:2181\u003c/p\u003e\n\u003c/blockquote\u003e\n\u003ch3\u003e生产消息\u003c/h3\u003e\n\u003cpre\u003e\u003ccode\u003e$ kafka-console-producer --broker-list localhost:9092 --topic testkafka\n\u003ehello, kafka!\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch3\u003e消费消息\u003c/h3\u003e\n\u003col\u003e\n\u003cli\u003e直接消费\u003c/li\u003e\n\u003c/ol\u003e\n\u003cblockquote\u003e\n\u003cp\u003ekafka-console-consumer --bootstrap-server localhost:9092 --topic testkafka --from-beginning\u003c/p\u003e\n\u003c/blockquote\u003e\n\u003col start=\"2\"\u003e\n\u003cli\u003e组(group)消费\u003c/li\u003e\n\u003c/ol\u003e\n\u003cblockquote\u003e\n\u003cp\u003ekafka-console-consumer --bootstrap-server localhost:9092 --topic testkafka --group test-consumer1 --from-beginning\u003c/p\u003e\n\u003c/blockquote\u003e\n\u003ch3\u003e关闭服务\u003c/h3\u003e\n\u003cpre\u003e\u003ccode\u003ebrew services stop kafka\nbrew services stop zookeeper\n\u003c/code\u003e\u003c/pre\u003e\n","date":"2015-06-05T10:00:00.000Z","title":"在Mac系统上使用Kafka环境","published":true,"hideInList":false,"feature":null,"isTop":false},"prevPost":{"summary":null,"tags":["Kafka"],"id":"concepts-of-kafka","title":"Kafka组件中的常用概念介绍","date":"2015-06-08T10:00:00.000Z","published":true,"hideInList":false,"feature":null,"isTop":false},"nextPost":{"summary":null,"tags":["Golang"],"id":"go-unit-test","title":"Go语言的单元测试","date":"2015-06-03T10:00:00.000Z","published":true,"hideInList":false,"feature":null,"isTop":false}},"__N_SSG":true},"page":"/posts/[id]","query":{"id":"use-kafka-on-mac-system"},"buildId":"1uQtDGz8MNx0P-gGWjhsM","isFallback":false,"gsp":true,"scriptLoader":[]}</script></body></html>

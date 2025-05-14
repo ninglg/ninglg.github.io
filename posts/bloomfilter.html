@@ -1,0 +1,48 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8" data-next-head=""/><meta name="viewport" content="width=device-width" data-next-head=""/><link rel="preload" href="/_next/static/css/f7f849eb29140580.css" as="style"/><link rel="preload" href="/_next/static/css/2c7ffd10416756d7.css" as="style"/><link rel="stylesheet" href="/_next/static/css/f7f849eb29140580.css" data-n-g=""/><link rel="stylesheet" href="/_next/static/css/2c7ffd10416756d7.css" data-n-p=""/><noscript data-n-css=""></noscript><script defer="" noModule="" src="/_next/static/chunks/polyfills-42372ed130431b0a.js"></script><script src="/_next/static/chunks/webpack-8cac0b4b405cede1.js" defer=""></script><script src="/_next/static/chunks/framework-2f335d22a7318891.js" defer=""></script><script src="/_next/static/chunks/main-6f8766cf045e0663.js" defer=""></script><script src="/_next/static/chunks/pages/_app-0d1ac66d38199a83.js" defer=""></script><script src="/_next/static/chunks/8-20d97a1f65308574.js" defer=""></script><script src="/_next/static/chunks/pages/posts/%5Bid%5D-9642aa333720a6ed.js" defer=""></script><script src="/_next/static/1uQtDGz8MNx0P-gGWjhsM/_buildManifest.js" defer=""></script><script src="/_next/static/1uQtDGz8MNx0P-gGWjhsM/_ssgManifest.js" defer=""></script></head><body class="antialiased"><div id="__next"><div class="Post_container__ictJu"><nav class="Nav_nav__o8sSc"><div class="Nav_navContainer__KuO9f"><a class="Nav_navLogo__aczrM" href="/">Light Ning</a><div class="Nav_navLinks__sb_3K"><a class="Nav_navLink__z2PDT " href="/">首页</a><a class="Nav_navLink__z2PDT " href="/about">关于</a></div></div></nav><main class="Post_main__X4Tic"><article class="Post_post__1KH4p"><p>Tags: <!-- -->算法</p><h1 class="Post_title__pen_7">BloomFilter（布隆过滤器）介绍</h1><time class="Post_date__YGL_Q">2018-01-15</time><div class="Post_content__aWM2C"><p>BloomFilter（布隆过滤器）是一种可以高效地判断元素是否在某个集合中的算法。</p>
+<h2>应用场景</h2>
+<p>BloomFilter有非常多的应用场景，如检查单词是否拼写正确、网络爬虫的URL去重、黑名单检验、昵称不能重复的检测等等。</p>
+<h2>原理分析</h2>
+<p>布隆过滤器本质是一个<strong>位数组</strong>。其整体思路：</p>
+<blockquote>
+<p>1、先初始化一个m位长度的位向量{1..m}，每一位均初始化为0；
+2、使用k个相互独立的Hash函数，每个Hash函数将元素映射到{1..m}的范围内，并将对应的位置为1；
+3、当查找某元素是否存在时，查找该元素所对应的k位是否全部为1，即可说明该元素是否存在。</p>
+</blockquote>
+<h2>使用优缺点</h2>
+<h3>优点</h3>
+<h3>1. 空间和时间效率高</h3>
+<ol>
+<li>对于少量数据来说，使用HashSet判断是很好的选择。但是对于海量数据来说，BloomFilter相比于其他数据结构在空间效率和时间效率方面都有着明显的优势。</li>
+</ol>
+<h3>缺点</h3>
+<h3>1. 存在误报</h3>
+<p>BloomFilter 具有一定的误判率，有可能会将本来不存在的元素判定为存在。因此，对于那些需要“零错误”的应用场景，BloomFilter将不太适用。</p>
+<h3>2. 无法删除</h3>
+<p>BloomFilter 由于并不存储元素，而是用位的0、1来表示元素是否存在，并且很有可能一个位被多个元素同时使用，所以无法通过将某元素对应的位置为0来删除元素。
+幸运的是，目前学术界和工业界都有很多方法扩展已解决以上问题。如可以使用<strong>Counting Bloom Filter (CBF)</strong>，CBF将基本BloomFilter的每一个Bit改为一个计数器，这样就可以实现删除字符串的功能了。另外还有<strong>Cuckoo（布谷鸟哈希）</strong> 也可以解决误报和无法删除的问题。</p>
+<h2>实际操作</h2>
+<p>可以通过 docker 直接在 redis 中体验布隆过滤器：</p>
+<blockquote>
+<p>docker run -d -p 6379:6379 --name bloomfilter redislabs/rebloom
+docker exec -it bloomfilter redis-cli</p>
+</blockquote>
+<p>redis 布隆过滤器主要就两个命令：</p>
+<blockquote>
+<p>bf.add 添加元素到布隆过滤器中：bf.add urls https://ninglg.com
+bf.exists 判断某个元素是否在过滤器中：bf.exists urls https://ninglg.com</p>
+</blockquote>
+<p>上面说过布隆过滤器存在误判的情况，在 redis 中有两个值决定布隆过滤器的准确率：</p>
+<blockquote>
+<p>error_rate：允许布隆过滤器的错误率，这个值越低过滤器的位数组的大小越大，占用空间也就越大。
+initial_size：布隆过滤器可以储存的元素个数，当实际存储的元素个数超过这个值之后，过滤器的准确率会下降。</p>
+</blockquote>
+<p>redis 中有一个命令可以来设置这两个值：</p>
+<blockquote>
+<p>bf.reserve urls 0.01 100</p>
+</blockquote>
+<p>复制代码三个参数的含义：
+第一个值是过滤器的名字。
+第二个值为 error_rate 的值。
+第三个值为 initial_size 的值。</p>
+<p>使用这个命令要注意一点：执行这个命令之前过滤器的名字应该不存在，如果执行之前就存在会报错：(error) ERR item exists。</p>
+</div></article><div class="Post_postNavigation__TSrfz"><a class="Post_navLink__iyGDb" href="/posts/redis-memory-usage-analysis">← <!-- -->Redis的内存使用量分析</a><a class="Post_navLink__iyGDb Post_nextLink__THXHn" href="/posts/microservice-maintenance">微服务架构的维护<!-- --> →</a></div></main><footer class="footer_footer__mqdak"><p>© <!-- -->2025<!-- --> <!-- -->Light Ning<!-- --> All rights reserved.</p></footer></div></div><script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{"post":{"summary":null,"tags":["算法"],"id":"bloomfilter","contentHtml":"\u003cp\u003eBloomFilter（布隆过滤器）是一种可以高效地判断元素是否在某个集合中的算法。\u003c/p\u003e\n\u003ch2\u003e应用场景\u003c/h2\u003e\n\u003cp\u003eBloomFilter有非常多的应用场景，如检查单词是否拼写正确、网络爬虫的URL去重、黑名单检验、昵称不能重复的检测等等。\u003c/p\u003e\n\u003ch2\u003e原理分析\u003c/h2\u003e\n\u003cp\u003e布隆过滤器本质是一个\u003cstrong\u003e位数组\u003c/strong\u003e。其整体思路：\u003c/p\u003e\n\u003cblockquote\u003e\n\u003cp\u003e1、先初始化一个m位长度的位向量{1..m}，每一位均初始化为0；\n2、使用k个相互独立的Hash函数，每个Hash函数将元素映射到{1..m}的范围内，并将对应的位置为1；\n3、当查找某元素是否存在时，查找该元素所对应的k位是否全部为1，即可说明该元素是否存在。\u003c/p\u003e\n\u003c/blockquote\u003e\n\u003ch2\u003e使用优缺点\u003c/h2\u003e\n\u003ch3\u003e优点\u003c/h3\u003e\n\u003ch3\u003e1. 空间和时间效率高\u003c/h3\u003e\n\u003col\u003e\n\u003cli\u003e对于少量数据来说，使用HashSet判断是很好的选择。但是对于海量数据来说，BloomFilter相比于其他数据结构在空间效率和时间效率方面都有着明显的优势。\u003c/li\u003e\n\u003c/ol\u003e\n\u003ch3\u003e缺点\u003c/h3\u003e\n\u003ch3\u003e1. 存在误报\u003c/h3\u003e\n\u003cp\u003eBloomFilter 具有一定的误判率，有可能会将本来不存在的元素判定为存在。因此，对于那些需要“零错误”的应用场景，BloomFilter将不太适用。\u003c/p\u003e\n\u003ch3\u003e2. 无法删除\u003c/h3\u003e\n\u003cp\u003eBloomFilter 由于并不存储元素，而是用位的0、1来表示元素是否存在，并且很有可能一个位被多个元素同时使用，所以无法通过将某元素对应的位置为0来删除元素。\n幸运的是，目前学术界和工业界都有很多方法扩展已解决以上问题。如可以使用\u003cstrong\u003eCounting Bloom Filter (CBF)\u003c/strong\u003e，CBF将基本BloomFilter的每一个Bit改为一个计数器，这样就可以实现删除字符串的功能了。另外还有\u003cstrong\u003eCuckoo（布谷鸟哈希）\u003c/strong\u003e 也可以解决误报和无法删除的问题。\u003c/p\u003e\n\u003ch2\u003e实际操作\u003c/h2\u003e\n\u003cp\u003e可以通过 docker 直接在 redis 中体验布隆过滤器：\u003c/p\u003e\n\u003cblockquote\u003e\n\u003cp\u003edocker run -d -p 6379:6379 --name bloomfilter redislabs/rebloom\ndocker exec -it bloomfilter redis-cli\u003c/p\u003e\n\u003c/blockquote\u003e\n\u003cp\u003eredis 布隆过滤器主要就两个命令：\u003c/p\u003e\n\u003cblockquote\u003e\n\u003cp\u003ebf.add 添加元素到布隆过滤器中：bf.add urls https://ninglg.com\nbf.exists 判断某个元素是否在过滤器中：bf.exists urls https://ninglg.com\u003c/p\u003e\n\u003c/blockquote\u003e\n\u003cp\u003e上面说过布隆过滤器存在误判的情况，在 redis 中有两个值决定布隆过滤器的准确率：\u003c/p\u003e\n\u003cblockquote\u003e\n\u003cp\u003eerror_rate：允许布隆过滤器的错误率，这个值越低过滤器的位数组的大小越大，占用空间也就越大。\ninitial_size：布隆过滤器可以储存的元素个数，当实际存储的元素个数超过这个值之后，过滤器的准确率会下降。\u003c/p\u003e\n\u003c/blockquote\u003e\n\u003cp\u003eredis 中有一个命令可以来设置这两个值：\u003c/p\u003e\n\u003cblockquote\u003e\n\u003cp\u003ebf.reserve urls 0.01 100\u003c/p\u003e\n\u003c/blockquote\u003e\n\u003cp\u003e复制代码三个参数的含义：\n第一个值是过滤器的名字。\n第二个值为 error_rate 的值。\n第三个值为 initial_size 的值。\u003c/p\u003e\n\u003cp\u003e使用这个命令要注意一点：执行这个命令之前过滤器的名字应该不存在，如果执行之前就存在会报错：(error) ERR item exists。\u003c/p\u003e\n","date":"2018-01-15T23:22:39.000Z","title":"BloomFilter（布隆过滤器）介绍","published":true,"hideInList":false,"feature":null,"isTop":false},"prevPost":{"summary":null,"tags":["Redis"],"id":"redis-memory-usage-analysis","title":"Redis的内存使用量分析","date":"2018-01-17T10:06:19.000Z","published":true,"hideInList":false,"feature":null,"isTop":false},"nextPost":{"summary":null,"tags":["微服务"],"id":"microservice-maintenance","title":"微服务架构的维护","date":"2018-01-11T23:48:25.000Z","published":true,"hideInList":false,"feature":null,"isTop":false}},"__N_SSG":true},"page":"/posts/[id]","query":{"id":"bloomfilter"},"buildId":"1uQtDGz8MNx0P-gGWjhsM","isFallback":false,"gsp":true,"scriptLoader":[]}</script></body></html>

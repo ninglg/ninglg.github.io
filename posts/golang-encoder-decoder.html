@@ -1,0 +1,182 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8" data-next-head=""/><meta name="viewport" content="width=device-width" data-next-head=""/><link rel="preload" href="/_next/static/css/f7f849eb29140580.css" as="style"/><link rel="preload" href="/_next/static/css/2c7ffd10416756d7.css" as="style"/><link rel="stylesheet" href="/_next/static/css/f7f849eb29140580.css" data-n-g=""/><link rel="stylesheet" href="/_next/static/css/2c7ffd10416756d7.css" data-n-p=""/><noscript data-n-css=""></noscript><script defer="" noModule="" src="/_next/static/chunks/polyfills-42372ed130431b0a.js"></script><script src="/_next/static/chunks/webpack-8cac0b4b405cede1.js" defer=""></script><script src="/_next/static/chunks/framework-2f335d22a7318891.js" defer=""></script><script src="/_next/static/chunks/main-6f8766cf045e0663.js" defer=""></script><script src="/_next/static/chunks/pages/_app-0d1ac66d38199a83.js" defer=""></script><script src="/_next/static/chunks/8-20d97a1f65308574.js" defer=""></script><script src="/_next/static/chunks/pages/posts/%5Bid%5D-9642aa333720a6ed.js" defer=""></script><script src="/_next/static/1uQtDGz8MNx0P-gGWjhsM/_buildManifest.js" defer=""></script><script src="/_next/static/1uQtDGz8MNx0P-gGWjhsM/_ssgManifest.js" defer=""></script></head><body class="antialiased"><div id="__next"><div class="Post_container__ictJu"><nav class="Nav_nav__o8sSc"><div class="Nav_navContainer__KuO9f"><a class="Nav_navLogo__aczrM" href="/">Light Ning</a><div class="Nav_navLinks__sb_3K"><a class="Nav_navLink__z2PDT " href="/">首页</a><a class="Nav_navLink__z2PDT " href="/about">关于</a></div></div></nav><main class="Post_main__X4Tic"><article class="Post_post__1KH4p"><p>Tags: <!-- -->Golang</p><h1 class="Post_title__pen_7">Go语言的常用编解码器（序列化/反序列化）</h1><time class="Post_date__YGL_Q">2017-01-20</time><div class="Post_content__aWM2C"><p>Go语言常用到的几种编解码器</p>
+<h1>编解码器</h1>
+<pre><code class="language-txt">base64
+gob
+
+json
+thrift
+msgpack
+protobuf
+
+gencode
+</code></pre>
+<h1>base64</h1>
+<p>示例代码如下：</p>
+<pre><code class="language-go">package main
+
+import (
+	"encoding/base64"
+	"fmt"
+)
+
+func main() {
+	msg := "Hello, 世界"
+	encoded := base64.StdEncoding.EncodeToString([]byte(msg))
+	fmt.Println("base64 encode: ", encoded)
+	decoded, err := base64.StdEncoding.DecodeString(encoded)
+	if err != nil {
+		fmt.Println("base64 decode error: ", err)
+		return
+	}
+
+	fmt.Println("base64 decode: ", string(decoded))
+}
+</code></pre>
+<p>输出结果如下：</p>
+<pre><code class="language-txt">base64 encode:  SGVsbG8sIOS4lueVjA==
+base64 decode:  Hello, 世界
+</code></pre>
+<h1>json</h1>
+<p>示例代码如下：</p>
+<pre><code class="language-go">package main
+
+import (
+	"encoding/json"
+	"fmt"
+)
+
+type Person struct {
+	Name string `json:"name"`
+	Age  int    `json:"age"`
+}
+
+func main() {
+	p := Person{
+		Name: "xiaoming",
+		Age:  16,
+	}
+
+	ret, _ := json.Marshal(p)
+	fmt.Println(string(ret))
+
+	pp := Person{}
+	_ = json.Unmarshal(ret, &#x26;pp)
+	fmt.Printf("%+v", pp)
+
+}
+</code></pre>
+<p>输出结果如下：</p>
+<pre><code class="language-txt">{"name":"xiaoming","age":16}
+{Name:xiaoming Age:16}
+</code></pre>
+<h1>gob（Go binary）</h1>
+<p>示例代码如下：</p>
+<pre><code class="language-go">package main
+
+import (
+	"bytes"
+	"encoding/gob"
+	"fmt"
+	"log"
+)
+
+type P struct {
+	X, Y, Z int
+	Name    string
+}
+
+type Q struct {
+	X, Y *int32
+	Name string
+}
+
+func main() {
+	buf := new(bytes.Buffer)
+	enc := gob.NewEncoder(buf)
+	dec := gob.NewDecoder(buf)
+	// Encode (send) the value.
+	err := enc.Encode(P{3, 4, 5, "Pythagoras"})
+	if err != nil {
+		log.Fatal("encode error:", err)
+	}
+	fmt.Println(buf.Bytes())
+
+	// Decode (receive) the value.
+	var q Q
+	err = dec.Decode(&#x26;q)
+	if err != nil {
+		log.Fatal("decode error:", err)
+	}
+
+	fmt.Printf("%q: {%d,%d}\n", q.Name, *q.X, *q.Y)
+}
+</code></pre>
+<p>输出结果如下：</p>
+<pre><code class="language-txt">[42 255 129 3 1 1 1 80 1 255 130 0 1 4 1 1 88 1 4 0 1 1 89 1 4 0 1 1 90 1 4 0 1 4 78 97 109 101 1 12 0 0 0 21 255 130 1 6 1 8 1 10 1 10 80 121 116 104 97 103 111 114 97 115 0]
+"Pythagoras": {3,4}
+</code></pre>
+<h1>msgpack</h1>
+<p>示例代码如下：</p>
+<pre><code class="language-go">package main
+
+import (
+	"fmt"
+
+	"github.com/vmihailenco/msgpack"
+)
+
+type Person struct {
+	Name   string
+	Age    int
+	Gender string
+}
+
+func main() {
+	p1 := Person{
+		Name:   "xiaoming",
+		Age:    16,
+		Gender: "M",
+	}
+
+	// marshal
+	b, err := msgpack.Marshal(p1)
+	if err != nil {
+		fmt.Printf("msgpack marshal failed, err:%v", err)
+		return
+	}
+
+	// unmarshal
+	var p2 Person
+	err = msgpack.Unmarshal(b, &#x26;p2)
+	if err != nil {
+		fmt.Printf("msgpack unmarshal failed, err:%v", err)
+		return
+	}
+	fmt.Printf("p2:%#v\n", p2)
+}
+</code></pre>
+<p>输出结果如下：</p>
+<pre><code class="language-txt">p2:main.Person{Name:"xiaoming", Age:16, Gender:"M"}
+</code></pre>
+<h1>protobuf</h1>
+<p>#gencode
+<a href="https://github.com/andyleap/gencode">andyleap/gencode</a></p>
+<h1>字符串格式化常用功能</h1>
+<p>格式化  |  功能
+--- | ---
+%v | 按值的本来值输出
+%+v | 在 %v 基础上，对结构体字段名和值进行展开
+%#v	| 输出 Go 语言语法格式的值
+%T	| 输出 Go 语言语法格式的类型和值
+%%	| 输出 % 本体
+%b	| 整型以二进制方式显示
+%o	| 整型以八进制方式显示
+%d	| 整型以十进制方式显示
+%x	| 整型以十六进制方式显示
+%X	| 整型以十六进制、字母大写方式显示
+%U	| Unicode 字符
+%f	| 浮点数
+%p | 指针，十六进制方式显示</p>
+<h1>性能测试结果</h1>
+<p>由快到慢：gencode、msgpack、protobuf、json、xml</p>
+</div></article><div class="Post_postNavigation__TSrfz"><a class="Post_navLink__iyGDb" href="/posts/hive-hbase-in-bigdata">← <!-- -->Hive和HBase在大数据中的应用场景</a><a class="Post_navLink__iyGDb Post_nextLink__THXHn" href="/posts/reduce-golang-executable-program-size">减小Go代码编译后可执行程序的体积<!-- --> →</a></div></main><footer class="footer_footer__mqdak"><p>© <!-- -->2025<!-- --> <!-- -->Light Ning<!-- --> All rights reserved.</p></footer></div></div><script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{"post":{"summary":null,"tags":["Golang"],"id":"golang-encoder-decoder","contentHtml":"\u003cp\u003eGo语言常用到的几种编解码器\u003c/p\u003e\n\u003ch1\u003e编解码器\u003c/h1\u003e\n\u003cpre\u003e\u003ccode class=\"language-txt\"\u003ebase64\ngob\n\njson\nthrift\nmsgpack\nprotobuf\n\ngencode\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch1\u003ebase64\u003c/h1\u003e\n\u003cp\u003e示例代码如下：\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-go\"\u003epackage main\n\nimport (\n\t\"encoding/base64\"\n\t\"fmt\"\n)\n\nfunc main() {\n\tmsg := \"Hello, 世界\"\n\tencoded := base64.StdEncoding.EncodeToString([]byte(msg))\n\tfmt.Println(\"base64 encode: \", encoded)\n\tdecoded, err := base64.StdEncoding.DecodeString(encoded)\n\tif err != nil {\n\t\tfmt.Println(\"base64 decode error: \", err)\n\t\treturn\n\t}\n\n\tfmt.Println(\"base64 decode: \", string(decoded))\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e输出结果如下：\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-txt\"\u003ebase64 encode:  SGVsbG8sIOS4lueVjA==\nbase64 decode:  Hello, 世界\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch1\u003ejson\u003c/h1\u003e\n\u003cp\u003e示例代码如下：\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-go\"\u003epackage main\n\nimport (\n\t\"encoding/json\"\n\t\"fmt\"\n)\n\ntype Person struct {\n\tName string `json:\"name\"`\n\tAge  int    `json:\"age\"`\n}\n\nfunc main() {\n\tp := Person{\n\t\tName: \"xiaoming\",\n\t\tAge:  16,\n\t}\n\n\tret, _ := json.Marshal(p)\n\tfmt.Println(string(ret))\n\n\tpp := Person{}\n\t_ = json.Unmarshal(ret, \u0026#x26;pp)\n\tfmt.Printf(\"%+v\", pp)\n\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e输出结果如下：\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-txt\"\u003e{\"name\":\"xiaoming\",\"age\":16}\n{Name:xiaoming Age:16}\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch1\u003egob（Go binary）\u003c/h1\u003e\n\u003cp\u003e示例代码如下：\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-go\"\u003epackage main\n\nimport (\n\t\"bytes\"\n\t\"encoding/gob\"\n\t\"fmt\"\n\t\"log\"\n)\n\ntype P struct {\n\tX, Y, Z int\n\tName    string\n}\n\ntype Q struct {\n\tX, Y *int32\n\tName string\n}\n\nfunc main() {\n\tbuf := new(bytes.Buffer)\n\tenc := gob.NewEncoder(buf)\n\tdec := gob.NewDecoder(buf)\n\t// Encode (send) the value.\n\terr := enc.Encode(P{3, 4, 5, \"Pythagoras\"})\n\tif err != nil {\n\t\tlog.Fatal(\"encode error:\", err)\n\t}\n\tfmt.Println(buf.Bytes())\n\n\t// Decode (receive) the value.\n\tvar q Q\n\terr = dec.Decode(\u0026#x26;q)\n\tif err != nil {\n\t\tlog.Fatal(\"decode error:\", err)\n\t}\n\n\tfmt.Printf(\"%q: {%d,%d}\\n\", q.Name, *q.X, *q.Y)\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e输出结果如下：\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-txt\"\u003e[42 255 129 3 1 1 1 80 1 255 130 0 1 4 1 1 88 1 4 0 1 1 89 1 4 0 1 1 90 1 4 0 1 4 78 97 109 101 1 12 0 0 0 21 255 130 1 6 1 8 1 10 1 10 80 121 116 104 97 103 111 114 97 115 0]\n\"Pythagoras\": {3,4}\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch1\u003emsgpack\u003c/h1\u003e\n\u003cp\u003e示例代码如下：\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-go\"\u003epackage main\n\nimport (\n\t\"fmt\"\n\n\t\"github.com/vmihailenco/msgpack\"\n)\n\ntype Person struct {\n\tName   string\n\tAge    int\n\tGender string\n}\n\nfunc main() {\n\tp1 := Person{\n\t\tName:   \"xiaoming\",\n\t\tAge:    16,\n\t\tGender: \"M\",\n\t}\n\n\t// marshal\n\tb, err := msgpack.Marshal(p1)\n\tif err != nil {\n\t\tfmt.Printf(\"msgpack marshal failed, err:%v\", err)\n\t\treturn\n\t}\n\n\t// unmarshal\n\tvar p2 Person\n\terr = msgpack.Unmarshal(b, \u0026#x26;p2)\n\tif err != nil {\n\t\tfmt.Printf(\"msgpack unmarshal failed, err:%v\", err)\n\t\treturn\n\t}\n\tfmt.Printf(\"p2:%#v\\n\", p2)\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e输出结果如下：\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-txt\"\u003ep2:main.Person{Name:\"xiaoming\", Age:16, Gender:\"M\"}\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch1\u003eprotobuf\u003c/h1\u003e\n\u003cp\u003e#gencode\n\u003ca href=\"https://github.com/andyleap/gencode\"\u003eandyleap/gencode\u003c/a\u003e\u003c/p\u003e\n\u003ch1\u003e字符串格式化常用功能\u003c/h1\u003e\n\u003cp\u003e格式化  |  功能\n--- | ---\n%v | 按值的本来值输出\n%+v | 在 %v 基础上，对结构体字段名和值进行展开\n%#v\t| 输出 Go 语言语法格式的值\n%T\t| 输出 Go 语言语法格式的类型和值\n%%\t| 输出 % 本体\n%b\t| 整型以二进制方式显示\n%o\t| 整型以八进制方式显示\n%d\t| 整型以十进制方式显示\n%x\t| 整型以十六进制方式显示\n%X\t| 整型以十六进制、字母大写方式显示\n%U\t| Unicode 字符\n%f\t| 浮点数\n%p | 指针，十六进制方式显示\u003c/p\u003e\n\u003ch1\u003e性能测试结果\u003c/h1\u003e\n\u003cp\u003e由快到慢：gencode、msgpack、protobuf、json、xml\u003c/p\u003e\n","date":"2017-01-20T10:00:00.000Z","title":"Go语言的常用编解码器（序列化/反序列化）","published":true,"hideInList":false,"feature":null,"isTop":false},"prevPost":{"summary":null,"tags":["大数据"],"id":"hive-hbase-in-bigdata","title":"Hive和HBase在大数据中的应用场景","date":"2017-02-15T10:00:00.000Z","published":true,"hideInList":false,"feature":null,"isTop":false},"nextPost":{"summary":null,"tags":["Golang"],"id":"reduce-golang-executable-program-size","title":"减小Go代码编译后可执行程序的体积","date":"2017-01-02T10:00:00.000Z","published":true,"hideInList":false,"feature":null,"isTop":false}},"__N_SSG":true},"page":"/posts/[id]","query":{"id":"golang-encoder-decoder"},"buildId":"1uQtDGz8MNx0P-gGWjhsM","isFallback":false,"gsp":true,"scriptLoader":[]}</script></body></html>

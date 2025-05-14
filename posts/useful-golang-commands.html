@@ -1,0 +1,160 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8" data-next-head=""/><meta name="viewport" content="width=device-width" data-next-head=""/><link rel="preload" href="/_next/static/css/f7f849eb29140580.css" as="style"/><link rel="preload" href="/_next/static/css/2c7ffd10416756d7.css" as="style"/><link rel="stylesheet" href="/_next/static/css/f7f849eb29140580.css" data-n-g=""/><link rel="stylesheet" href="/_next/static/css/2c7ffd10416756d7.css" data-n-p=""/><noscript data-n-css=""></noscript><script defer="" noModule="" src="/_next/static/chunks/polyfills-42372ed130431b0a.js"></script><script src="/_next/static/chunks/webpack-8cac0b4b405cede1.js" defer=""></script><script src="/_next/static/chunks/framework-2f335d22a7318891.js" defer=""></script><script src="/_next/static/chunks/main-6f8766cf045e0663.js" defer=""></script><script src="/_next/static/chunks/pages/_app-0d1ac66d38199a83.js" defer=""></script><script src="/_next/static/chunks/8-20d97a1f65308574.js" defer=""></script><script src="/_next/static/chunks/pages/posts/%5Bid%5D-9642aa333720a6ed.js" defer=""></script><script src="/_next/static/1uQtDGz8MNx0P-gGWjhsM/_buildManifest.js" defer=""></script><script src="/_next/static/1uQtDGz8MNx0P-gGWjhsM/_ssgManifest.js" defer=""></script></head><body class="antialiased"><div id="__next"><div class="Post_container__ictJu"><nav class="Nav_nav__o8sSc"><div class="Nav_navContainer__KuO9f"><a class="Nav_navLogo__aczrM" href="/">Light Ning</a><div class="Nav_navLinks__sb_3K"><a class="Nav_navLink__z2PDT " href="/">首页</a><a class="Nav_navLink__z2PDT " href="/about">关于</a></div></div></nav><main class="Post_main__X4Tic"><article class="Post_post__1KH4p"><p>Tags: <!-- -->Golang</p><h1 class="Post_title__pen_7">一些实用的Go工具命令</h1><time class="Post_date__YGL_Q">2018-02-02</time><div class="Post_content__aWM2C"><p>一些实用的Go工具命令</p>
+<p>命令 | 作用
+--- | ---
+gofmt -w -l -r "panic(err) -> log.Error(err)" . | 格式化并替换文本
+go test -v | 将 t.Log 的输出变成实时流式，而不是在整个测试结束之后输出
+go mod why -m  | 分析特定的模块为什么会在 go.mod 文件中</p>
+<h1>Go语言自带工具集</h1>
+<pre><code class="language-txt">bug         start a bug report
+build       compile packages and dependencies
+clean       remove object files and cached files
+doc         show documentation for package or symbol
+env         print Go environment information
+fix         update packages to use new APIs
+fmt         gofmt (reformat) package sources
+generate    generate Go files by processing source
+get         add dependencies to current module and install them
+install     compile and install packages and dependencies
+list        list packages or modules
+mod         module maintenance
+run         compile and run Go program
+test        test packages
+tool        run specified go tool
+version     print Go version
+vet         report likely mistakes in packages
+</code></pre>
+<h1>go generate</h1>
+<ol>
+<li>go generate常用于自动生成代码，它可以在代码编译之前根据源代码生成代码。</li>
+<li>当运行go generate时，它将扫描与当前包相关的源代码文件，找出所有包含"// go:generate"的注释语句，提取并执行该注释后的命令，命令为可执行程序。</li>
+<li>该过程类似于调用执行shell脚本。</li>
+</ol>
+<p>添加特殊注释</p>
+<blockquote>
+<p>//go:generate command argument...</p>
+</blockquote>
+<p>执行generate命令</p>
+<blockquote>
+<p>go generate [-run regexp] [-n] [-v] [-x] [build flags] [file.go... | packages]</p>
+</blockquote>
+<h3>注意事项</h3>
+<ol>
+<li>该特殊注释必须包含在.go源码文件中。</li>
+<li>每个源码文件可以包含多个generate特殊注释。</li>
+<li>go generate不会被类似go build，go get，go test等命令触发执行，必须由开发者显式使用。</li>
+<li>命令执行是串行的，如果出错，后续命令不再执行。</li>
+<li>特殊注释必须以“//go:generate”开头，双斜线之后没有空格。</li>
+<li>执行命令必须是系统PATH（echo $PATH）下的可执行程序。</li>
+</ol>
+<h3>go generate 示例</h3>
+<pre><code class="language-go">package main
+
+import "fmt"
+
+//go:generate echo HelloWorld!
+//go:generate go run main.go
+//go:generate echo $GOARCH $GOOS $GOFILE $GOLINE $GOPACKAGE
+
+func main() {
+ fmt.Println("go run main.go!")
+}
+</code></pre>
+<h3>常用场景</h3>
+<p>为枚举常量实现String方法</p>
+<blockquote>
+<p>//go:generate stringer -type=XXXXX(枚举的别名)</p>
+</blockquote>
+<p>首先安装Go官方工具stringer：</p>
+<blockquote>
+<p>go install golang.org/x/tools/cmd/stringer</p>
+</blockquote>
+<h1>其它常用命令</h1>
+<blockquote>
+<p>go tool compile -S main.go  生成汇编代码
+go build -gcflags -S main.go</p>
+</blockquote>
+<h3>禁止内联</h3>
+<pre><code class="language-go">//go:noinline
+func smallAllocation() *smallStruct {
+   return &#x26;smallStruct{}
+}
+</code></pre>
+<h1>逃逸分析命令</h1>
+<blockquote>
+<p>go tool compile -S main.go    //输出汇编内容，从中也可以看出逃逸的信息。用 go tool compile -help 可以查看所有可以传递给编译器的标识参数
+go build -gcflags '-N -l -m' main.go    //禁止优化、禁止内联、打印逃逸分析信息</p>
+</blockquote>
+<h1>GODEBUG</h1>
+<h2>GC垃圾回收分析命令</h2>
+<blockquote>
+<p>GODEBUG=gctrace=1 go run main.go</p>
+</blockquote>
+<h2>调度器观察参数</h2>
+<blockquote>
+<p>GODEBUG=schedtrace=100 go run main.go    //在运行时每100毫秒发出一行调度器的摘要信息到标准err输出中
+GODEBUG=scheddetail=1,schedtrace=100 go run main.go    //在运行时每100毫秒发出一次详细的多行信息，信息内容包括调度程序、处理器、OS线程和goroutine的状态</p>
+</blockquote>
+<p>说明如下：</p>
+<pre><code class="language-txt">**GODEBUG=schedtrace=100 go run main.go**
+SCHED 0ms: gomaxprocs=16 idleprocs=14 threads=4 spinningthreads=1 idlethreads=0 runqueue=0 [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+# command-line-arguments
+SCHED 0ms: gomaxprocs=16 idleprocs=14 threads=3 spinningthreads=1 idlethreads=0 runqueue=0 [2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+SCHED 104ms: gomaxprocs=16 idleprocs=15 threads=20 spinningthreads=1 idlethreads=13 runqueue=0 [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+# command-line-arguments
+SCHED 0ms: gomaxprocs=16 idleprocs=14 threads=3 spinningthreads=1 idlethreads=0 runqueue=0 [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+SCHED 207ms: gomaxprocs=16 idleprocs=16 threads=20 spinningthreads=0 idlethreads=13 runqueue=0 [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+SCHED 316ms: gomaxprocs=16 idleprocs=16 threads=20 spinningthreads=0 idlethreads=13 runqueue=0 [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+SCHED 0ms: gomaxprocs=16 idleprocs=13 threads=5 spinningthreads=1 idlethreads=0 runqueue=0 [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+SCHED 416ms: gomaxprocs=16 idleprocs=15 threads=20 spinningthreads=1 idlethreads=13 runqueue=0 [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+SCHED 100ms: gomaxprocs=16 idleprocs=16 threads=5 spinningthreads=0 idlethreads=3 runqueue=0 [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+SCHED 526ms: gomaxprocs=16 idleprocs=16 threads=20 spinningthreads=0 idlethreads=13 runqueue=0 [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+
+解释：
+sched：每一行都代表调度器的调试信息，后面的毫秒数是表示从启动到现在的时间，是由schedtrace值设置的。
+gomaxprocs：当前的cpu核心数
+idleprocs：空闲的处理器数量
+threads：OS线程数量，后面的数字表示当前正在运行的线程数量
+spinningthreads：自旋状态的OS线程数量。（调度器的设计者在考虑了“OS的资源利用率”和“频繁的线程抢占给OS带来的负载”之后，提出了自旋线程的概念。当自旋线程没有找到可供其调度执行的goroutine时，并不会销毁改线程，而是采取自旋的操作保存了下来。虽然看起来浪费了一些资源，但是考虑一下syscall的情景就可以知道，比起自旋操作，线程间频繁的抢占、创建和销毁操作带来的危害更大。）
+idlethreads：空闲的线程数量
+runqueue：全局队列中的goroutine数量，后面的[0 ...]表示这16个P的本地队列正在运行的goroutine数量。
+</code></pre>
+<pre><code class="language-txt">**GODEBUG=scheddetail=1,schedtrace=100 go run main.go**
+SCHED 0ms: gomaxprocs=16 idleprocs=14 threads=4 spinningthreads=1 idlethreads=0 runqueue=0 gcwaiting=0 nmidlelocked=0 stopwait=0 sysmonwait=0
+  P0: status=1 schedtick=0 syscalltick=0 m=0 runqsize=0 gfreecnt=0 timerslen=0
+  P1: status=1 schedtick=0 syscalltick=0 m=3 runqsize=0 gfreecnt=0 timerslen=0
+  P2: status=0 schedtick=0 syscalltick=0 m=-1 runqsize=0 gfreecnt=0 timerslen=0
+  P3: status=0 schedtick=0 syscalltick=0 m=-1 runqsize=0 gfreecnt=0 timerslen=0
+  P4: status=0 schedtick=0 syscalltick=0 m=-1 runqsize=0 gfreecnt=0 timerslen=0
+  P5: status=0 schedtick=0 syscalltick=0 m=-1 runqsize=0 gfreecnt=0 timerslen=0
+  P6: status=0 schedtick=0 syscalltick=0 m=-1 runqsize=0 gfreecnt=0 timerslen=0
+  P7: status=0 schedtick=0 syscalltick=0 m=-1 runqsize=0 gfreecnt=0 timerslen=0
+  P8: status=0 schedtick=0 syscalltick=0 m=-1 runqsize=0 gfreecnt=0 timerslen=0
+  P9: status=0 schedtick=0 syscalltick=0 m=-1 runqsize=0 gfreecnt=0 timerslen=0
+  P10: status=0 schedtick=0 syscalltick=0 m=-1 runqsize=0 gfreecnt=0 timerslen=0
+  P11: status=0 schedtick=0 syscalltick=0 m=-1 runqsize=0 gfreecnt=0 timerslen=0
+  P12: status=0 schedtick=0 syscalltick=0 m=-1 runqsize=0 gfreecnt=0 timerslen=0
+  P13: status=0 schedtick=0 syscalltick=0 m=-1 runqsize=0 gfreecnt=0 timerslen=0
+  P14: status=0 schedtick=0 syscalltick=0 m=-1 runqsize=0 gfreecnt=0 timerslen=0
+  P15: status=0 schedtick=0 syscalltick=0 m=-1 runqsize=0 gfreecnt=0 timerslen=0
+  M3: p=1 curg=-1 mallocing=0 throwing=0 preemptoff= locks=2 dying=0 spinning=false blocked=false lockedg=-1
+  M2: p=-1 curg=-1 mallocing=0 throwing=0 preemptoff= locks=2 dying=0 spinning=false blocked=false lockedg=-1
+  M1: p=-1 curg=17 mallocing=0 throwing=0 preemptoff= locks=0 dying=0 spinning=false blocked=false lockedg=17
+  M0: p=0 curg=-1 mallocing=0 throwing=0 preemptoff= locks=1 dying=0 spinning=false blocked=false lockedg=1
+  G1: status=1() m=-1 lockedm=0
+  G17: status=6() m=1 lockedm=1
+  G2: status=1() m=-1 lockedm=-1
+
+解释：
+G的运行状态共有 9 种，分别为：
+（1）
+（2）
+（3）
+（4）
+（5）
+（6）
+（7）
+（8）
+（9）
+
+</code></pre>
+</div></article><div class="Post_postNavigation__TSrfz"><a class="Post_navLink__iyGDb" href="/posts/docker-commands-middleware-example">← <!-- -->Docker常用命令及中间件应用示例</a><a class="Post_navLink__iyGDb Post_nextLink__THXHn" href="/posts/holidays-in-english">节假日的英文表述<!-- --> →</a></div></main><footer class="footer_footer__mqdak"><p>© <!-- -->2025<!-- --> <!-- -->Light Ning<!-- --> All rights reserved.</p></footer></div></div><script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{"post":{"summary":null,"tags":["Golang"],"id":"useful-golang-commands","contentHtml":"\u003cp\u003e一些实用的Go工具命令\u003c/p\u003e\n\u003cp\u003e命令 | 作用\n--- | ---\ngofmt -w -l -r \"panic(err) -\u003e log.Error(err)\" . | 格式化并替换文本\ngo test -v | 将 t.Log 的输出变成实时流式，而不是在整个测试结束之后输出\ngo mod why -m  | 分析特定的模块为什么会在 go.mod 文件中\u003c/p\u003e\n\u003ch1\u003eGo语言自带工具集\u003c/h1\u003e\n\u003cpre\u003e\u003ccode class=\"language-txt\"\u003ebug         start a bug report\nbuild       compile packages and dependencies\nclean       remove object files and cached files\ndoc         show documentation for package or symbol\nenv         print Go environment information\nfix         update packages to use new APIs\nfmt         gofmt (reformat) package sources\ngenerate    generate Go files by processing source\nget         add dependencies to current module and install them\ninstall     compile and install packages and dependencies\nlist        list packages or modules\nmod         module maintenance\nrun         compile and run Go program\ntest        test packages\ntool        run specified go tool\nversion     print Go version\nvet         report likely mistakes in packages\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch1\u003ego generate\u003c/h1\u003e\n\u003col\u003e\n\u003cli\u003ego generate常用于自动生成代码，它可以在代码编译之前根据源代码生成代码。\u003c/li\u003e\n\u003cli\u003e当运行go generate时，它将扫描与当前包相关的源代码文件，找出所有包含\"// go:generate\"的注释语句，提取并执行该注释后的命令，命令为可执行程序。\u003c/li\u003e\n\u003cli\u003e该过程类似于调用执行shell脚本。\u003c/li\u003e\n\u003c/ol\u003e\n\u003cp\u003e添加特殊注释\u003c/p\u003e\n\u003cblockquote\u003e\n\u003cp\u003e//go:generate command argument...\u003c/p\u003e\n\u003c/blockquote\u003e\n\u003cp\u003e执行generate命令\u003c/p\u003e\n\u003cblockquote\u003e\n\u003cp\u003ego generate [-run regexp] [-n] [-v] [-x] [build flags] [file.go... | packages]\u003c/p\u003e\n\u003c/blockquote\u003e\n\u003ch3\u003e注意事项\u003c/h3\u003e\n\u003col\u003e\n\u003cli\u003e该特殊注释必须包含在.go源码文件中。\u003c/li\u003e\n\u003cli\u003e每个源码文件可以包含多个generate特殊注释。\u003c/li\u003e\n\u003cli\u003ego generate不会被类似go build，go get，go test等命令触发执行，必须由开发者显式使用。\u003c/li\u003e\n\u003cli\u003e命令执行是串行的，如果出错，后续命令不再执行。\u003c/li\u003e\n\u003cli\u003e特殊注释必须以“//go:generate”开头，双斜线之后没有空格。\u003c/li\u003e\n\u003cli\u003e执行命令必须是系统PATH（echo $PATH）下的可执行程序。\u003c/li\u003e\n\u003c/ol\u003e\n\u003ch3\u003ego generate 示例\u003c/h3\u003e\n\u003cpre\u003e\u003ccode class=\"language-go\"\u003epackage main\n\nimport \"fmt\"\n\n//go:generate echo HelloWorld!\n//go:generate go run main.go\n//go:generate echo $GOARCH $GOOS $GOFILE $GOLINE $GOPACKAGE\n\nfunc main() {\n fmt.Println(\"go run main.go!\")\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch3\u003e常用场景\u003c/h3\u003e\n\u003cp\u003e为枚举常量实现String方法\u003c/p\u003e\n\u003cblockquote\u003e\n\u003cp\u003e//go:generate stringer -type=XXXXX(枚举的别名)\u003c/p\u003e\n\u003c/blockquote\u003e\n\u003cp\u003e首先安装Go官方工具stringer：\u003c/p\u003e\n\u003cblockquote\u003e\n\u003cp\u003ego install golang.org/x/tools/cmd/stringer\u003c/p\u003e\n\u003c/blockquote\u003e\n\u003ch1\u003e其它常用命令\u003c/h1\u003e\n\u003cblockquote\u003e\n\u003cp\u003ego tool compile -S main.go  生成汇编代码\ngo build -gcflags -S main.go\u003c/p\u003e\n\u003c/blockquote\u003e\n\u003ch3\u003e禁止内联\u003c/h3\u003e\n\u003cpre\u003e\u003ccode class=\"language-go\"\u003e//go:noinline\nfunc smallAllocation() *smallStruct {\n   return \u0026#x26;smallStruct{}\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch1\u003e逃逸分析命令\u003c/h1\u003e\n\u003cblockquote\u003e\n\u003cp\u003ego tool compile -S main.go    //输出汇编内容，从中也可以看出逃逸的信息。用 go tool compile -help 可以查看所有可以传递给编译器的标识参数\ngo build -gcflags '-N -l -m' main.go    //禁止优化、禁止内联、打印逃逸分析信息\u003c/p\u003e\n\u003c/blockquote\u003e\n\u003ch1\u003eGODEBUG\u003c/h1\u003e\n\u003ch2\u003eGC垃圾回收分析命令\u003c/h2\u003e\n\u003cblockquote\u003e\n\u003cp\u003eGODEBUG=gctrace=1 go run main.go\u003c/p\u003e\n\u003c/blockquote\u003e\n\u003ch2\u003e调度器观察参数\u003c/h2\u003e\n\u003cblockquote\u003e\n\u003cp\u003eGODEBUG=schedtrace=100 go run main.go    //在运行时每100毫秒发出一行调度器的摘要信息到标准err输出中\nGODEBUG=scheddetail=1,schedtrace=100 go run main.go    //在运行时每100毫秒发出一次详细的多行信息，信息内容包括调度程序、处理器、OS线程和goroutine的状态\u003c/p\u003e\n\u003c/blockquote\u003e\n\u003cp\u003e说明如下：\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-txt\"\u003e**GODEBUG=schedtrace=100 go run main.go**\nSCHED 0ms: gomaxprocs=16 idleprocs=14 threads=4 spinningthreads=1 idlethreads=0 runqueue=0 [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n# command-line-arguments\nSCHED 0ms: gomaxprocs=16 idleprocs=14 threads=3 spinningthreads=1 idlethreads=0 runqueue=0 [2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\nSCHED 104ms: gomaxprocs=16 idleprocs=15 threads=20 spinningthreads=1 idlethreads=13 runqueue=0 [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n# command-line-arguments\nSCHED 0ms: gomaxprocs=16 idleprocs=14 threads=3 spinningthreads=1 idlethreads=0 runqueue=0 [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\nSCHED 207ms: gomaxprocs=16 idleprocs=16 threads=20 spinningthreads=0 idlethreads=13 runqueue=0 [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\nSCHED 316ms: gomaxprocs=16 idleprocs=16 threads=20 spinningthreads=0 idlethreads=13 runqueue=0 [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\nSCHED 0ms: gomaxprocs=16 idleprocs=13 threads=5 spinningthreads=1 idlethreads=0 runqueue=0 [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\nSCHED 416ms: gomaxprocs=16 idleprocs=15 threads=20 spinningthreads=1 idlethreads=13 runqueue=0 [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\nSCHED 100ms: gomaxprocs=16 idleprocs=16 threads=5 spinningthreads=0 idlethreads=3 runqueue=0 [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\nSCHED 526ms: gomaxprocs=16 idleprocs=16 threads=20 spinningthreads=0 idlethreads=13 runqueue=0 [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n\n解释：\nsched：每一行都代表调度器的调试信息，后面的毫秒数是表示从启动到现在的时间，是由schedtrace值设置的。\ngomaxprocs：当前的cpu核心数\nidleprocs：空闲的处理器数量\nthreads：OS线程数量，后面的数字表示当前正在运行的线程数量\nspinningthreads：自旋状态的OS线程数量。（调度器的设计者在考虑了“OS的资源利用率”和“频繁的线程抢占给OS带来的负载”之后，提出了自旋线程的概念。当自旋线程没有找到可供其调度执行的goroutine时，并不会销毁改线程，而是采取自旋的操作保存了下来。虽然看起来浪费了一些资源，但是考虑一下syscall的情景就可以知道，比起自旋操作，线程间频繁的抢占、创建和销毁操作带来的危害更大。）\nidlethreads：空闲的线程数量\nrunqueue：全局队列中的goroutine数量，后面的[0 ...]表示这16个P的本地队列正在运行的goroutine数量。\n\u003c/code\u003e\u003c/pre\u003e\n\u003cpre\u003e\u003ccode class=\"language-txt\"\u003e**GODEBUG=scheddetail=1,schedtrace=100 go run main.go**\nSCHED 0ms: gomaxprocs=16 idleprocs=14 threads=4 spinningthreads=1 idlethreads=0 runqueue=0 gcwaiting=0 nmidlelocked=0 stopwait=0 sysmonwait=0\n  P0: status=1 schedtick=0 syscalltick=0 m=0 runqsize=0 gfreecnt=0 timerslen=0\n  P1: status=1 schedtick=0 syscalltick=0 m=3 runqsize=0 gfreecnt=0 timerslen=0\n  P2: status=0 schedtick=0 syscalltick=0 m=-1 runqsize=0 gfreecnt=0 timerslen=0\n  P3: status=0 schedtick=0 syscalltick=0 m=-1 runqsize=0 gfreecnt=0 timerslen=0\n  P4: status=0 schedtick=0 syscalltick=0 m=-1 runqsize=0 gfreecnt=0 timerslen=0\n  P5: status=0 schedtick=0 syscalltick=0 m=-1 runqsize=0 gfreecnt=0 timerslen=0\n  P6: status=0 schedtick=0 syscalltick=0 m=-1 runqsize=0 gfreecnt=0 timerslen=0\n  P7: status=0 schedtick=0 syscalltick=0 m=-1 runqsize=0 gfreecnt=0 timerslen=0\n  P8: status=0 schedtick=0 syscalltick=0 m=-1 runqsize=0 gfreecnt=0 timerslen=0\n  P9: status=0 schedtick=0 syscalltick=0 m=-1 runqsize=0 gfreecnt=0 timerslen=0\n  P10: status=0 schedtick=0 syscalltick=0 m=-1 runqsize=0 gfreecnt=0 timerslen=0\n  P11: status=0 schedtick=0 syscalltick=0 m=-1 runqsize=0 gfreecnt=0 timerslen=0\n  P12: status=0 schedtick=0 syscalltick=0 m=-1 runqsize=0 gfreecnt=0 timerslen=0\n  P13: status=0 schedtick=0 syscalltick=0 m=-1 runqsize=0 gfreecnt=0 timerslen=0\n  P14: status=0 schedtick=0 syscalltick=0 m=-1 runqsize=0 gfreecnt=0 timerslen=0\n  P15: status=0 schedtick=0 syscalltick=0 m=-1 runqsize=0 gfreecnt=0 timerslen=0\n  M3: p=1 curg=-1 mallocing=0 throwing=0 preemptoff= locks=2 dying=0 spinning=false blocked=false lockedg=-1\n  M2: p=-1 curg=-1 mallocing=0 throwing=0 preemptoff= locks=2 dying=0 spinning=false blocked=false lockedg=-1\n  M1: p=-1 curg=17 mallocing=0 throwing=0 preemptoff= locks=0 dying=0 spinning=false blocked=false lockedg=17\n  M0: p=0 curg=-1 mallocing=0 throwing=0 preemptoff= locks=1 dying=0 spinning=false blocked=false lockedg=1\n  G1: status=1() m=-1 lockedm=0\n  G17: status=6() m=1 lockedm=1\n  G2: status=1() m=-1 lockedm=-1\n\n解释：\nG的运行状态共有 9 种，分别为：\n（1）\n（2）\n（3）\n（4）\n（5）\n（6）\n（7）\n（8）\n（9）\n\n\u003c/code\u003e\u003c/pre\u003e\n","date":"2018-02-02T10:00:00.000Z","title":"一些实用的Go工具命令","published":true,"hideInList":false,"feature":null,"isTop":false},"prevPost":{"summary":null,"tags":["Docker"],"id":"docker-commands-middleware-example","title":"Docker常用命令及中间件应用示例","date":"2018-02-03T10:00:00.000Z","published":true,"hideInList":false,"feature":null,"isTop":false},"nextPost":{"summary":null,"tags":["英语"],"id":"holidays-in-english","title":"节假日的英文表述","date":"2018-02-02T10:00:00.000Z","published":true,"hideInList":false,"feature":null}},"__N_SSG":true},"page":"/posts/[id]","query":{"id":"useful-golang-commands"},"buildId":"1uQtDGz8MNx0P-gGWjhsM","isFallback":false,"gsp":true,"scriptLoader":[]}</script></body></html>

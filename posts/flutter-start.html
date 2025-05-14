@@ -1,0 +1,217 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8" data-next-head=""/><meta name="viewport" content="width=device-width" data-next-head=""/><link rel="preload" href="/_next/static/css/f7f849eb29140580.css" as="style"/><link rel="preload" href="/_next/static/css/2c7ffd10416756d7.css" as="style"/><link rel="stylesheet" href="/_next/static/css/f7f849eb29140580.css" data-n-g=""/><link rel="stylesheet" href="/_next/static/css/2c7ffd10416756d7.css" data-n-p=""/><noscript data-n-css=""></noscript><script defer="" noModule="" src="/_next/static/chunks/polyfills-42372ed130431b0a.js"></script><script src="/_next/static/chunks/webpack-8cac0b4b405cede1.js" defer=""></script><script src="/_next/static/chunks/framework-2f335d22a7318891.js" defer=""></script><script src="/_next/static/chunks/main-6f8766cf045e0663.js" defer=""></script><script src="/_next/static/chunks/pages/_app-0d1ac66d38199a83.js" defer=""></script><script src="/_next/static/chunks/8-20d97a1f65308574.js" defer=""></script><script src="/_next/static/chunks/pages/posts/%5Bid%5D-9642aa333720a6ed.js" defer=""></script><script src="/_next/static/1uQtDGz8MNx0P-gGWjhsM/_buildManifest.js" defer=""></script><script src="/_next/static/1uQtDGz8MNx0P-gGWjhsM/_ssgManifest.js" defer=""></script></head><body class="antialiased"><div id="__next"><div class="Post_container__ictJu"><nav class="Nav_nav__o8sSc"><div class="Nav_navContainer__KuO9f"><a class="Nav_navLogo__aczrM" href="/">Light Ning</a><div class="Nav_navLinks__sb_3K"><a class="Nav_navLink__z2PDT " href="/">首页</a><a class="Nav_navLink__z2PDT " href="/about">关于</a></div></div></nav><main class="Post_main__X4Tic"><article class="Post_post__1KH4p"><p>Tags: <!-- -->Flutter</p><h1 class="Post_title__pen_7">Flutter开发环境</h1><time class="Post_date__YGL_Q">2020-10-28</time><div class="Post_content__aWM2C"><p>此篇介绍初期学习Flutter的一些知识。</p>
+<h2>环境安装</h2>
+<ol>
+<li>由于国内访问限制，首先需要设置Flutter镜像环境变量（解决被墙导致的失败问题）</li>
+</ol>
+<pre><code>export PUB_HOSTED_URL=https://pub.flutter-io.cn
+export FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn
+</code></pre>
+<ol start="2">
+<li>下载Flutter SDK</li>
+</ol>
+<blockquote>
+<p>git clone -b stable https://github.com/flutter/flutter.git</p>
+</blockquote>
+<p>并将Flutter的Bin目录加入到PATH中</p>
+<blockquote>
+<p>export PATH=<code>pwd</code>/flutter/bin:$PATH</p>
+</blockquote>
+<ol start="3">
+<li>运行 flutter doctor 命令检查环境是否已正确配置，如有错误需逐项解决</li>
+</ol>
+<p>macOS 可以允许开发 iOS、Android 和 Web（技术预览版正式发布）三个平台的 Flutter 应用</p>
+<ol start="4">
+<li>
+<p>要为Android开发Flutter应用，需要在电脑上安装和配置Android Studio，并在手机设备上启用“开发人员选项”和“USB调试”。或者使用Visual Studio Code，并安装flutter插件使用</p>
+</li>
+<li>
+<p>如使用VSCode，“查看”——“命令面板”——“Flutter：New Project”创建新的Flutter项目，使用“调试”——“启动调试”可以传输包到模拟器上，并显示效果，修改后还可以使用热重载观看修改后的效果</p>
+</li>
+</ol>
+<h2>示例代码</h2>
+<p>第一个Flutter应用的代码：startup_name_generator</p>
+<pre><code class="language-dart">import 'package:flutter/material.dart';
+import 'package:english_words/english_words.dart';
+
+void main() => runApp(new MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return new MaterialApp(
+      title: 'Startup Name Generator',
+      theme: new ThemeData(
+        primaryColor: Colors.white,
+      ),
+      home: new RandomWords(),
+    );
+  }
+}
+
+class RandomWords extends StatefulWidget {
+  @override
+  createState() => new RandomWordsState();
+}
+
+class RandomWordsState extends State&#x3C;RandomWords> {
+  final _suggestions = &#x3C;WordPair>[];
+
+  final _saved = new Set&#x3C;WordPair>();
+
+  final _biggerFont = const TextStyle(fontSize: 18.0);
+
+  @override
+  Widget build(BuildContext context) {
+    return new Scaffold(
+      appBar: new AppBar(
+        title: new Text('Startup Name Generator'),
+        actions: &#x3C;Widget>[
+          new IconButton(icon: new Icon(Icons.list), onPressed: _pushSaved)
+        ],
+      ),
+      body: _buildSuggestions(),
+    );
+  }
+
+  Widget _buildSuggestions() {
+    return new ListView.builder(
+      padding: const EdgeInsets.all(16.0),
+      itemBuilder: (context, i) {
+        if (i.isOdd) return new Divider();
+
+        final index = i ~/ 2;
+        if (index >= _suggestions.length) {
+          _suggestions.addAll(generateWordPairs().take(10));
+        }
+        return _buildRow(_suggestions[index]);
+      },
+    );
+  }
+
+  Widget _buildRow(WordPair pair) {
+    final alreadySaved = _saved.contains(pair);
+    return new ListTile(
+      title: new Text(
+        pair.asPascalCase,
+        style: _biggerFont,
+      ),
+      trailing: new Icon(
+        alreadySaved ? Icons.favorite : Icons.favorite_border,
+        color: alreadySaved ? Colors.red : null,
+      ),
+      onTap: () {
+        setState(
+              () {
+            if (alreadySaved) {
+              _saved.remove(pair);
+            } else {
+              _saved.add(pair);
+            }
+          },
+        );
+      },
+    );
+  }
+
+  void _pushSaved() {
+    Navigator.of(context).push(
+      new MaterialPageRoute(
+        builder: (context) {
+          final tiles = _saved.map(
+                (pair) {
+              return new ListTile(
+                title: new Text(
+                  pair.asPascalCase,
+                  style: _biggerFont,
+                ),
+              );
+            },
+          );
+          final divided = ListTile
+              .divideTiles(
+            context: context,
+            tiles: tiles,
+          )
+              .toList();
+
+          return new Scaffold(
+            appBar: new AppBar(
+              title: new Text('Saved Suggestions'),
+            ),
+            body: new ListView(children: divided),
+          );
+        },
+      ),
+    );
+  }
+}
+</code></pre>
+<h2>简单命令</h2>
+<pre><code>flutter create myapp   //创建Flutter工程
+flutter devices  //查看运行的设备
+flutter run  //运行应用程序
+flutter build ios --debug  //iOS debug模式打包
+flutter build ios --release  //iOS release模式打包(release包不能在模拟器上正常运行)
+flutter channel  //查看当前channel
+flutter channel beta //切换到beta channel
+flutter upgrade  //升级
+</code></pre>
+<h1>将项目运行在模拟器上</h1>
+<ol>
+<li>注意Project name必须以小写字母开头，而且不可以有空格。</li>
+</ol>
+<h1>Flutter的热修复特性</h1>
+<ol>
+<li>Flutter具有热修复（在某些情况下称之为热重载）特性。所谓热修复，是指无需重新启动App，即可快速的将修改后的源代码文件注入正在运行的Dart虚拟机中，而Dart虚拟机会立即套用修改后的代码。</li>
+<li>Flutter框架会自动重新构建组件树实现热修复。</li>
+<li>有几种情况下无法执行热修复：
+（1）代码编译错误
+（2）修改后的代码影响了修改前的状态（即数据）
+（3）对于静态字段如final修饰的常量值，在修改后不会变化，仍未修改前的值
+（4）对于UI组件，如果修改后的代码不会因为重新构建Widget组件树而被重新执行的话，热修复就对其不起作用，并且不会抛出任何异常
+（5）枚举类型更改为常规类，或常规类更改为枚举类型，都会导致热修复失败
+（6）更改泛型类型声明会导致热修复失败</li>
+</ol>
+<h1>升级Flutter</h1>
+<p>1、升级Flutter SDK可以执行命令</p>
+<blockquote>
+<p>flutter upgrade</p>
+</blockquote>
+<p>命令会获取最新稳定版本，并在升级后自动执行flutter doctor命令来检查环境配置</p>
+<ol start="2">
+<li>升级依赖库
+App可能会依赖多个库，这些库在pubspec.yaml文件中被列出。如果要获取依赖库，需要执行命令：</li>
+</ol>
+<blockquote>
+<p>flutter packages get</p>
+</blockquote>
+<p>如果想升级依赖库到最新版本，需要执行命令：</p>
+<blockquote>
+<p>flutter packages upgrade</p>
+</blockquote>
+<h1>命令行编译包</h1>
+<p>生成Android平台App包：</p>
+<blockquote>
+<p>flutter build apk</p>
+</blockquote>
+<p>生成iOS平台App包：</p>
+<blockquote>
+<p>flutter build ios</p>
+</blockquote>
+<p>显示可用设备（已连接到开发计算机）</p>
+<blockquote>
+<p>flutter devices</p>
+</blockquote>
+<p>在devices列表中的第一个设备上编译并以调试模式（默认模式）运行</p>
+<blockquote>
+<p>flutter run</p>
+</blockquote>
+<p>或者指定特定设备ID</p>
+<blockquote>
+<p>flutter run -d 000507e0a52252f43eaa151dcbc4ebfa52bd92f0</p>
+</blockquote>
+<p>在chrome上运行</p>
+<blockquote>
+<p>flutter run -d chrome</p>
+</blockquote>
+</div></article><div class="Post_postNavigation__TSrfz"><a class="Post_navLink__iyGDb" href="/posts/dart-start">← <!-- -->Flutter Dart语言基础</a><a class="Post_navLink__iyGDb Post_nextLink__THXHn" href="/posts/flutter-intro">Flutter简介<!-- --> →</a></div></main><footer class="footer_footer__mqdak"><p>© <!-- -->2025<!-- --> <!-- -->Light Ning<!-- --> All rights reserved.</p></footer></div></div><script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{"post":{"summary":null,"tags":["Flutter"],"id":"flutter-start","contentHtml":"\u003cp\u003e此篇介绍初期学习Flutter的一些知识。\u003c/p\u003e\n\u003ch2\u003e环境安装\u003c/h2\u003e\n\u003col\u003e\n\u003cli\u003e由于国内访问限制，首先需要设置Flutter镜像环境变量（解决被墙导致的失败问题）\u003c/li\u003e\n\u003c/ol\u003e\n\u003cpre\u003e\u003ccode\u003eexport PUB_HOSTED_URL=https://pub.flutter-io.cn\nexport FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn\n\u003c/code\u003e\u003c/pre\u003e\n\u003col start=\"2\"\u003e\n\u003cli\u003e下载Flutter SDK\u003c/li\u003e\n\u003c/ol\u003e\n\u003cblockquote\u003e\n\u003cp\u003egit clone -b stable https://github.com/flutter/flutter.git\u003c/p\u003e\n\u003c/blockquote\u003e\n\u003cp\u003e并将Flutter的Bin目录加入到PATH中\u003c/p\u003e\n\u003cblockquote\u003e\n\u003cp\u003eexport PATH=\u003ccode\u003epwd\u003c/code\u003e/flutter/bin:$PATH\u003c/p\u003e\n\u003c/blockquote\u003e\n\u003col start=\"3\"\u003e\n\u003cli\u003e运行 flutter doctor 命令检查环境是否已正确配置，如有错误需逐项解决\u003c/li\u003e\n\u003c/ol\u003e\n\u003cp\u003emacOS 可以允许开发 iOS、Android 和 Web（技术预览版正式发布）三个平台的 Flutter 应用\u003c/p\u003e\n\u003col start=\"4\"\u003e\n\u003cli\u003e\n\u003cp\u003e要为Android开发Flutter应用，需要在电脑上安装和配置Android Studio，并在手机设备上启用“开发人员选项”和“USB调试”。或者使用Visual Studio Code，并安装flutter插件使用\u003c/p\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003e如使用VSCode，“查看”——“命令面板”——“Flutter：New Project”创建新的Flutter项目，使用“调试”——“启动调试”可以传输包到模拟器上，并显示效果，修改后还可以使用热重载观看修改后的效果\u003c/p\u003e\n\u003c/li\u003e\n\u003c/ol\u003e\n\u003ch2\u003e示例代码\u003c/h2\u003e\n\u003cp\u003e第一个Flutter应用的代码：startup_name_generator\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-dart\"\u003eimport 'package:flutter/material.dart';\nimport 'package:english_words/english_words.dart';\n\nvoid main() =\u003e runApp(new MyApp());\n\nclass MyApp extends StatelessWidget {\n  @override\n  Widget build(BuildContext context) {\n    return new MaterialApp(\n      title: 'Startup Name Generator',\n      theme: new ThemeData(\n        primaryColor: Colors.white,\n      ),\n      home: new RandomWords(),\n    );\n  }\n}\n\nclass RandomWords extends StatefulWidget {\n  @override\n  createState() =\u003e new RandomWordsState();\n}\n\nclass RandomWordsState extends State\u0026#x3C;RandomWords\u003e {\n  final _suggestions = \u0026#x3C;WordPair\u003e[];\n\n  final _saved = new Set\u0026#x3C;WordPair\u003e();\n\n  final _biggerFont = const TextStyle(fontSize: 18.0);\n\n  @override\n  Widget build(BuildContext context) {\n    return new Scaffold(\n      appBar: new AppBar(\n        title: new Text('Startup Name Generator'),\n        actions: \u0026#x3C;Widget\u003e[\n          new IconButton(icon: new Icon(Icons.list), onPressed: _pushSaved)\n        ],\n      ),\n      body: _buildSuggestions(),\n    );\n  }\n\n  Widget _buildSuggestions() {\n    return new ListView.builder(\n      padding: const EdgeInsets.all(16.0),\n      itemBuilder: (context, i) {\n        if (i.isOdd) return new Divider();\n\n        final index = i ~/ 2;\n        if (index \u003e= _suggestions.length) {\n          _suggestions.addAll(generateWordPairs().take(10));\n        }\n        return _buildRow(_suggestions[index]);\n      },\n    );\n  }\n\n  Widget _buildRow(WordPair pair) {\n    final alreadySaved = _saved.contains(pair);\n    return new ListTile(\n      title: new Text(\n        pair.asPascalCase,\n        style: _biggerFont,\n      ),\n      trailing: new Icon(\n        alreadySaved ? Icons.favorite : Icons.favorite_border,\n        color: alreadySaved ? Colors.red : null,\n      ),\n      onTap: () {\n        setState(\n              () {\n            if (alreadySaved) {\n              _saved.remove(pair);\n            } else {\n              _saved.add(pair);\n            }\n          },\n        );\n      },\n    );\n  }\n\n  void _pushSaved() {\n    Navigator.of(context).push(\n      new MaterialPageRoute(\n        builder: (context) {\n          final tiles = _saved.map(\n                (pair) {\n              return new ListTile(\n                title: new Text(\n                  pair.asPascalCase,\n                  style: _biggerFont,\n                ),\n              );\n            },\n          );\n          final divided = ListTile\n              .divideTiles(\n            context: context,\n            tiles: tiles,\n          )\n              .toList();\n\n          return new Scaffold(\n            appBar: new AppBar(\n              title: new Text('Saved Suggestions'),\n            ),\n            body: new ListView(children: divided),\n          );\n        },\n      ),\n    );\n  }\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003e简单命令\u003c/h2\u003e\n\u003cpre\u003e\u003ccode\u003eflutter create myapp   //创建Flutter工程\nflutter devices  //查看运行的设备\nflutter run  //运行应用程序\nflutter build ios --debug  //iOS debug模式打包\nflutter build ios --release  //iOS release模式打包(release包不能在模拟器上正常运行)\nflutter channel  //查看当前channel\nflutter channel beta //切换到beta channel\nflutter upgrade  //升级\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch1\u003e将项目运行在模拟器上\u003c/h1\u003e\n\u003col\u003e\n\u003cli\u003e注意Project name必须以小写字母开头，而且不可以有空格。\u003c/li\u003e\n\u003c/ol\u003e\n\u003ch1\u003eFlutter的热修复特性\u003c/h1\u003e\n\u003col\u003e\n\u003cli\u003eFlutter具有热修复（在某些情况下称之为热重载）特性。所谓热修复，是指无需重新启动App，即可快速的将修改后的源代码文件注入正在运行的Dart虚拟机中，而Dart虚拟机会立即套用修改后的代码。\u003c/li\u003e\n\u003cli\u003eFlutter框架会自动重新构建组件树实现热修复。\u003c/li\u003e\n\u003cli\u003e有几种情况下无法执行热修复：\n（1）代码编译错误\n（2）修改后的代码影响了修改前的状态（即数据）\n（3）对于静态字段如final修饰的常量值，在修改后不会变化，仍未修改前的值\n（4）对于UI组件，如果修改后的代码不会因为重新构建Widget组件树而被重新执行的话，热修复就对其不起作用，并且不会抛出任何异常\n（5）枚举类型更改为常规类，或常规类更改为枚举类型，都会导致热修复失败\n（6）更改泛型类型声明会导致热修复失败\u003c/li\u003e\n\u003c/ol\u003e\n\u003ch1\u003e升级Flutter\u003c/h1\u003e\n\u003cp\u003e1、升级Flutter SDK可以执行命令\u003c/p\u003e\n\u003cblockquote\u003e\n\u003cp\u003eflutter upgrade\u003c/p\u003e\n\u003c/blockquote\u003e\n\u003cp\u003e命令会获取最新稳定版本，并在升级后自动执行flutter doctor命令来检查环境配置\u003c/p\u003e\n\u003col start=\"2\"\u003e\n\u003cli\u003e升级依赖库\nApp可能会依赖多个库，这些库在pubspec.yaml文件中被列出。如果要获取依赖库，需要执行命令：\u003c/li\u003e\n\u003c/ol\u003e\n\u003cblockquote\u003e\n\u003cp\u003eflutter packages get\u003c/p\u003e\n\u003c/blockquote\u003e\n\u003cp\u003e如果想升级依赖库到最新版本，需要执行命令：\u003c/p\u003e\n\u003cblockquote\u003e\n\u003cp\u003eflutter packages upgrade\u003c/p\u003e\n\u003c/blockquote\u003e\n\u003ch1\u003e命令行编译包\u003c/h1\u003e\n\u003cp\u003e生成Android平台App包：\u003c/p\u003e\n\u003cblockquote\u003e\n\u003cp\u003eflutter build apk\u003c/p\u003e\n\u003c/blockquote\u003e\n\u003cp\u003e生成iOS平台App包：\u003c/p\u003e\n\u003cblockquote\u003e\n\u003cp\u003eflutter build ios\u003c/p\u003e\n\u003c/blockquote\u003e\n\u003cp\u003e显示可用设备（已连接到开发计算机）\u003c/p\u003e\n\u003cblockquote\u003e\n\u003cp\u003eflutter devices\u003c/p\u003e\n\u003c/blockquote\u003e\n\u003cp\u003e在devices列表中的第一个设备上编译并以调试模式（默认模式）运行\u003c/p\u003e\n\u003cblockquote\u003e\n\u003cp\u003eflutter run\u003c/p\u003e\n\u003c/blockquote\u003e\n\u003cp\u003e或者指定特定设备ID\u003c/p\u003e\n\u003cblockquote\u003e\n\u003cp\u003eflutter run -d 000507e0a52252f43eaa151dcbc4ebfa52bd92f0\u003c/p\u003e\n\u003c/blockquote\u003e\n\u003cp\u003e在chrome上运行\u003c/p\u003e\n\u003cblockquote\u003e\n\u003cp\u003eflutter run -d chrome\u003c/p\u003e\n\u003c/blockquote\u003e\n","date":"2020-10-28T10:00:00.000Z","title":"Flutter开发环境","published":true,"hideInList":false,"feature":null,"isTop":false},"prevPost":{"summary":null,"tags":["Flutter"],"id":"dart-start","title":"Flutter Dart语言基础","date":"2020-11-09T10:00:00.000Z","published":true,"hideInList":false,"feature":null,"isTop":false},"nextPost":{"summary":null,"tags":["Flutter"],"id":"flutter-intro","title":"Flutter简介","date":"2020-10-17T10:00:00.000Z","published":true,"hideInList":false,"feature":null,"isTop":false}},"__N_SSG":true},"page":"/posts/[id]","query":{"id":"flutter-start"},"buildId":"1uQtDGz8MNx0P-gGWjhsM","isFallback":false,"gsp":true,"scriptLoader":[]}</script></body></html>
