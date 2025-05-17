@@ -1,12 +1,42 @@
-<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8" data-next-head=""/><meta name="viewport" content="width=device-width" data-next-head=""/><title data-next-head="">Light Up The World</title><link rel="preload" href="/_next/static/css/a1f8ca1f622e7286.css" as="style"/><link rel="preload" href="/_next/static/css/b9a831462dbeea41.css" as="style"/><link rel="stylesheet" href="/_next/static/css/a1f8ca1f622e7286.css" data-n-g=""/><link rel="stylesheet" href="/_next/static/css/b9a831462dbeea41.css" data-n-p=""/><noscript data-n-css=""></noscript><script defer="" noModule="" src="/_next/static/chunks/polyfills-42372ed130431b0a.js"></script><script src="/_next/static/chunks/webpack-8cac0b4b405cede1.js" defer=""></script><script src="/_next/static/chunks/framework-2f335d22a7318891.js" defer=""></script><script src="/_next/static/chunks/main-6f8766cf045e0663.js" defer=""></script><script src="/_next/static/chunks/pages/_app-395f9b40f90241c5.js" defer=""></script><script src="/_next/static/chunks/8-20d97a1f65308574.js" defer=""></script><script src="/_next/static/chunks/pages/posts/%5Bid%5D-8a042aea2eb3ff82.js" defer=""></script><script src="/_next/static/qRRo75OyBuZGxwdbfzQNo/_buildManifest.js" defer=""></script><script src="/_next/static/qRRo75OyBuZGxwdbfzQNo/_ssgManifest.js" defer=""></script></head><body class="antialiased"><div id="__next"><div class="Post_container__ictJu"><nav class="Nav_nav__o8sSc"><div class="Nav_navContainer__KuO9f"><a class="Nav_navLogo__aczrM" href="/">Light Ning</a><div class="Nav_navLinks__sb_3K"><a class="Nav_navLink__z2PDT " href="/">首页</a><a class="Nav_navLink__z2PDT " href="/about">关于</a></div></div></nav><main class="Post_main__X4Tic"><article class="Post_post__1KH4p"><h1 class="Post_title__pen_7">Go语言sync同步包使用</h1><time class="Post_date__YGL_Q">2016-08-10</time><div class="Post_postTags__df1Jm"><span class="Post_postTag__j37er">Golang</span></div><div class="Post_content__aWM2C"><p>Go语言sync包使用</p>
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8" data-next-head=""/><meta name="viewport" content="width=device-width" data-next-head=""/><title data-next-head="">Light Up The World</title><link rel="preload" href="/_next/static/css/c6cf52e305c0a82d.css" as="style"/><link rel="preload" href="/_next/static/css/b9a831462dbeea41.css" as="style"/><link rel="stylesheet" href="/_next/static/css/c6cf52e305c0a82d.css" data-n-g=""/><link rel="stylesheet" href="/_next/static/css/b9a831462dbeea41.css" data-n-p=""/><noscript data-n-css=""></noscript><script defer="" noModule="" src="/_next/static/chunks/polyfills-42372ed130431b0a.js"></script><script src="/_next/static/chunks/webpack-8cac0b4b405cede1.js" defer=""></script><script src="/_next/static/chunks/framework-7c47d0879e3fabaa.js" defer=""></script><script src="/_next/static/chunks/main-eabf4e641ff2595a.js" defer=""></script><script src="/_next/static/chunks/pages/_app-1c3b0aeaafcae3ac.js" defer=""></script><script src="/_next/static/chunks/255-556050becd2e6a51.js" defer=""></script><script src="/_next/static/chunks/pages/posts/%5Bid%5D-4708161c18abc68d.js" defer=""></script><script src="/_next/static/2ZgHfOx01ssA5o03Pibi0/_buildManifest.js" defer=""></script><script src="/_next/static/2ZgHfOx01ssA5o03Pibi0/_ssgManifest.js" defer=""></script></head><body class="antialiased"><div id="__next"><div class="Post_container__ictJu"><nav class="Nav_nav__o8sSc"><div class="Nav_navContainer__KuO9f"><a class="Nav_navLogo__aczrM" href="/">Light Ning</a><div class="Nav_navLinks__sb_3K"><a class="Nav_navLink__z2PDT " href="/">首页</a><a class="Nav_navLink__z2PDT " href="/about">关于</a></div></div></nav><main class="Post_main__X4Tic"><article class="Post_post__1KH4p"><h1 class="Post_title__pen_7">Go语言sync同步包使用</h1><time class="Post_date__YGL_Q">2016-08-10</time><div class="Post_postTags__df1Jm"><span class="Post_postTag__j37er">Golang</span></div><div class="Post_content__aWM2C"><p>Go语言sync包使用</p>
+<!-- more -->
 <h1>sync同步包</h1>
-<p>工具 | 说明
---- | ---
-Mutex | 互斥锁
-RWMutex | 读写锁
-WaitGroup | 并发等待组
-Map | 并发安全字典
-Cond | 同步等待条件
-Once | 只执行一次
-Pool | 临时对象池</p>
-</div></article><div class="Post_postNavigation__TSrfz"><a class="Post_navLink__iyGDb" href="/posts/protobuf-3">← <!-- -->Protobuf 3介绍</a><a class="Post_navLink__iyGDb Post_nextLink__THXHn" href="/posts/go-struct-tag-label">Go结构体里的Tag标签<!-- --> →</a></div></main><footer class="footer_footer__mqdak"><p>Copyright © <!-- -->2025<!-- --> <!-- -->Light Ning<!-- -->. All rights reserved.</p></footer></div></div><script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{"post":{"summary":null,"tags":["Golang"],"id":"go-sync-usage","contentHtml":"\u003cp\u003eGo语言sync包使用\u003c/p\u003e\n\u003ch1\u003esync同步包\u003c/h1\u003e\n\u003cp\u003e工具 | 说明\n--- | ---\nMutex | 互斥锁\nRWMutex | 读写锁\nWaitGroup | 并发等待组\nMap | 并发安全字典\nCond | 同步等待条件\nOnce | 只执行一次\nPool | 临时对象池\u003c/p\u003e\n","date":"2016-08-10T10:00:00.000Z","title":"Go语言sync同步包使用","published":true,"hideInList":false,"feature":null,"isTop":false},"prevPost":{"summary":null,"tags":["Golang"],"id":"protobuf-3","title":"Protobuf 3介绍","date":"2016-12-10T10:00:00.000Z","published":true,"hideInList":false,"feature":null,"isTop":false},"nextPost":{"summary":null,"tags":["Golang"],"id":"go-struct-tag-label","title":"Go结构体里的Tag标签","date":"2016-07-29T10:00:00.000Z","published":true,"hideInList":false,"feature":null,"isTop":false}},"__N_SSG":true},"page":"/posts/[id]","query":{"id":"go-sync-usage"},"buildId":"qRRo75OyBuZGxwdbfzQNo","isFallback":false,"gsp":true,"scriptLoader":[]}</script></body></html>
+<table>
+<thead>
+<tr>
+<th>工具</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mutex</td>
+<td>互斥锁</td>
+</tr>
+<tr>
+<td>RWMutex</td>
+<td>读写锁</td>
+</tr>
+<tr>
+<td>WaitGroup</td>
+<td>并发等待组</td>
+</tr>
+<tr>
+<td>Map</td>
+<td>并发安全字典</td>
+</tr>
+<tr>
+<td>Cond</td>
+<td>同步等待条件</td>
+</tr>
+<tr>
+<td>Once</td>
+<td>只执行一次</td>
+</tr>
+<tr>
+<td>Pool</td>
+<td>临时对象池</td>
+</tr>
+</tbody>
+</table>
+</div></article><div class="Post_postNavigation__TSrfz"><a class="Post_navLink__iyGDb" href="/posts/protobuf-3">← <!-- -->Protobuf 3介绍</a><a class="Post_navLink__iyGDb Post_nextLink__THXHn" href="/posts/go-struct-tag-label">Go结构体里的Tag标签<!-- --> →</a></div></main><footer class="footer_footer__mqdak"><p>Copyright © <!-- -->2025<!-- --> <!-- -->Light Ning<!-- -->. All rights reserved.</p></footer></div></div><script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{"post":{"summary":null,"tags":["Golang"],"id":"go-sync-usage","contentHtml":"\u003cp\u003eGo语言sync包使用\u003c/p\u003e\n\u003c!-- more --\u003e\n\u003ch1\u003esync同步包\u003c/h1\u003e\n\u003ctable\u003e\n\u003cthead\u003e\n\u003ctr\u003e\n\u003cth\u003e工具\u003c/th\u003e\n\u003cth\u003e说明\u003c/th\u003e\n\u003c/tr\u003e\n\u003c/thead\u003e\n\u003ctbody\u003e\n\u003ctr\u003e\n\u003ctd\u003eMutex\u003c/td\u003e\n\u003ctd\u003e互斥锁\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003eRWMutex\u003c/td\u003e\n\u003ctd\u003e读写锁\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003eWaitGroup\u003c/td\u003e\n\u003ctd\u003e并发等待组\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003eMap\u003c/td\u003e\n\u003ctd\u003e并发安全字典\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003eCond\u003c/td\u003e\n\u003ctd\u003e同步等待条件\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003eOnce\u003c/td\u003e\n\u003ctd\u003e只执行一次\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003ePool\u003c/td\u003e\n\u003ctd\u003e临时对象池\u003c/td\u003e\n\u003c/tr\u003e\n\u003c/tbody\u003e\n\u003c/table\u003e\n","date":"2016-08-10T10:00:00.000Z","title":"Go语言sync同步包使用","published":true,"hideInList":false,"feature":null,"isTop":false},"prevPost":{"summary":null,"tags":["Golang"],"id":"protobuf-3","title":"Protobuf 3介绍","date":"2016-12-10T10:00:00.000Z","published":true,"hideInList":false,"feature":null,"isTop":false},"nextPost":{"summary":null,"tags":["Golang"],"id":"go-struct-tag-label","title":"Go结构体里的Tag标签","date":"2016-07-29T10:00:00.000Z","published":true,"hideInList":false,"feature":null,"isTop":false}},"__N_SSG":true},"page":"/posts/[id]","query":{"id":"go-sync-usage"},"buildId":"2ZgHfOx01ssA5o03Pibi0","isFallback":false,"gsp":true,"scriptLoader":[]}</script></body></html>
