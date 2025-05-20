@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 55, "column": 0}, "map": {"version":3,"sources":["file:///Users/ninglg/Github/ninglg.com/pages/_document.tsx"],"sourcesContent":["import { Html, Head, Main, NextScript } from \"next/document\";\n\nexport default function Document() {\n  return (\n    <Html lang=\"zh-CN\">\n      <Head />\n      <body className=\"antialiased\">\n        <Main />\n        <NextScript />\n      </body>\n    </Html>\n  );\n}\n"],"names":[],"mappings":";;;;AAAA;;;AAEe,SAAS;IACtB,qBACE,qKAAC,wPAAA,CAAA,OAAI;QAAC,MAAK;;0BACT,qKAAC,wPAAA,CAAA,OAAI;;;;;0BACL,qKAAC;gBAAK,WAAU;;kCACd,qKAAC,wPAAA,CAAA,OAAI;;;;;kCACL,qKAAC,wPAAA,CAAA,aAAU;;;;;;;;;;;;;;;;;AAInB","debugId":null}}]
-}
