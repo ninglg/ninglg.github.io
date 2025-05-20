@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["turbopack:///[project]/components/Nav.module.css"],"sourcesContent":[".nav {\n  background: #f3f4f6;\n  color: var(--text-color);\n  padding: 1rem 0;\n  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\n}\n\n.navContainer {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  max-width: 1200px;\n  margin: 0 auto;\n  padding: 0 1rem;\n}\n\n.navLogo {\n  font-size: 1.5rem;\n  font-weight: bold;\n  text-decoration: none;\n  background: linear-gradient(to right, #3b82f6, #1d4ed8);\n  -webkit-background-clip: text;\n  background-clip: text;\n  color: transparent;\n}\n\n.navLinks {\n  display: flex;\n  gap: 1.5rem;\n}\n\n.navLink {\n  color: var(--text-color);\n  text-decoration: none;\n  font-weight: 500;\n  font-size: inherit;\n  transition: all 0.2s ease;\n  padding: 0.25rem 0.5rem;\n  border-radius: 4px;\n}\n\n.navLink:hover {\n  background-color: #e5e7eb;\n  color: var(--primary-color);\n}\n\n.navLink.active {\n  background-color: var(--primary-color);\n  color: white;\n  font-weight: 600;\n}"],"names":[],"mappings":"AAAA;;;;;;;AAOA;;;;;;;;;AASA;;;;;;;;;;AAUA;;;;;AAKA;;;;;;;;;;AAUA;;;;;AAKA"}}]
+}

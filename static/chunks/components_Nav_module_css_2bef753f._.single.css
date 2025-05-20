@@ -1,0 +1,54 @@
+/* [project]/components/Nav.module.css [client] (css) */
+.Nav-module__e1xquq__nav {
+  color: var(--text-color);
+  background: #f3f4f6;
+  padding: 1rem 0;
+  box-shadow: 0 2px 4px #0000001a;
+}
+
+.Nav-module__e1xquq__navContainer {
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  display: flex;
+}
+
+.Nav-module__e1xquq__navLogo {
+  background: linear-gradient(to right, #3b82f6, #1d4ed8);
+  color: #0000;
+  -webkit-background-clip: text;
+  background-clip: text;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.Nav-module__e1xquq__navLinks {
+  gap: 1.5rem;
+  display: flex;
+}
+
+.Nav-module__e1xquq__navLink {
+  color: var(--text-color);
+  font-weight: 500;
+  font-size: inherit;
+  border-radius: 4px;
+  padding: .25rem .5rem;
+  text-decoration: none;
+  transition: all .2s;
+}
+
+.Nav-module__e1xquq__navLink:hover {
+  color: var(--primary-color);
+  background-color: #e5e7eb;
+}
+
+.Nav-module__e1xquq__navLink.Nav-module__e1xquq__active {
+  background-color: var(--primary-color);
+  color: #fff;
+  font-weight: 600;
+}
+
+/*# sourceMappingURL=components_Nav_module_css_2bef753f._.single.css.map*/

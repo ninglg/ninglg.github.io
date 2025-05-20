@@ -1,0 +1,69 @@
+/* [project]/styles/About.module.css [client] (css) */
+.About-module__suJDDW__container {
+  flex-direction: column;
+  min-height: 100vh;
+  display: flex;
+}
+
+.About-module__suJDDW__main {
+  text-align: center;
+  flex: 1;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 0;
+}
+
+.About-module__suJDDW__avatar {
+  object-fit: cover;
+  border-radius: 50%;
+  width: 150px;
+  height: 150px;
+  margin-bottom: 2rem;
+}
+
+.About-module__suJDDW__post {
+  background: #fff;
+  border-radius: 8px;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  display: flex;
+  box-shadow: 0 2px 4px #0000000d;
+}
+
+.About-module__suJDDW__content {
+  line-height: 1.8;
+}
+
+.About-module__suJDDW__content p {
+  margin-bottom: 1.5rem;
+}
+
+.About-module__suJDDW__title {
+  text-align: center;
+  color: var(--primary-color);
+  margin-bottom: 2rem;
+  font-size: 2.5rem;
+}
+
+.About-module__suJDDW__content {
+  text-align: center;
+  color: var(--text-color);
+  line-height: 1.8;
+}
+
+.About-module__suJDDW__content p {
+  margin: 1rem 0;
+  font-size: 1.1rem;
+}
+
+.About-module__suJDDW__footer {
+  text-align: center;
+  color: #6b7280;
+  border-top: 1px solid #e5e7eb;
+  margin-top: 2rem;
+  padding: 2rem 0;
+}
+
+/*# sourceMappingURL=styles_About_module_css_2bef753f._.single.css.map*/

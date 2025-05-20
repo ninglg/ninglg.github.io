@@ -1,0 +1,212 @@
+/* [project]/components/Nav.module.css [client] (css) */
+.Nav-module__e1xquq__nav {
+  color: var(--text-color);
+  background: #f3f4f6;
+  padding: 1rem 0;
+  box-shadow: 0 2px 4px #0000001a;
+}
+
+.Nav-module__e1xquq__navContainer {
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  display: flex;
+}
+
+.Nav-module__e1xquq__navLogo {
+  background: linear-gradient(to right, #3b82f6, #1d4ed8);
+  color: #0000;
+  -webkit-background-clip: text;
+  background-clip: text;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.Nav-module__e1xquq__navLinks {
+  gap: 1.5rem;
+  display: flex;
+}
+
+.Nav-module__e1xquq__navLink {
+  color: var(--text-color);
+  font-weight: 500;
+  font-size: inherit;
+  border-radius: 4px;
+  padding: .25rem .5rem;
+  text-decoration: none;
+  transition: all .2s;
+}
+
+.Nav-module__e1xquq__navLink:hover {
+  color: var(--primary-color);
+  background-color: #e5e7eb;
+}
+
+.Nav-module__e1xquq__navLink.Nav-module__e1xquq__active {
+  background-color: var(--primary-color);
+  color: #fff;
+  font-weight: 600;
+}
+
+
+/* [project]/styles/Home.module.css [client] (css) */
+.Home-module__g21JLG__container {
+  flex-direction: column;
+  min-height: 100vh;
+  display: flex;
+}
+
+.Home-module__g21JLG__main {
+  flex: 1;
+  padding: 2rem 0;
+}
+
+.Home-module__g21JLG__title {
+  text-align: center;
+  color: var(--primary-color);
+  margin-bottom: .5rem;
+  font-size: 2.5rem;
+}
+
+.Home-module__g21JLG__posts {
+  background: #fff;
+  border-radius: 16px;
+  flex-direction: column;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 3rem;
+  display: flex;
+  box-shadow: 0 4px 12px #0000001a;
+}
+
+.Home-module__g21JLG__postCard {
+  max-width: 100%;
+  margin-bottom: 1.5rem;
+  display: block;
+}
+
+.Home-module__g21JLG__postHeader {
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: .5rem;
+  display: flex;
+}
+
+.Home-module__g21JLG__postTitle {
+  color: var(--text-color);
+  flex: 1;
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.3;
+  transition: color .2s;
+}
+
+.Home-module__g21JLG__postTitle:hover {
+  color: var(--primary-color);
+}
+
+.Home-module__g21JLG__postDate {
+  color: #6b7280;
+  white-space: nowrap;
+  margin-left: 1rem;
+  font-size: .875rem;
+}
+
+.Home-module__g21JLG__postTags {
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin: .5rem 0 1rem;
+  display: flex;
+}
+
+.Home-module__g21JLG__postTag {
+  background-color: var(--accent);
+  color: var(--accent-foreground);
+  border-radius: 9999px;
+  padding: .25rem .75rem;
+  font-size: .875rem;
+}
+
+.Home-module__g21JLG__postSummary {
+  color: #6b7280;
+  margin: .5rem 0 1.5rem;
+  font-size: .875rem;
+  line-height: 1.6;
+}
+
+.Home-module__g21JLG__readMore {
+  color: var(--primary-color);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.Home-module__g21JLG__readMore:hover {
+  text-decoration: underline;
+}
+
+.Home-module__g21JLG__pagination {
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .5rem;
+  margin-top: 3rem;
+  display: flex;
+}
+
+.Home-module__g21JLG__pageButton {
+  color: var(--text-color);
+  cursor: pointer;
+  text-align: center;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+  justify-content: center;
+  align-items: center;
+  min-width: 40px;
+  padding: .5rem 1rem;
+  transition: all .2s;
+  display: flex;
+}
+
+.Home-module__g21JLG__ellipsis {
+  color: #6b7280;
+  cursor: default;
+  align-items: center;
+  padding: 0 .5rem;
+  display: flex;
+}
+
+.Home-module__g21JLG__pageButton:hover {
+  background: #f3f4f6;
+}
+
+.Home-module__g21JLG__active {
+  background: var(--primary-color);
+  color: #fff;
+  border-color: var(--primary-color);
+}
+
+.Home-module__g21JLG__footer {
+  text-align: center;
+  color: #6b7280;
+  border-top: 1px solid #e5e7eb;
+  margin-top: 2rem;
+  padding: 2rem 0;
+}
+
+
+/* [project]/components/footer.module.css [client] (css) */
+.footer-module__oqRDSq__footer {
+  text-align: center;
+  color: var(--text-color);
+  background: #f3f4f6;
+  margin-top: 2rem;
+  padding: 1rem 0;
+  box-shadow: 0 2px 4px #0000001a;
+}
+
+
+/*# sourceMappingURL=_52a90745._.css.map*/
